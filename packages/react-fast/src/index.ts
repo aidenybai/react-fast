@@ -1,7 +1,37 @@
-export const greet = (name: string): string => {
-  return `Hello, ${name}!`;
-};
+export {
+  // Core runtime
+  template,
+  delegateEvents,
+  clearDelegatedEvents,
+  insert,
+  reconcileArrays,
+  spread,
+  assign,
+  use,
+  mergeProps,
+  dynamicProperty,
 
-export const add = (left: number, right: number): number => {
-  return left + right;
-};
+  // Effect / reactivity (injectable)
+  effect,
+  untrack,
+  setRuntime,
+
+  // Properties
+  setProperty,
+  setAttribute,
+  setAttributeNS,
+  setBoolAttribute,
+  className,
+  addEventListener,
+  classList,
+  style,
+  setStyleProperty,
+
+  // Constants
+  Properties,
+  ChildProperties,
+  getPropAlias,
+  Aliases,
+  SVGNamespace,
+  DelegatedEvents,
+} from "./client.js";

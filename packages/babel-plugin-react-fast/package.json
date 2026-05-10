@@ -1,7 +1,7 @@
 {
-  "name": "react-fast",
+  "name": "babel-plugin-react-fast",
   "version": "0.0.1",
-  "description": "react-fast",
+  "description": "Babel plugin that compiles React JSX into direct DOM operations",
   "keywords": [],
   "license": "MIT",
   "author": {
@@ -17,7 +17,6 @@
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
-  "browser": "dist/index.iife.js",
   "types": "dist/index.d.mts",
   "exports": {
     "./package.json": "./package.json",
@@ -41,8 +40,19 @@
     "test": "vp test",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "@babel/helper-module-imports": "^7.25.0",
+    "@babel/types": "^7.26.0"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0"
+  },
   "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/plugin-syntax-jsx": "^7.25.0",
+    "@types/babel__core": "^7.20.0",
     "@types/node": "^25.6.0",
-    "jsdom": "^26.0.0"
+    "babel-plugin-tester": "^11.0.0"
   }
 }

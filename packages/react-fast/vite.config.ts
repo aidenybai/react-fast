@@ -9,7 +9,7 @@ export default defineConfig({
       dts: false,
       clean: false,
       platform: "browser",
-      sourcemap: false,
+      sourcemap: true,
       minify: process.env.NODE_ENV === "production",
     },
     {
@@ -17,12 +17,13 @@ export default defineConfig({
       format: ["cjs", "esm"],
       dts: true,
       clean: false,
-      platform: "node",
-      sourcemap: false,
+      platform: "browser",
+      sourcemap: true,
       minify: process.env.NODE_ENV === "production",
     },
   ],
   test: {
-    include: ["src/**/*.test.ts"],
+    include: ["tests/**/*.test.ts"],
+    environment: "jsdom",
   },
 });
