@@ -25,7 +25,6 @@ export const generateHooks = (
 
   const useRefId = getImportId("useRef");
 
-  // useRef avoids deps comparison overhead of useMemo; lazy-init avoids [] on re-renders
   const refCall = t.callExpression(useRefId, []);
   const refId = t.identifier(`_r$${instanceIndex}`);
   statements.push(
@@ -48,16 +47,14 @@ export const generateHooks = (
 
   const allPaths = collectAllPaths(holes, inserts);
 
-  // Identify terminal paths (actually used by holes/inserts)
   const terminalPaths = new Set<string>();
   for (const hole of holes) {
-    const key = hole.walkPath.map((s) => s.method).join(".");
+    const key = hole.walkPath.map((step) => step.method).join(".");
     if (key) terminalPaths.add(key);
   }
   for (const insert of inserts) {
-    const key = insert.walkPath.map((s) => s.method).join(".");
+    const key = insert.walkPath.map((step) => step.method).join(".");
     if (key) terminalPaths.add(key);
-    // Also mark parent path as terminal (used by insert for parent element)
     const parentKey = findParentPath(insert.walkPath);
     if (parentKey) terminalPaths.add(parentKey);
   }
@@ -71,7 +68,6 @@ export const generateHooks = (
     if (terminalPaths.has(pathKey)) {
       pathToSlot.set(pathKey, slotCounter++);
     } else {
-      // Intermediate: use local variable instead of cache slot
       const localName = `_n$${localCounter++}`;
       intermediateLocals.set(pathKey, localName);
     }
@@ -79,7 +75,6 @@ export const generateHooks = (
 
   const rootSlot = slotCounter++;
 
-  // Build the ref callback
   const refBody: t.Statement[] = [];
   refBody.push(t.ifStatement(t.unaryExpression("!", t.identifier("_el")), t.returnStatement()));
 
@@ -102,7 +97,6 @@ export const generateHooks = (
     for (let i = 0; i < steps.length; i++) {
       const partialKey = steps.slice(0, i + 1).join(".");
       if (partialKey !== pathKey) {
-        // Use either cache slot or local variable for this prefix
         const partialSlot = pathToSlot.get(partialKey);
         if (partialSlot !== undefined) {
           accessExpr = t.memberExpression(cacheId, t.numericLiteral(partialSlot), true);
@@ -151,18 +145,14 @@ export const generateHooks = (
 
   refBody.push(...walkStatements);
 
-  // Build the patch body (for re-renders with dirty checking)
   const patchBody: t.Statement[] = [];
-  // Build init body (for ref callback — direct assignment, no dirty checks)
   const initBody: t.Statement[] = [];
 
-  // Track attribute cache slots for init
   const attrCacheSlots: { slot: number; expression: t.Expression; elementExpr: t.Expression; name: string }[] = [];
-  // Track insert cache slots for init
   const insertCacheSlots: { slot: number; markerExpr: t.Expression; valueExpr: t.Expression }[] = [];
 
   for (const hole of holes) {
-    const pathKey = hole.walkPath.map((s) => s.method).join(".");
+    const pathKey = hole.walkPath.map((step) => step.method).join(".");
     const slot = pathKey ? pathToSlot.get(pathKey) : undefined;
     const elementExpr: t.Expression =
       slot !== undefined
@@ -178,13 +168,11 @@ export const generateHooks = (
             t.isArrowFunctionExpression(hole.expression) &&
             hole.expression.params.length === 0
           ) {
-            // Optimize: extract free vars, hoist handler, use $$Data pattern
             const freeVars = collectFreeVars(hole.expression);
             if (freeVars.size > 0) {
               const handlerName = `_$eh${instanceIndex}_${hoistedHandlerCounter++}`;
               const dataParam = t.identifier("_d");
 
-              // Clone the handler body and rewrite free vars to read from _d
               const rewrittenBody = rewriteFreeVars(hole.expression.body, freeVars, dataParam);
               const hoistedHandler = t.variableDeclaration("const", [
                 t.variableDeclarator(
@@ -194,7 +182,6 @@ export const generateHooks = (
               ]);
               hoistedDeclarations.push(hoistedHandler);
 
-              // Store free var values on cache each render (deduplicated)
               for (const varName of freeVars) {
                 if (!storedFreeVars.has(varName)) {
                   storedFreeVars.add(varName);
@@ -210,7 +197,6 @@ export const generateHooks = (
                 }
               }
 
-              // In ref init: set handler + data once
               initBody.push(
                 t.expressionStatement(
                   t.assignmentExpression(
@@ -228,9 +214,7 @@ export const generateHooks = (
                 ),
               );
 
-              // No patch body needed — handler reads latest values from cache
             } else {
-              // No free vars: handler is pure, set once
               initBody.push(
                 t.expressionStatement(
                   t.assignmentExpression(
@@ -423,7 +407,7 @@ export const generateHooks = (
   for (let i = 0; i < inserts.length; i++) {
     const insert = inserts[i]!;
 
-    const markerPathKey = insert.walkPath.map((s) => s.method).join(".");
+    const markerPathKey = insert.walkPath.map((step) => step.method).join(".");
     const markerSlot = pathToSlot.get(markerPathKey);
     const markerExpr =
       markerSlot !== undefined
@@ -455,7 +439,6 @@ export const generateHooks = (
     insertCacheSlots.push({ slot: cacheSlot, markerExpr, valueExpr });
   }
 
-  // Inline init for attributes: direct write + cache init
   for (const { slot, expression, elementExpr, name } of attrCacheSlots) {
     initBody.push(
       t.expressionStatement(
@@ -472,7 +455,6 @@ export const generateHooks = (
     );
   }
 
-  // Inline init for inserts: store raw value for comparison, write coerced to DOM
   for (const { slot, markerExpr, valueExpr } of insertCacheSlots) {
     initBody.push(
       t.expressionStatement(
@@ -492,7 +474,6 @@ export const generateHooks = (
     );
   }
 
-  // Add init body to ref (inline initialization without dirty checks)
   refBody.push(...initBody);
 
   const refFnExpr = t.arrowFunctionExpression([t.identifier("_el")], t.blockStatement(refBody));
@@ -506,7 +487,6 @@ export const generateHooks = (
     ),
   );
 
-  // On re-renders (DOM already mounted), patch inline — no function allocation
   if (patchBody.length > 0) {
     statements.push(
       t.ifStatement(
@@ -523,16 +503,16 @@ const collectAllPaths = (holes: DynamicHole[], inserts: InsertHole[]): string[] 
   const paths = new Set<string>();
 
   for (const hole of holes) {
-    const pathKey = hole.walkPath.map((s) => s.method).join(".");
+    const pathKey = hole.walkPath.map((step) => step.method).join(".");
     if (pathKey) paths.add(pathKey);
   }
 
   for (const insert of inserts) {
-    const pathKey = insert.walkPath.map((s) => s.method).join(".");
+    const pathKey = insert.walkPath.map((step) => step.method).join(".");
     if (pathKey) paths.add(pathKey);
     const parentKey = insert.walkPath
       .slice(0, -1)
-      .map((s) => s.method)
+      .map((step) => step.method)
       .join(".");
     if (parentKey) paths.add(parentKey);
   }
@@ -546,11 +526,11 @@ const collectAllPaths = (holes: DynamicHole[], inserts: InsertHole[]): string[] 
     }
   }
 
-  return [...withIntermediates].sort((a, b) => {
-    const aDepth = a.split(".").length;
-    const bDepth = b.split(".").length;
-    if (aDepth !== bDepth) return aDepth - bDepth;
-    return a.localeCompare(b);
+  return [...withIntermediates].sort((pathA, pathB) => {
+    const depthA = pathA.split(".").length;
+    const depthB = pathB.split(".").length;
+    if (depthA !== depthB) return depthA - depthB;
+    return pathA.localeCompare(pathB);
   });
 };
 
@@ -565,7 +545,7 @@ const findParentPath = (walkPath: TemplateWalkStep[]): string => {
   if (lastFirstChildIdx <= 0) return "";
   return walkPath
     .slice(0, lastFirstChildIdx)
-    .map((s) => s.method)
+    .map((step) => step.method)
     .join(".");
 };
 
@@ -606,7 +586,6 @@ const collectFreeVars = (fn: t.ArrowFunctionExpression): Set<string> => {
     }
 
     if (t.isMemberExpression(node)) {
-      // Only the object part contributes free vars, not computed property
       if (t.isIdentifier(node.object) && !declared.has(node.object.name)) {
         freeVars.add(node.object.name);
       } else {
@@ -690,9 +669,8 @@ const collectFreeVars = (fn: t.ArrowFunctionExpression): Set<string> => {
     visit(fn.body);
   }
 
-  // Filter out well-known globals
   const globals = new Set(["undefined", "null", "true", "false", "NaN", "Infinity", "console", "Math", "Date", "JSON", "Object", "Array", "String", "Number", "Boolean", "Promise", "Symbol", "Map", "Set", "WeakMap", "WeakSet", "Error", "TypeError", "parseInt", "parseFloat", "isNaN", "isFinite"]);
-  for (const g of globals) freeVars.delete(g);
+  for (const globalName of globals) freeVars.delete(globalName);
 
   return freeVars;
 };
@@ -702,7 +680,6 @@ const rewriteFreeVars = (
   freeVars: Set<string>,
   dataParam: t.Identifier,
 ): t.Expression | t.BlockStatement => {
-  // Deep clone the body and replace free var identifiers with _d._ev_varName
   const cloned = t.cloneNode(body, true);
   rewriteNode(cloned, freeVars, dataParam);
   return cloned;
@@ -715,7 +692,6 @@ const rewriteNode = (
 ): void => {
   if (t.isMemberExpression(node)) {
     if (t.isIdentifier(node.object) && freeVars.has(node.object.name)) {
-      // Replace: item.id → _d._ev_item.id
       (node as any).object = t.memberExpression(dataParam, t.identifier(`_ev_${node.object.name}`));
     } else {
       rewriteNode(node.object, freeVars, dataParam);

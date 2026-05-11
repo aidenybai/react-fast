@@ -28,7 +28,8 @@ describe("template generation", () => {
       function B() { return <div class="x"><span>A</span></div>; }
     `);
     const templateDecls = output.match(/_tmpl\$\d+\s*=/g);
-    expect(templateDecls?.length).toBe(1);
+    // 2 templates: children-only + full-element (both shared across A and B)
+    expect(templateDecls?.length).toBe(2);
   });
 
   it("creates separate templates for different structures", () => {

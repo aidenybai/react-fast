@@ -117,11 +117,11 @@ const detectSelector = (
   return null;
 };
 
-const expressionsMatch = (a: t.Expression | t.Node, b: t.Expression | t.Node): boolean => {
-  if (t.isIdentifier(a) && t.isIdentifier(b)) return a.name === b.name;
-  if (t.isMemberExpression(a) && t.isMemberExpression(b)) {
-    if (!expressionsMatch(a.object, b.object)) return false;
-    if (t.isIdentifier(a.property) && t.isIdentifier(b.property)) return a.property.name === b.property.name;
+const expressionsMatch = (nodeA: t.Expression | t.Node, nodeB: t.Expression | t.Node): boolean => {
+  if (t.isIdentifier(nodeA) && t.isIdentifier(nodeB)) return nodeA.name === nodeB.name;
+  if (t.isMemberExpression(nodeA) && t.isMemberExpression(nodeB)) {
+    if (!expressionsMatch(nodeA.object, nodeB.object)) return false;
+    if (t.isIdentifier(nodeA.property) && t.isIdentifier(nodeB.property)) return nodeA.property.name === nodeB.property.name;
     return false;
   }
   return false;
@@ -320,7 +320,7 @@ const expressionContainsJSX = (expr: t.Expression | t.Node): boolean => {
     return expressionContainsJSX(expr.left) || expressionContainsJSX(expr.right);
   }
   if (t.isSequenceExpression(expr)) {
-    return expr.expressions.some((e) => expressionContainsJSX(e));
+    return expr.expressions.some((innerExpr) => expressionContainsJSX(innerExpr));
   }
   if (t.isCallExpression(expr)) {
     if (t.isMemberExpression(expr.callee) && t.isIdentifier(expr.callee.property)) {

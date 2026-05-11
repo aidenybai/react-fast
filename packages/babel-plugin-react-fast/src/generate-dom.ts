@@ -26,11 +26,11 @@ export const generateDomProtocol = (
   const allPaths = collectAllPaths(holes, inserts);
   const terminalPaths = new Set<string>();
   for (const hole of holes) {
-    const key = hole.walkPath.map((s) => s.method).join(".");
+    const key = hole.walkPath.map((step) => step.method).join(".");
     if (key) terminalPaths.add(key);
   }
   for (const insert of inserts) {
-    const key = insert.walkPath.map((s) => s.method).join(".");
+    const key = insert.walkPath.map((step) => step.method).join(".");
     if (key) terminalPaths.add(key);
     const parentKey = findParentPath(insert.walkPath);
     if (parentKey) terminalPaths.add(parentKey);
@@ -49,7 +49,6 @@ export const generateDomProtocol = (
     }
   }
 
-  // --- Build walk statements ---
   const walkStatements: t.Statement[] = [];
   for (const pathKey of allPaths) {
     const steps = pathKey.split(".");
@@ -87,7 +86,6 @@ export const generateDomProtocol = (
     }
   }
 
-  // --- Build init body (for create) and patch body ---
   const initBody: t.Statement[] = [];
   const patchBody: t.Statement[] = [];
   const freeVarStores: t.Statement[] = [];
@@ -97,7 +95,7 @@ export const generateDomProtocol = (
   const insertCacheSlots: { slot: number; markerExpr: t.Expression; valueExpr: t.Expression }[] = [];
 
   for (const hole of holes) {
-    const pathKey = hole.walkPath.map((s) => s.method).join(".");
+    const pathKey = hole.walkPath.map((step) => step.method).join(".");
     const slot = pathKey ? pathToSlot.get(pathKey) : undefined;
     const elementExpr: t.Expression =
       slot !== undefined
@@ -204,7 +202,7 @@ export const generateDomProtocol = (
 
   for (let i = 0; i < inserts.length; i++) {
     const insert = inserts[i]!;
-    const markerPathKey = insert.walkPath.map((s) => s.method).join(".");
+    const markerPathKey = insert.walkPath.map((step) => step.method).join(".");
     const markerSlot = pathToSlot.get(markerPathKey);
     const markerExpr =
       markerSlot !== undefined
@@ -256,7 +254,6 @@ export const generateDomProtocol = (
     );
   }
 
-  // --- Assemble __dom.c (create) ---
   const createPreamble: t.Statement[] = fullTemplateId
     ? [
         t.variableDeclaration("const", [
@@ -283,12 +280,11 @@ export const generateDomProtocol = (
   ];
 
   const createFn = t.arrowFunctionExpression(
-    componentParams.map((p) => t.cloneNode(p, true)),
+    componentParams.map((param) => t.cloneNode(param, true)),
     t.blockStatement(createBody),
   );
 
-  // --- Assemble __dom.p (patch) ---
-  const patchFreeVarStores = freeVarStores.map((s) => t.cloneNode(s, true));
+  const patchFreeVarStores = freeVarStores.map((statement) => t.cloneNode(statement, true));
   const patchBodyStatements: t.Statement[] = [
     t.variableDeclaration("const", [
       t.variableDeclarator(t.cloneNode(cacheId), t.memberExpression(t.cloneNode(elId), t.identifier("__c"))),
@@ -298,25 +294,23 @@ export const generateDomProtocol = (
   ];
 
   const patchFn = t.arrowFunctionExpression(
-    [t.cloneNode(elId), ...componentParams.map((p) => t.cloneNode(p, true))],
+    [t.cloneNode(elId), ...componentParams.map((param) => t.cloneNode(param, true))],
     t.blockStatement(patchBodyStatements),
   );
 
   return { createFn, patchFn, delegatedEvents, hoistedDeclarations };
 };
 
-// --- Shared helpers (duplicated from generate-hooks.ts for isolation) ---
-
 const collectAllPaths = (holes: DynamicHole[], inserts: InsertHole[]): string[] => {
   const paths = new Set<string>();
   for (const hole of holes) {
-    const key = hole.walkPath.map((s) => s.method).join(".");
+    const key = hole.walkPath.map((step) => step.method).join(".");
     if (key) paths.add(key);
   }
   for (const insert of inserts) {
-    const key = insert.walkPath.map((s) => s.method).join(".");
+    const key = insert.walkPath.map((step) => step.method).join(".");
     if (key) paths.add(key);
-    const parentKey = insert.walkPath.slice(0, -1).map((s) => s.method).join(".");
+    const parentKey = insert.walkPath.slice(0, -1).map((step) => step.method).join(".");
     if (parentKey) paths.add(parentKey);
   }
   const withIntermediates = new Set<string>();
@@ -327,11 +321,11 @@ const collectAllPaths = (holes: DynamicHole[], inserts: InsertHole[]): string[] 
       withIntermediates.add(steps.slice(0, i).join("."));
     }
   }
-  return [...withIntermediates].sort((a, b) => {
-    const aDepth = a.split(".").length;
-    const bDepth = b.split(".").length;
-    if (aDepth !== bDepth) return aDepth - bDepth;
-    return a.localeCompare(b);
+  return [...withIntermediates].sort((pathA, pathB) => {
+    const depthA = pathA.split(".").length;
+    const depthB = pathB.split(".").length;
+    if (depthA !== depthB) return depthA - depthB;
+    return pathA.localeCompare(pathB);
   });
 };
 
@@ -344,7 +338,7 @@ const findParentPath = (walkPath: TemplateWalkStep[]): string => {
     }
   }
   if (lastFirstChildIdx <= 0) return "";
-  return walkPath.slice(0, lastFirstChildIdx).map((s) => s.method).join(".");
+  return walkPath.slice(0, lastFirstChildIdx).map((step) => step.method).join(".");
 };
 
 const unwrapThunk = (expr: t.Expression): t.Expression => {
@@ -383,17 +377,17 @@ const collectFreeVars = (fn: t.ArrowFunctionExpression): Set<string> => {
     if (t.isConditionalExpression(node)) { visit(node.test); visit(node.consequent); visit(node.alternate); return; }
     if (t.isBinaryExpression(node) || t.isLogicalExpression(node)) { visit(node.left); visit(node.right); return; }
     if (t.isUnaryExpression(node)) { visit(node.argument); return; }
-    if (t.isObjectExpression(node)) { for (const p of node.properties) { if (t.isObjectProperty(p)) visit(p.value); } return; }
-    if (t.isTemplateLiteral(node)) { for (const e of node.expressions) visit(e); return; }
+    if (t.isObjectExpression(node)) { for (const prop of node.properties) { if (t.isObjectProperty(prop)) visit(prop.value); } return; }
+    if (t.isTemplateLiteral(node)) { for (const expr of node.expressions) visit(expr); return; }
     if (t.isExpressionStatement(node)) { visit(node.expression); return; }
-    if (t.isBlockStatement(node)) { for (const s of node.body) visit(s); return; }
+    if (t.isBlockStatement(node)) { for (const stmt of node.body) visit(stmt); return; }
     if (t.isReturnStatement(node) && node.argument) { visit(node.argument); return; }
   };
 
   if (t.isExpression(fn.body)) visit(fn.body);
   else visit(fn.body);
 
-  for (const g of globals) freeVars.delete(g);
+  for (const globalName of globals) freeVars.delete(globalName);
   return freeVars;
 };
 
@@ -425,9 +419,9 @@ const rewriteNode = (node: t.Node, freeVars: Set<string>, dataParam: t.Identifie
   if (t.isConditionalExpression(node)) { rewriteNode(node.test, freeVars, dataParam); rewriteNode(node.consequent, freeVars, dataParam); rewriteNode(node.alternate, freeVars, dataParam); return; }
   if (t.isBinaryExpression(node) || t.isLogicalExpression(node)) { rewriteNode(node.left, freeVars, dataParam); rewriteNode(node.right, freeVars, dataParam); return; }
   if (t.isUnaryExpression(node)) { rewriteNode(node.argument, freeVars, dataParam); return; }
-  if (t.isObjectExpression(node)) { for (const p of node.properties) { if (t.isObjectProperty(p)) { if (p.computed) rewriteNode(p.key, freeVars, dataParam); rewriteNode(p.value, freeVars, dataParam); } } return; }
-  if (t.isTemplateLiteral(node)) { for (const e of node.expressions) rewriteNode(e, freeVars, dataParam); return; }
+  if (t.isObjectExpression(node)) { for (const prop of node.properties) { if (t.isObjectProperty(prop)) { if (prop.computed) rewriteNode(prop.key, freeVars, dataParam); rewriteNode(prop.value, freeVars, dataParam); } } return; }
+  if (t.isTemplateLiteral(node)) { for (const expr of node.expressions) rewriteNode(expr, freeVars, dataParam); return; }
   if (t.isExpressionStatement(node)) { rewriteNode(node.expression, freeVars, dataParam); return; }
-  if (t.isBlockStatement(node)) { for (const s of node.body) rewriteNode(s, freeVars, dataParam); return; }
+  if (t.isBlockStatement(node)) { for (const stmt of node.body) rewriteNode(stmt, freeVars, dataParam); return; }
   if (t.isReturnStatement(node) && node.argument) { rewriteNode(node.argument, freeVars, dataParam); return; }
 };

@@ -45,7 +45,6 @@ export const generateListCode = (
     ]),
   ];
 
-  // Stable ref: cached on first call so React doesn't re-invoke on re-renders
   const refFnBody = t.arrowFunctionExpression(
     [t.identifier("_el")],
     t.blockStatement([
@@ -69,13 +68,13 @@ export const generateListCode = (
   return { cacheStatements, refCallback, patchBlock, cacheId };
 };
 
-function buildPatchBlock(
+const buildPatchBlock = (
   cacheId: t.Identifier,
   analysis: MapAnalysis,
   compId: t.Identifier,
   domAccess: t.Expression,
   reconcileId: t.Identifier,
-): t.Statement {
+): t.Statement => {
   const parentEl = t.memberExpression(cacheId, t.identifier("e"));
   const nodes = t.memberExpression(cacheId, t.identifier("n"));
   const keyMap = t.memberExpression(cacheId, t.identifier("k"));
@@ -273,18 +272,15 @@ function buildPatchBlock(
           ),
         ),
         t.blockStatement([
-          // Remove DOM node
           t.expressionStatement(
             t.callExpression(
               t.memberExpression(t.cloneNode(parentEl, true), t.identifier("removeChild")),
               [t.memberExpression(t.cloneNode(nodes, true), delIdx, true)],
             ),
           ),
-          // Splice nodes array
           t.expressionStatement(
             t.callExpression(t.memberExpression(t.cloneNode(nodes, true), t.identifier("splice")), [delIdx, t.numericLiteral(1)]),
           ),
-          // Rebuild keyMap from new data
           t.expressionStatement(t.callExpression(t.memberExpression(t.cloneNode(keyMap, true), t.identifier("clear")), [])),
           t.forStatement(
             t.variableDeclaration("let", [t.variableDeclarator(iVar, t.numericLiteral(0))]),
@@ -418,15 +414,15 @@ function buildPatchBlock(
   ];
 
   return t.blockStatement(patchStatements) as unknown as t.Statement;
-}
+};
 
-function buildPropsWithOverride(
+const buildPropsWithOverride = (
   analysis: MapAnalysis,
   itemExpr: t.Expression,
   indexExpr: t.Expression,
   overrideProp: string,
   overrideValue: t.Expression,
-): t.ObjectExpression {
+): t.ObjectExpression => {
   const properties: t.ObjectProperty[] = [];
   for (const prop of analysis.props) {
     if (prop.name === overrideProp) {
@@ -438,20 +434,20 @@ function buildPropsWithOverride(
     }
   }
   return t.objectExpression(properties);
-}
+};
 
-function rewriteItemRefs(
+const rewriteItemRefs = (
   expr: t.Expression,
   itemParam: t.Pattern,
   replacement: t.Expression,
   _indexExpr: t.Expression,
-): t.Expression {
+): t.Expression => {
   if (!t.isIdentifier(itemParam)) return expr;
   const paramName = itemParam.name;
   return rewriteIdentifier(expr, paramName, replacement);
-}
+};
 
-function rewriteIdentifier(expr: t.Expression, name: string, replacement: t.Expression): t.Expression {
+const rewriteIdentifier = (expr: t.Expression, name: string, replacement: t.Expression): t.Expression => {
   if (t.isIdentifier(expr) && expr.name === name) {
     return t.cloneNode(replacement, true);
   }
@@ -472,7 +468,7 @@ function rewriteIdentifier(expr: t.Expression, name: string, replacement: t.Expr
   }
   if (t.isCallExpression(expr)) {
     expr.callee = rewriteIdentifier(expr.callee as t.Expression, name, replacement);
-    expr.arguments = expr.arguments.map(a => t.isExpression(a) ? rewriteIdentifier(a, name, replacement) : a);
+    expr.arguments = expr.arguments.map((arg) => t.isExpression(arg) ? rewriteIdentifier(arg, name, replacement) : arg);
     return expr;
   }
   if (t.isObjectExpression(expr)) {
@@ -493,8 +489,8 @@ function rewriteIdentifier(expr: t.Expression, name: string, replacement: t.Expr
     return expr;
   }
   if (t.isTemplateLiteral(expr)) {
-    expr.expressions = expr.expressions.map(e => t.isExpression(e) ? rewriteIdentifier(e, name, replacement) : e);
+    expr.expressions = expr.expressions.map((innerExpr) => t.isExpression(innerExpr) ? rewriteIdentifier(innerExpr, name, replacement) : innerExpr);
     return expr;
   }
   return expr;
-}
+};

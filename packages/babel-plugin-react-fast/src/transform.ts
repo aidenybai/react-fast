@@ -32,7 +32,6 @@ export const transformJSXElement = (
     return null;
   }
 
-  // Check for list optimization: native element with sole .map() child returning a component
   const listResult = tryTransformListOptimization(path, state);
   if (listResult) return listResult;
 
@@ -57,13 +56,13 @@ export const transformJSXFragment = (
     return null;
   }
 
-  const children = path.node.children.filter((c) => !(t.isJSXText(c) && !c.value.trim()));
+  const children = path.node.children.filter((childNode) => !(t.isJSXText(childNode) && !childNode.value.trim()));
 
   if (children.length === 0) return t.nullLiteral();
   if (children.length === 1) {
     const child = children[0]!;
     if (t.isJSXElement(child)) {
-      const childPath = path.get("children").find((p) => p.node === child) as
+      const childPath = path.get("children").find((innerPath) => innerPath.node === child) as
         | NodePath<t.JSXElement>
         | undefined;
       if (childPath) return transformJSXElement(childPath, state);
@@ -97,7 +96,7 @@ export const transformJSXFragment = (
       if (isComponent(childTagName)) {
         elements.push(transformComponent(child, path));
       } else {
-        const childPath = path.get("children").find((p) => p.node === child) as
+        const childPath = path.get("children").find((innerPath) => innerPath.node === child) as
           | NodePath<t.JSXElement>
           | undefined;
         if (childPath) {
@@ -186,22 +185,19 @@ const transformFullOptimization = (
     state.delegatedEvents.add(event);
   }
 
-  // Hoist module-level declarations (e.g., extracted event handlers)
   if (hooks.hoistedDeclarations.length > 0) {
-    const program = path.findParent((p) => p.isProgram());
-    if (program) {
-      for (const decl of hooks.hoistedDeclarations) {
-        (program as NodePath<t.Program>).pushContainer("body", decl);
+    const programPath = path.findParent((ancestor) => ancestor.isProgram());
+    if (programPath) {
+      for (const declaration of hooks.hoistedDeclarations) {
+        (programPath as NodePath<t.Program>).pushContainer("body", declaration);
       }
     }
   }
 
   injectHooksIntoFunction(path, hooks.statements);
 
-  // Register full template (includes outer element) for __dom.c — avoids createElement + appendChild
   const fullTemplateInfo = registerTemplate(childrenHtml.fullHtml, childrenHtml.isSVG, state, false);
 
-  // Generate __dom protocol for list optimization
   emitDomProtocol(path, state, tagName, templateInfo.id, childrenHtml.holes, childrenHtml.inserts, instanceIndex, fullTemplateInfo.id);
 
   const createElementId = getImportId("createElement");
@@ -301,10 +297,10 @@ const emitDomProtocol = (
     state.delegatedEvents.add(event);
   }
 
-  const program = path.findParent((p) => p.isProgram());
-  if (program && dom.hoistedDeclarations.length > 0) {
-    for (const decl of dom.hoistedDeclarations) {
-      (program as NodePath<t.Program>).pushContainer("body", decl);
+  const programPath = path.findParent((ancestor) => ancestor.isProgram());
+  if (programPath && dom.hoistedDeclarations.length > 0) {
+    for (const declaration of dom.hoistedDeclarations) {
+      (programPath as NodePath<t.Program>).pushContainer("body", declaration);
     }
   }
 
@@ -324,9 +320,8 @@ const tryTransformListOptimization = (
   const tagName = getTagName(node);
   if (isComponent(tagName)) return null;
 
-  // Check: sole meaningful child is a JSXExpressionContainer with a .map() call
   const meaningfulChildren = node.children.filter(
-    (c) => !(t.isJSXText(c) && !c.value.trim()),
+    (childNode) => !(t.isJSXText(childNode) && !childNode.value.trim()),
   );
   if (meaningfulChildren.length !== 1) return null;
 
@@ -378,7 +373,6 @@ const tryTransformListOptimization = (
     }
   }
 
-  // Cache the React element so React bails out on re-renders (stable ref + same element reference)
   const elemExpr = t.callExpression(createElementId, [
     t.stringLiteral(tagName),
     t.objectExpression(staticProps),
@@ -394,12 +388,12 @@ const transformFragmentOptimization = (
   path: NodePath<t.JSXFragment>,
   state: PluginState,
 ): t.Expression => {
-  const children = path.node.children.filter((c) => !(t.isJSXText(c) && !c.value.trim()));
+  const children = path.node.children.filter((childNode) => !(t.isJSXText(childNode) && !childNode.value.trim()));
   const elements: t.Expression[] = [];
 
   for (const child of children) {
     if (t.isJSXElement(child)) {
-      const childPath = path.get("children").find((p) => p.node === child) as
+      const childPath = path.get("children").find((innerPath) => innerPath.node === child) as
         | NodePath<t.JSXElement>
         | undefined;
       if (childPath) {
@@ -578,9 +572,9 @@ const registerSSRFlag = (state: PluginState, path: NodePath): t.Identifier => {
   if (state.ssrFlagId) return state.ssrFlagId;
   const id = t.identifier("_SSR$");
   state.ssrFlagId = id;
-  const program = path.findParent((p) => p.isProgram());
-  if (program) {
-    (program as NodePath<t.Program>).unshiftContainer(
+  const programPath = path.findParent((ancestor) => ancestor.isProgram());
+  if (programPath) {
+    (programPath as NodePath<t.Program>).unshiftContainer(
       "body",
       t.variableDeclaration("const", [
         t.variableDeclarator(
@@ -816,7 +810,6 @@ const buildNativeElement = (
   path: NodePath,
   state: PluginState,
 ): t.Expression => {
-  // Check for list optimization: sole child is a .map() returning a component
   const listResult = tryBuildListElement(node, path, state);
   if (listResult) return listResult;
 
@@ -873,7 +866,7 @@ const tryBuildListElement = (
 ): t.Expression | null => {
   const tagName = getTagName(node);
   const meaningfulChildren = node.children.filter(
-    (c) => !(t.isJSXText(c) && !c.value.trim()),
+    (childNode) => !(t.isJSXText(childNode) && !childNode.value.trim()),
   );
   if (meaningfulChildren.length !== 1) return null;
 

@@ -419,7 +419,7 @@ const buildComponentExpression = (
     }
   }
 
-  const children = node.children.filter((c) => !(t.isJSXText(c) && !c.value.trim()));
+  const children = node.children.filter((childNode) => !(t.isJSXText(childNode) && !childNode.value.trim()));
   if (children.length > 0) {
     const childExprs = children.map((child) => {
       if (t.isJSXText(child)) return t.stringLiteral(child.value.trim());

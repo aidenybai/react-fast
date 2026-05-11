@@ -76,29 +76,31 @@ import { use as _$use } from "react-fast";
 import { useRef as _$useRef } from "react";
 const _SSR$ = typeof window === "undefined";
 const _tmpl$1 = /*#__PURE__*/_$template("Hello \\u200B", true),
-  _tmpl$3 = /*#__PURE__*/_$template("\\u200B", true);
+  _tmpl$3 = /*#__PURE__*/_$template("<div>Hello \\u200B</div>"),
+  _tmpl$4 = /*#__PURE__*/_$template("\\u200B", true),
+  _tmpl$6 = /*#__PURE__*/_$template("<div>\\u200B</div>");
 const Child = props => {
-  const _r$4 = _$useRef();
-  const _c$4 = _r$4.current || (_r$4.current = []);
-  if (!_c$4.ref) _c$4.ref = _el => {
-    if (!_el) return;
-    if (!_el.firstChild) _el.appendChild(_tmpl$3());
-    _c$4[0] = _el.firstChild;
-    _c$4[1] = _el;
-    _$use(set, _c$4[1]);
-    _c$4[2] = props.children;
-    _c$4[0].data = "" + props.children;
-  };
-  if (_c$4[1]) {
-    _$use(set, _c$4[1]);
-    const _v$0 = props.children;
-    if (_c$4[2] !== _v$0) {
-      _c$4[2] = _v$0;
-      _c$4[0].data = "" + _v$0;
-    }
-  }
   const _r$2 = _$useRef();
   const _c$2 = _r$2.current || (_r$2.current = []);
+  const _r$5 = _$useRef();
+  const _c$5 = _r$5.current || (_r$5.current = []);
+  if (!_c$5.ref) _c$5.ref = _el => {
+    if (!_el) return;
+    if (!_el.firstChild) _el.appendChild(_tmpl$4());
+    _c$5[0] = _el.firstChild;
+    _c$5[1] = _el;
+    _$use(set, _c$5[1]);
+    _c$5[2] = props.children;
+    _c$5[0].data = "" + props.children;
+  };
+  if (_c$5[1]) {
+    _$use(set, _c$5[1]);
+    const _v$0 = props.children;
+    if (_c$5[2] !== _v$0) {
+      _c$5[2] = _v$0;
+      _c$5[0].data = "" + _v$0;
+    }
+  }
   if (!_c$2.ref) _c$2.ref = _el => {
     if (!_el) return;
     if (!_el.firstChild) _el.appendChild(_tmpl$1());
@@ -128,9 +130,48 @@ const Child = props => {
     dangerouslySetInnerHTML: {
       __html: \`<div>\${_$escape(props.children)}</div>\`
     }
-  }) : _c$4.node || (_c$4.node = _$createElement("div", {
-    ref: _c$4.ref
+  }) : _c$5.node || (_c$5.node = _$createElement("div", {
+    ref: _c$5.ref
   }))];
+};
+Child.__dom = {
+  c: props => {
+    const _el = _tmpl$6();
+    const _c = [];
+    _c[0] = _el.firstChild;
+    _c[1] = props.children;
+    _c[0].data = "" + props.children;
+    _el.__c = _c;
+    return _el;
+  },
+  p: (_el, props) => {
+    const _c = _el.__c;
+    const _v$0 = props.children;
+    if (_c[1] !== _v$0) {
+      _c[1] = _v$0;
+      _c[0].data = "" + _v$0;
+    }
+  }
+};
+Child.__dom = {
+  c: props => {
+    const _el = _tmpl$3();
+    const _c = [];
+    const _n$0 = _el.firstChild;
+    _c[0] = _n$0.nextSibling;
+    _c[1] = props.name;
+    _c[0].data = "" + props.name;
+    _el.__c = _c;
+    return _el;
+  },
+  p: (_el, props) => {
+    const _c = _el.__c;
+    const _v$0 = props.name;
+    if (_c[1] !== _v$0) {
+      _c[1] = _v$0;
+      _c[0].data = "" + _v$0;
+    }
+  }
 };
 const template = props => {
   let childRef;
@@ -373,7 +414,8 @@ exports[`babel-plugin-react-fast > fragments 1`] = `
 "import { template as _$template } from "react-fast";
 import { useRef as _$useRef, createElement as _$createElement } from "react";
 const _SSR$ = typeof window === "undefined";
-const _tmpl$1 = /*#__PURE__*/_$template("Title", true);
+const _tmpl$1 = /*#__PURE__*/_$template("Title", true),
+  _tmpl$3 = /*#__PURE__*/_$template("<h1>Title</h1>");
 const multiStatic = <>
     <div>First</div>
     <div>Last</div>
@@ -457,14 +499,31 @@ function FragmentComponent({
           <dd>{item.definition}</dd>
         </>;
   })];
-}"
+}
+FragmentComponent.__dom = {
+  c: ({
+    items
+  }) => {
+    const _el = _tmpl$3();
+    const _c = [];
+    _el.__c = _c;
+    return _el;
+  },
+  p: (_el, {
+    items
+  }) => {
+    const _c = _el.__c;
+  }
+};"
 `;
 
 exports[`babel-plugin-react-fast > insertChildren 1`] = `
 "import { escape as _$escape, template as _$template } from "react-fast";
 import { createElement as _$createElement, useRef as _$useRef } from "react";
 const _SSR$ = typeof window === "undefined";
-const _tmpl$1 = /*#__PURE__*/_$template("\\u200B", true);
+const _tmpl$1 = /*#__PURE__*/_$template("\\u200B", true),
+  _tmpl$3 = /*#__PURE__*/_$template("<header>\\u200B</header>"),
+  _tmpl$5 = /*#__PURE__*/_$template("<footer>\\u200B</footer>");
 const children = <div />;
 const dynamic = {
   children
@@ -514,25 +573,25 @@ function ListComponent({
 function NestedInserts({
   data
 }) {
-  const _r$3 = _$useRef();
-  const _c$3 = _r$3.current || (_r$3.current = []);
-  if (!_c$3.ref) _c$3.ref = _el => {
-    if (!_el) return;
-    if (!_el.firstChild) _el.appendChild(_tmpl$1());
-    _c$3[0] = _el.firstChild;
-    _c$3[1] = _el;
-    _c$3[2] = data.footer;
-    _c$3[0].data = "" + data.footer;
-  };
-  if (_c$3[1]) {
-    const _v$0 = data.footer;
-    if (_c$3[2] !== _v$0) {
-      _c$3[2] = _v$0;
-      _c$3[0].data = "" + _v$0;
-    }
-  }
   const _r$2 = _$useRef();
   const _c$2 = _r$2.current || (_r$2.current = []);
+  const _r$4 = _$useRef();
+  const _c$4 = _r$4.current || (_r$4.current = []);
+  if (!_c$4.ref) _c$4.ref = _el => {
+    if (!_el) return;
+    if (!_el.firstChild) _el.appendChild(_tmpl$1());
+    _c$4[0] = _el.firstChild;
+    _c$4[1] = _el;
+    _c$4[2] = data.footer;
+    _c$4[0].data = "" + data.footer;
+  };
+  if (_c$4[1]) {
+    const _v$0 = data.footer;
+    if (_c$4[2] !== _v$0) {
+      _c$4[2] = _v$0;
+      _c$4[0].data = "" + _v$0;
+    }
+  }
   if (!_c$2.ref) _c$2.ref = _el => {
     if (!_el) return;
     if (!_el.firstChild) _el.appendChild(_tmpl$1());
@@ -563,10 +622,56 @@ function NestedInserts({
     dangerouslySetInnerHTML: {
       __html: \`<footer>\${_$escape(data.footer)}</footer>\`
     }
-  }) : _c$3.node || (_c$3.node = _$createElement("footer", {
-    ref: _c$3.ref
+  }) : _c$4.node || (_c$4.node = _$createElement("footer", {
+    ref: _c$4.ref
   })));
-}"
+}
+NestedInserts.__dom = {
+  c: ({
+    data
+  }) => {
+    const _el = _tmpl$5();
+    const _c = [];
+    _c[0] = _el.firstChild;
+    _c[1] = data.footer;
+    _c[0].data = "" + data.footer;
+    _el.__c = _c;
+    return _el;
+  },
+  p: (_el, {
+    data
+  }) => {
+    const _c = _el.__c;
+    const _v$0 = data.footer;
+    if (_c[1] !== _v$0) {
+      _c[1] = _v$0;
+      _c[0].data = "" + _v$0;
+    }
+  }
+};
+NestedInserts.__dom = {
+  c: ({
+    data
+  }) => {
+    const _el = _tmpl$3();
+    const _c = [];
+    _c[0] = _el.firstChild;
+    _c[1] = data.title;
+    _c[0].data = "" + data.title;
+    _el.__c = _c;
+    return _el;
+  },
+  p: (_el, {
+    data
+  }) => {
+    const _c = _el.__c;
+    const _v$0 = data.title;
+    if (_c[1] !== _v$0) {
+      _c[1] = _v$0;
+      _c[0].data = "" + _v$0;
+    }
+  }
+};"
 `;
 
 exports[`babel-plugin-react-fast > simpleElements 1`] = `
@@ -616,7 +721,8 @@ import { createElement as _$createElement } from "react";
 import { spread as _$spread } from "react-fast";
 import { useRef as _$useRef } from "react";
 const _SSR$ = typeof window === "undefined";
-const _tmpl$1 = /*#__PURE__*/_$template("<div class=\\"card-body\\">\\u200B</div>", true);
+const _tmpl$1 = /*#__PURE__*/_$template("<div class=\\"card-body\\">\\u200B</div>", true),
+  _tmpl$3 = /*#__PURE__*/_$template("<div><div class=\\"card-body\\">\\u200B</div></div>");
 const template = <div {...props} />;
 const template2 = <div {...props} className="extra" />;
 const template3 = <div className="base" {...props} />;
@@ -674,6 +780,40 @@ function SpreadComponent({
     ref: _c$2.ref
   }));
 }
+SpreadComponent.__dom = {
+  c: ({
+    variant,
+    size,
+    ...rest
+  }) => {
+    const _el = _tmpl$3();
+    const _c = [];
+    _c[0] = _el.firstChild;
+    _c[1] = _c[0].firstChild;
+    _c[2] = _el.className = \`card card-\${variant} card-\${size}\`;
+    _c[3] = rest.children;
+    _c[1].data = "" + rest.children;
+    _el.__c = _c;
+    return _el;
+  },
+  p: (_el, {
+    variant,
+    size,
+    ...rest
+  }) => {
+    const _c = _el.__c;
+    const _a$2 = \`card card-\${variant} card-\${size}\`;
+    if (_c[2] !== _a$2) {
+      _c[2] = _a$2;
+      _el.className = _a$2;
+    }
+    const _v$0 = rest.children;
+    if (_c[3] !== _v$0) {
+      _c[3] = _v$0;
+      _c[1].data = "" + _v$0;
+    }
+  }
+};
 function ForwardedComponent(props) {
   const {
     className,
@@ -693,7 +833,8 @@ import { createElement as _$createElement } from "react";
 import { setAttribute as _$setAttribute } from "react-fast";
 import { useRef as _$useRef } from "react";
 const _SSR$ = typeof window === "undefined";
-const _tmpl$1 = /*#__PURE__*/_$template("<circle cx=\\"100\\" cy=\\"100\\" r=\\"90\\" fill=\\"none\\" stroke=\\"#e0e0e0\\" strokeWidth=\\"10\\"></circle><circle cx=\\"100\\" cy=\\"100\\" r=\\"90\\" fill=\\"none\\" stroke=\\"#4caf50\\" strokeWidth=\\"10\\" strokeLinecap=\\"round\\" transform=\\"rotate(-90 100 100)\\"></circle><text x=\\"100\\" y=\\"100\\" textAnchor=\\"middle\\" dominantBaseline=\\"central\\" fontSize=\\"24\\">\\u200B%</text>", true, true);
+const _tmpl$1 = /*#__PURE__*/_$template("<circle cx=\\"100\\" cy=\\"100\\" r=\\"90\\" fill=\\"none\\" stroke=\\"#e0e0e0\\" strokeWidth=\\"10\\"></circle><circle cx=\\"100\\" cy=\\"100\\" r=\\"90\\" fill=\\"none\\" stroke=\\"#4caf50\\" strokeWidth=\\"10\\" strokeLinecap=\\"round\\" transform=\\"rotate(-90 100 100)\\"></circle><text x=\\"100\\" y=\\"100\\" textAnchor=\\"middle\\" dominantBaseline=\\"central\\" fontSize=\\"24\\">\\u200B%</text>", true, true),
+  _tmpl$3 = /*#__PURE__*/_$template("<svg width=\\"200\\" height=\\"200\\" viewBox=\\"0 0 200 200\\"><circle cx=\\"100\\" cy=\\"100\\" r=\\"90\\" fill=\\"none\\" stroke=\\"#e0e0e0\\" strokeWidth=\\"10\\"></circle><circle cx=\\"100\\" cy=\\"100\\" r=\\"90\\" fill=\\"none\\" stroke=\\"#4caf50\\" strokeWidth=\\"10\\" strokeLinecap=\\"round\\" transform=\\"rotate(-90 100 100)\\"></circle><text x=\\"100\\" y=\\"100\\" textAnchor=\\"middle\\" dominantBaseline=\\"central\\" fontSize=\\"24\\">\\u200B%</text></svg>", false, true);
 const template = <svg width="400" height="180">
     <rect strokeWidth="2" x="50" y="20" rx="20" ry="20" width="150" height="150" style="fill:red;stroke:black;stroke-width:5;opacity:0.5" />
     <linearGradient gradientTransform="rotate(25)">
@@ -763,7 +904,33 @@ function AnimatedSVG({
   }) : _c$2.node || (_c$2.node = _$createElement("svg", {
     ref: _c$2.ref
   }));
-}"
+}
+AnimatedSVG.__dom = {
+  c: ({
+    progress
+  }) => {
+    const _el = _tmpl$3();
+    const _c = [];
+    const _n$0 = _el.firstChild;
+    _c[0] = _n$0.nextSibling;
+    _c[1] = _c[0].nextSibling;
+    _c[2] = _c[1].firstChild;
+    _c[3] = Math.round(progress * 100);
+    _c[2].data = "" + Math.round(progress * 100);
+    _el.__c = _c;
+    return _el;
+  },
+  p: (_el, {
+    progress
+  }) => {
+    const _c = _el.__c;
+    const _v$0 = Math.round(progress * 100);
+    if (_c[3] !== _v$0) {
+      _c[3] = _v$0;
+      _c[2].data = "" + _v$0;
+    }
+  }
+};"
 `;
 
 exports[`babel-plugin-react-fast > textInterpolation 1`] = `

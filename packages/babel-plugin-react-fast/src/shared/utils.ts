@@ -167,54 +167,54 @@ export const trimWhitespace = (text: string): string => {
     text = text
       .split("\n")
       .map((line, i) => (i ? line.replace(/^\s*/g, "") : line))
-      .filter((s) => !/^\s*$/.test(s))
+      .filter((line) => !/^\s*$/.test(line))
       .join(" ");
   }
   return text.replace(/\s+/g, " ");
 };
 
-export const escapeHtml = (s: string, attr = false): string => {
-  const delim = attr ? '"' : "<";
-  const escDelim = attr ? "&quot;" : "&lt;";
-  let iDelim = s.indexOf(delim);
-  let iAmp = s.indexOf("&");
+export const escapeHtml = (input: string, isAttribute = false): string => {
+  const delimiter = isAttribute ? '"' : "<";
+  const escapedDelimiter = isAttribute ? "&quot;" : "&lt;";
+  let delimiterIndex = input.indexOf(delimiter);
+  let ampersandIndex = input.indexOf("&");
 
-  if (iDelim < 0 && iAmp < 0) return s;
+  if (delimiterIndex < 0 && ampersandIndex < 0) return input;
 
   let left = 0;
-  let out = "";
+  let output = "";
 
-  while (iDelim >= 0 && iAmp >= 0) {
-    if (iDelim < iAmp) {
-      if (left < iDelim) out += s.substring(left, iDelim);
-      out += escDelim;
-      left = iDelim + 1;
-      iDelim = s.indexOf(delim, left);
+  while (delimiterIndex >= 0 && ampersandIndex >= 0) {
+    if (delimiterIndex < ampersandIndex) {
+      if (left < delimiterIndex) output += input.substring(left, delimiterIndex);
+      output += escapedDelimiter;
+      left = delimiterIndex + 1;
+      delimiterIndex = input.indexOf(delimiter, left);
     } else {
-      if (left < iAmp) out += s.substring(left, iAmp);
-      out += "&amp;";
-      left = iAmp + 1;
-      iAmp = s.indexOf("&", left);
+      if (left < ampersandIndex) output += input.substring(left, ampersandIndex);
+      output += "&amp;";
+      left = ampersandIndex + 1;
+      ampersandIndex = input.indexOf("&", left);
     }
   }
 
-  if (iDelim >= 0) {
+  if (delimiterIndex >= 0) {
     do {
-      if (left < iDelim) out += s.substring(left, iDelim);
-      out += escDelim;
-      left = iDelim + 1;
-      iDelim = s.indexOf(delim, left);
-    } while (iDelim >= 0);
+      if (left < delimiterIndex) output += input.substring(left, delimiterIndex);
+      output += escapedDelimiter;
+      left = delimiterIndex + 1;
+      delimiterIndex = input.indexOf(delimiter, left);
+    } while (delimiterIndex >= 0);
   } else {
-    while (iAmp >= 0) {
-      if (left < iAmp) out += s.substring(left, iAmp);
-      out += "&amp;";
-      left = iAmp + 1;
-      iAmp = s.indexOf("&", left);
+    while (ampersandIndex >= 0) {
+      if (left < ampersandIndex) output += input.substring(left, ampersandIndex);
+      output += "&amp;";
+      left = ampersandIndex + 1;
+      ampersandIndex = input.indexOf("&", left);
     }
   }
 
-  return left < s.length ? out + s.substring(left) : out;
+  return left < input.length ? output + input.substring(left) : output;
 };
 
 const ID_CHARS = "etaoinshrdlucwmfygpbTAOISWCBvkxjqzPHFMDRELNGUKVYJQZX_$";
@@ -258,6 +258,6 @@ export const getAttributeValue = (node: t.JSXAttribute): t.Expression | null => 
   return null;
 };
 
-export const camelToKebab = (s: string): string => {
-  return s.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
+export const camelToKebab = (input: string): string => {
+  return input.replace(/[A-Z]/g, (char) => `-${char.toLowerCase()}`);
 };

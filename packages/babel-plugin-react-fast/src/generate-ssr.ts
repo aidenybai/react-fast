@@ -159,7 +159,6 @@ const buildClientElementParts = (
         parts.push({ kind: "static", value: ` ${resolvedName}` });
       }
     } else if (value) {
-      // Dynamic attribute: interpolate into template literal
       parts.push({ kind: "static", value: ` ${resolvedName}="` });
       parts.push({ kind: "dynamic", expression: value });
       parts.push({ kind: "static", value: `"` });

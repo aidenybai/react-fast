@@ -54,7 +54,7 @@ export const getElementFromWalk = (
   rootExpr: t.Expression,
 ): t.Expression => {
   if (walkPath.length === 0) return rootExpr;
-  const pathKey = walkPath.map((s) => s.method).join(".");
+  const pathKey = walkPath.map((step) => step.method).join(".");
   return walkedIds.get(pathKey) || rootExpr;
 };
 
@@ -62,16 +62,16 @@ const collectAllWalkPaths = (holes: DynamicHole[], inserts: InsertHole[]): strin
   const paths = new Set<string>();
 
   for (const hole of holes) {
-    const pathKey = hole.walkPath.map((s) => s.method).join(".");
+    const pathKey = hole.walkPath.map((step) => step.method).join(".");
     if (pathKey) paths.add(pathKey);
   }
 
   for (const insert of inserts) {
-    const pathKey = insert.walkPath.map((s) => s.method).join(".");
+    const pathKey = insert.walkPath.map((step) => step.method).join(".");
     if (pathKey) paths.add(pathKey);
     const parentKey = insert.walkPath
       .slice(0, -1)
-      .map((s) => s.method)
+      .map((step) => step.method)
       .join(".");
     if (parentKey) paths.add(parentKey);
   }
@@ -85,11 +85,11 @@ const collectAllWalkPaths = (holes: DynamicHole[], inserts: InsertHole[]): strin
     }
   }
 
-  return [...withIntermediates].sort((a, b) => {
-    const aDepth = a.split(".").length;
-    const bDepth = b.split(".").length;
-    if (aDepth !== bDepth) return aDepth - bDepth;
-    return a.localeCompare(b);
+  return [...withIntermediates].sort((pathA, pathB) => {
+    const depthA = pathA.split(".").length;
+    const depthB = pathB.split(".").length;
+    if (depthA !== depthB) return depthA - depthB;
+    return pathA.localeCompare(pathB);
   });
 };
 
