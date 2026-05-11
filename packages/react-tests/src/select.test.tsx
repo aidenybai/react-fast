@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import React from "react";
 import * as ReactDOMClient from "react-dom/client";
 import * as ReactDOMServer from "react-dom/server";

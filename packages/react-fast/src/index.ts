@@ -27,6 +27,9 @@ export {
   style,
   setStyleProperty,
 
+  // SSR
+  escape,
+
   // Constants
   Properties,
   ChildProperties,

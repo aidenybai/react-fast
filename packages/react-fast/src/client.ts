@@ -60,15 +60,16 @@ export const template = (
       ? document.createElementNS("http://www.w3.org/1998/Math/MathML", "template")
       : document.createElement("template");
     templateElement.innerHTML = html;
+    if (isImportNode) {
+      return (templateElement as HTMLTemplateElement).content;
+    }
     return isSVG
       ? (templateElement as HTMLTemplateElement).content.firstChild!.firstChild!
       : isMathML
         ? templateElement.firstChild!
         : (templateElement as HTMLTemplateElement).content.firstChild!;
   };
-  const cloneFactory = isImportNode
-    ? () => _untrack(() => document.importNode(cachedNode || (cachedNode = createNode()), true))
-    : () => (cachedNode || (cachedNode = createNode())).cloneNode(true);
+  const cloneFactory = () => (cachedNode || (cachedNode = createNode())).cloneNode(true);
   (cloneFactory as unknown as Record<string, unknown>).cloneNode = cloneFactory;
   return cloneFactory;
 };
@@ -247,11 +248,18 @@ export const spread = (
 };
 
 export const use = (
-  fn: (el: Element, arg?: unknown) => void,
+  fn: ((el: Element, arg?: unknown) => void) | { current: unknown } | null | undefined,
   element: Element,
   arg?: unknown,
 ): unknown => {
-  return _untrack(() => fn(element, arg));
+  if (!fn) return undefined;
+  if (typeof fn === "function") {
+    return _untrack(() => fn(element, arg));
+  }
+  if (typeof fn === "object" && "current" in fn) {
+    fn.current = element;
+  }
+  return undefined;
 };
 
 // --- Insert ---
@@ -661,4 +669,51 @@ const cleanChildren = (
     }
   } else parent.insertBefore(replacementNode, marker);
   return [replacementNode];
+};
+
+// --- SSR Escape ---
+
+export const escape = (value: unknown, isAttr = false): string => {
+  const s = String(value ?? "");
+  const delim = isAttr ? '"' : "<";
+  const escDelim = isAttr ? "&quot;" : "&lt;";
+  let iDelim = s.indexOf(delim);
+  let iAmp = s.indexOf("&");
+
+  if (iDelim < 0 && iAmp < 0) return s;
+
+  let left = 0;
+  let out = "";
+
+  while (iDelim >= 0 && iAmp >= 0) {
+    if (iDelim < iAmp) {
+      if (left < iDelim) out += s.substring(left, iDelim);
+      out += escDelim;
+      left = iDelim + 1;
+      iDelim = s.indexOf(delim, left);
+    } else {
+      if (left < iAmp) out += s.substring(left, iAmp);
+      out += "&amp;";
+      left = iAmp + 1;
+      iAmp = s.indexOf("&", left);
+    }
+  }
+
+  if (iDelim >= 0) {
+    do {
+      if (left < iDelim) out += s.substring(left, iDelim);
+      out += escDelim;
+      left = iDelim + 1;
+      iDelim = s.indexOf(delim, left);
+    } while (iDelim >= 0);
+  } else {
+    while (iAmp >= 0) {
+      if (left < iAmp) out += s.substring(left, iAmp);
+      out += "&amp;";
+      left = iAmp + 1;
+      iAmp = s.indexOf("&", left);
+    }
+  }
+
+  return left < s.length ? out + s.substring(left) : out;
 };

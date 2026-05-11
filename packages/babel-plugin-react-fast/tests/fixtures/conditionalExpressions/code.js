@@ -32,25 +32,21 @@ const template16 = <div>{something?.something}</div>;
 
 const template17 = <div>{state?.dynamic ? "a" : "b"}</div>;
 
-const template18 = (
-  <div>
-    {isLoading ? <span>Loading...</span> : <span>{data}</span>}
-  </div>
-);
+const template18 = <div>{isLoading ? <span>Loading...</span> : <span>{data}</span>}</div>;
 
 const template19 = (
-  <div>
-    {items.length > 0 && items.map(item => <li key={item.id}>{item.name}</li>)}
-  </div>
+  <div>{items.length > 0 && items.map((item) => <li key={item.id}>{item.name}</li>)}</div>
 );
 
 const template20 = (
   <div>
-    {status === "success"
-      ? <div className="success">{message}</div>
-      : status === "error"
-        ? <div className="error">{error}</div>
-        : <div className="loading">Please wait...</div>}
+    {status === "success" ? (
+      <div className="success">{message}</div>
+    ) : status === "error" ? (
+      <div className="error">{error}</div>
+    ) : (
+      <div className="loading">Please wait...</div>
+    )}
   </div>
 );
 

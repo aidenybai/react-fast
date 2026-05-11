@@ -1,13 +1,6 @@
-const template = (
-  <my-element some-attr={name} notProp={data} />
-);
+const template = <my-element some-attr={name} notProp={data} />;
 
-const template2 = (
-  <my-element
-    some-attr={state.name}
-    notProp={state.data}
-  />
-);
+const template2 = <my-element some-attr={state.name} notProp={state.data} />;
 
 const template3 = (
   <my-element>
@@ -26,8 +19,12 @@ const template5 = (
     <h2 slot="title">{title}</h2>
     <div slot="content">
       <p>{description}</p>
-      <x-button variant="primary" onClick={handleConfirm}>Confirm</x-button>
-      <x-button variant="secondary" onClick={handleClose}>Cancel</x-button>
+      <x-button variant="primary" onClick={handleConfirm}>
+        Confirm
+      </x-button>
+      <x-button variant="secondary" onClick={handleClose}>
+        Cancel
+      </x-button>
     </div>
   </x-dialog>
 );

@@ -69,13 +69,19 @@ const lastComponent = (
   </>
 );
 
-const spaces = <><span>1</span> <span>2</span> <span>3</span></>;
+const spaces = (
+  <>
+    <span>1</span> <span>2</span> <span>3</span>
+  </>
+);
 
-const multiLineTrailing = <>
-  <span>1</span>
-  <span>2</span>
-  <span>3</span>
-</>;
+const multiLineTrailing = (
+  <>
+    <span>1</span>
+    <span>2</span>
+    <span>3</span>
+  </>
+);
 
 const nestedFragments = (
   <>
@@ -98,7 +104,7 @@ function FragmentComponent({ items }) {
   return (
     <>
       <h1>Title</h1>
-      {items.map(item => (
+      {items.map((item) => (
         <>
           <dt>{item.term}</dt>
           <dd>{item.definition}</dd>

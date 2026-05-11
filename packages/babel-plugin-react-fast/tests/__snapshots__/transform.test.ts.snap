@@ -1,480 +1,234 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`babel-plugin-react-fast > attributeExpressions 1`] = `
-"import { template as _$template, spread as _$spread2, use as _$use2, effect as _$effect2, style as _$style2, delegateEvents as _$delegateEvents } from "react-fast";
-const _tmpl$1 = _$template("<div id=\\"main\\"><h1 class=\\"base\\" disabled><a href=\\"/\\"> Welcome </a></h1></div>");
-const _tmpl$2 = _$template("<div><div></div></div>");
-const _tmpl$3 = _$template("<div></div>");
-const _tmpl$4 = _$template("<div class=\\"hi\\"></div>");
-const _tmpl$5 = _$template("<div class=\\"a\\" class=\\"b\\"></div>");
-const _tmpl$6 = _$template("<input type=\\"checkbox\\" checked>");
-const _tmpl$7 = _$template("<input type=\\"checkbox\\">");
-const _tmpl$8 = _$template("<div class=\\"\`a\\">\`$\`</div>");
-const _tmpl$9 = _$template("<button class=\\"static\\" type=\\"button\\"> Write </button>");
-const _tmpl$10 = _$template("<button> Hi </button>");
-const _tmpl$11 = _$template("<div><input readOnly=\\"\\"><input></div>");
-const _tmpl$12 = _$template("<div data-info=\\"&quot;hi&quot;\\" data-other=\\"&quot;\\"></div>");
-const _tmpl$13 = _$template("<div> </div>");
-const _tmpl$14 = _$template("<a something></a>");
-const _tmpl$15 = _$template("<div> <a something></a></div>");
-const _tmpl$16 = _$template("<div start=\\"Hi\\"> Hi </div>");
-const _tmpl$17 = _$template("<div class=\\"class1 class2 class3\\" style=\\"color: red; background-color: blue;\\"></div>");
-const _tmpl$18 = _$template("<input>");
-const _tmpl$19 = _$template("<div title=\\"&lt;u&gt;data&lt;/u&gt;\\"></div>");
-const selected = true;
+"const selected = true;
 let id = "my-h1";
 let link;
-const template = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  const _el$2 = _el$1.firstChild;
-  _$spread(_el$, results);
-  _$spread(_el$1, results());
-  _$use(link, _el$2);
-  _$effect(_prev => {
-    const _v$0 = {
-        color
-      },
-      _v$1 = id,
-      _v$2 = welcoming(),
-      _v$3 = {
-        "background-color": color(),
-        "margin-right": "40px"
-      };
-    if (_v$0 !== _prev.a) _prev.a = _$style(_el$, _v$0, _prev.a);
-    if (_v$1 !== _prev.b) _el$1.id = _prev.b = _v$1;
-    if (_v$2 !== _prev.c) _el$1.title = _prev.c = _v$2;
-    if (_v$3 !== _prev.d) _prev.d = _$style(_el$1, _v$3, _prev.d);
-    return _prev;
-  }, {
-    a: undefined,
-    b: undefined,
-    c: undefined,
-    d: undefined
-  });
-  return _el$;
-})();
-const template2 = (() => {
-  const _el$ = _tmpl$2();
-  const _el$1 = _el$.firstChild;
-  _$spread(_el$, getProps("test"));
-  _$effect(_prev => {
-    const _v$0 = {
-      __html: "<div/>"
-    }.__html;
-    if (_v$0 !== _prev.a) _el$1.innerHTML = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template3 = (() => {
-  const _el$ = _tmpl$3();
-  _$effect(_prev => {
-    const _v$0 = state.id,
-      _v$1 = state.name;
-    if (_v$0 !== _prev.a) _el$.id = _prev.a = _v$0;
-    if (_v$1 !== _prev.b) _el$.className = _prev.b = _v$1;
-    return _prev;
-  }, {
-    a: undefined,
-    b: undefined
-  });
-  return _el$;
-})();
-const template4 = (() => {
-  const _el$ = _tmpl$4();
-  _$effect(_prev => {
-    const _v$0 = state.class;
-    if (_v$0 !== _prev.a) _el$.className = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template5 = (() => {
-  const _el$ = _tmpl$5();
-  return _el$;
-})();
-const template6 = (() => {
-  const _el$ = _tmpl$3();
-  _$effect(_prev => {
-    const _v$0 = someStyle();
-    if (_v$0 !== _prev.a) _prev.a = _$style(_el$, _v$0, _prev.a);
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template7 = (() => {
-  const _el$ = _tmpl$3();
-  _$effect(_prev => {
-    const _v$0 = {
-      "background-color": color(),
-      "margin-right": "40px"
-    };
-    if (_v$0 !== _prev.a) _prev.a = _$style(_el$, _v$0, _prev.a);
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
+const template = <div id="main" {...results} style={{
+  color
+}}>
+    <h1 className="base" id={id} {...results()} disabled title={welcoming()} style={{
+    "background-color": color(),
+    "margin-right": "40px"
+  }}>
+      <a href={"/"} ref={link}>
+        Welcome
+      </a>
+    </h1>
+  </div>;
+const template2 = <div {...getProps("test")}>
+    <div dangerouslySetInnerHTML={{
+    __html: "<div/>"
+  }} />
+  </div>;
+const template3 = <div id={state.id} className={state.name} />;
+const template4 = <div className="hi" className={state.class} />;
+const template5 = <div className="a" className="b"></div>;
+const template6 = <div style={someStyle()} />;
+const template7 = <div style={{
+  "background-color": color(),
+  "margin-right": "40px"
+}} />;
 let refTarget;
-const template8 = (() => {
-  const _el$ = _tmpl$3();
-  _$use(refTarget, _el$);
-  return _el$;
-})();
-const template9 = (() => {
-  const _el$ = _tmpl$3();
-  _$use(e => console.log(e), _el$);
-  return _el$;
-})();
-const template10 = (() => {
-  const _el$ = _tmpl$3();
-  _$use(refFactory(), _el$);
-  return _el$;
-})();
-const template11 = (() => {
-  const _el$ = _tmpl$6();
-  return _el$;
-})();
-const template12 = (() => {
-  const _el$ = _tmpl$7();
-  _$effect(_prev => {
-    const _v$0 = state.visible;
-    if (_v$0 !== _prev.a) _el$.checked = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template13 = (() => {
-  const _el$ = _tmpl$8();
-  return _el$;
-})();
-const template14 = (() => {
-  const _el$ = _tmpl$9();
-  return _el$;
-})();
-const template15 = (() => {
-  const _el$ = _tmpl$10();
-  _el$.$$click = increment;
-  return _el$;
-})();
-const template16 = (() => {
-  const _el$ = _tmpl$11();
-  const _el$1 = _el$.firstChild;
-  const _el$2 = _el$1.nextSibling;
-  _el$1.$$input = doSomething;
-  _el$2.$$input = doSomethingElse;
-  _$effect(_prev => {
-    const _v$0 = s(),
-      _v$1 = s2(),
-      _v$2 = value;
-    if (_v$0 !== _prev.a) _el$1.value = _prev.a = _v$0;
-    if (_v$1 !== _prev.b) _el$2.checked = _prev.b = _v$1;
-    if (_v$2 !== _prev.c) _el$2.readOnly = _prev.c = _v$2;
-    return _prev;
-  }, {
-    a: undefined,
-    b: undefined,
-    c: undefined
-  });
-  return _el$;
-})();
-const template17 = (() => {
-  const _el$ = _tmpl$12();
-  return _el$;
-})();
-const template18 = (() => {
-  const _el$ = _tmpl$13();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = "t" in test,
-      _v$1 = "t" in test && "true";
-    if (_v$0 !== _prev.a) _el$.disabled = _prev.a = _v$0;
-    if (_v$1 !== _prev.b) _el$1.firstChild.data = _prev.b = _v$1;
-    return _prev;
-  }, {
-    a: undefined,
-    b: undefined
-  });
-  return _el$;
-})();
-const template19 = (() => {
-  const _el$ = _tmpl$14();
-  _$spread(_el$, props);
-  return _el$;
-})();
-const template20 = (() => {
-  const _el$ = _tmpl$15();
-  const _el$1 = _el$.firstChild;
-  const _el$2 = _el$1.nextSibling;
-  _$spread(_el$2, props);
-  _$effect(_prev => {
-    const _v$0 = props.children;
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template21 = (() => {
-  const _el$ = _tmpl$16();
-  _$spread(_el$, spread);
-  return _el$;
-})();
-const template22 = (() => {
-  const _el$ = _tmpl$16();
-  _$spread(_el$, first);
-  _$spread(_el$, second);
-  return _el$;
-})();
-const template23 = (() => {
-  const _el$ = _tmpl$13();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = !!someValue,
-      _v$1 = !!someValue;
-    if (_v$0 !== _prev.a) _el$.attribute = _prev.a = _v$0;
-    if (_v$1 !== _prev.b) _el$1.firstChild.data = _prev.b = _v$1;
-    return _prev;
-  }, {
-    a: undefined,
-    b: undefined
-  });
-  return _el$;
-})();
-const template24 = (() => {
-  const _el$ = _tmpl$17();
-  return _el$;
-})();
-const template25 = (() => {
-  const _el$ = _tmpl$3();
-  _$effect(_prev => {
-    const _v$0 = {
-      "background-color": getStore.color
-    };
-    if (_v$0 !== _prev.a) _prev.a = _$style(_el$, _v$0, _prev.a);
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template26 = (() => {
-  const _el$ = _tmpl$3();
-  _$effect(_prev => {
-    const _v$0 = {
-      "background-color": undefined
-    };
-    if (_v$0 !== _prev.a) _prev.a = _$style(_el$, _v$0, _prev.a);
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template27 = (() => {
-  const _el$ = _tmpl$18();
-  return _el$;
-})();
-const template28 = (() => {
-  const _el$ = _tmpl$19();
-  return _el$;
-})();
-_$delegateEvents(["click", "input"]);"
+const template8 = <div ref={refTarget} />;
+const template9 = <div ref={e => console.log(e)} />;
+const template10 = <div ref={refFactory()} />;
+const template11 = <input type="checkbox" checked={true} />;
+const template12 = <input type="checkbox" checked={state.visible} />;
+const template13 = <div className="\`a">\`$\`</div>;
+const template14 = <button className="static" type="button">
+    Write
+  </button>;
+const template15 = <button onClick={increment}>Hi</button>;
+const template16 = <div>
+    <input value={s()} onInput={doSomething} readOnly="" />
+    <input checked={s2()} onInput={doSomethingElse} readOnly={value} />
+  </div>;
+const template17 = <div data-info='"hi"' data-other={'"'} />;
+const template18 = <div disabled={"t" in test}>{"t" in test && "true"}</div>;
+const template19 = <a {...props} something />;
+const template20 = <div>
+    {props.children}
+    <a {...props} something />
+  </div>;
+const template21 = <div start="Hi" {...spread}>
+    Hi
+  </div>;
+const template22 = <div start="Hi" {...first} {...second}>
+    Hi
+  </div>;
+const template23 = <div attribute={!!someValue}>{!!someValue}</div>;
+const template24 = <div className="class1 class2 class3" style="color: red; background-color: blue;" />;
+const template25 = <div style={{
+  "background-color": getStore.color
+}} />;
+const template26 = <div style={{
+  "background-color": undefined
+}} />;
+const template27 = <input value={10} />;
+const template28 = <div title="<u>data</u>" />;"
 `;
 
 exports[`babel-plugin-react-fast > components 1`] = `
-"import { template as _$template, use as _$use2, effect as _$effect2, insert as _$insert2 } from "react-fast";
-const _tmpl$1 = _$template("<div>Hello  </div>");
-const _tmpl$2 = _$template("<div> </div>");
-const _tmpl$3 = _$template("<div><!><!><!></div>");
-const _tmpl$4 = _$template("<div></div>");
-const _tmpl$5 = _$template("<div><!> | <!> | <!> | <!></div>");
-const _tmpl$6 = _$template("<div><!> | <!><!> | <!></div>");
-const _tmpl$7 = _$template("<div class=\\"header\\"><!><!><!></div>");
+"import { escape as _$escape, template as _$template } from "react-fast";
+import { createElement as _$createElement } from "react";
+import { use as _$use } from "react-fast";
+import { useRef as _$useRef } from "react";
+const _SSR$ = typeof window === "undefined";
+const _tmpl$1 = /*#__PURE__*/_$template("Hello \\u200B", true),
+  _tmpl$3 = /*#__PURE__*/_$template("\\u200B", true);
 const Child = props => {
+  const _r$4 = _$useRef();
+  const _c$4 = _r$4.current || (_r$4.current = []);
+  if (!_c$4.ref) _c$4.ref = _el => {
+    if (!_el) return;
+    if (!_el.firstChild) _el.appendChild(_tmpl$3());
+    _c$4[0] = _el.firstChild;
+    _c$4[1] = _el;
+    _$use(set, _c$4[1]);
+    _c$4[2] = props.children;
+    _c$4[0].data = "" + props.children;
+  };
+  if (_c$4[1]) {
+    _$use(set, _c$4[1]);
+    const _v$0 = props.children;
+    if (_c$4[2] !== _v$0) {
+      _c$4[2] = _v$0;
+      _c$4[0].data = "" + _v$0;
+    }
+  }
+  const _r$2 = _$useRef();
+  const _c$2 = _r$2.current || (_r$2.current = []);
+  if (!_c$2.ref) _c$2.ref = _el => {
+    if (!_el) return;
+    if (!_el.firstChild) _el.appendChild(_tmpl$1());
+    const _n$0 = _el.firstChild;
+    _c$2[0] = _n$0.nextSibling;
+    _c$2[1] = _el;
+    _$use(props.ref, _c$2[1]);
+    _c$2[2] = props.name;
+    _c$2[0].data = "" + props.name;
+  };
+  if (_c$2[1]) {
+    _$use(props.ref, _c$2[1]);
+    const _v$0 = props.name;
+    if (_c$2[2] !== _v$0) {
+      _c$2[2] = _v$0;
+      _c$2[0].data = "" + _v$0;
+    }
+  }
   const [s, set] = createSignal();
-  return [(() => {
-    const _el$ = _tmpl$1();
-    const _el$1 = _el$.firstChild;
-    const _el$2 = _el$1.nextSibling;
-    _$use(props.ref, _el$);
-    _$effect(_prev => {
-      const _v$0 = props.name;
-      if (_v$0 !== _prev.a) _el$2.firstChild.data = _prev.a = _v$0;
-      return _prev;
-    }, {
-      a: undefined
-    });
-    return _el$;
-  })(), (() => {
-    const _el$ = _tmpl$2();
-    const _el$1 = _el$.firstChild;
-    _$use(set, _el$);
-    _$effect(_prev => {
-      const _v$0 = props.children;
-      if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-      return _prev;
-    }, {
-      a: undefined
-    });
-    return _el$;
-  })()];
+  return [_SSR$ ? _$createElement("div", {
+    dangerouslySetInnerHTML: {
+      __html: \`<div>Hello \${_$escape(props.name)}</div>\`
+    }
+  }) : _c$2.node || (_c$2.node = _$createElement("div", {
+    ref: _c$2.ref
+  })), _SSR$ ? _$createElement("div", {
+    dangerouslySetInnerHTML: {
+      __html: \`<div>\${_$escape(props.children)}</div>\`
+    }
+  }) : _c$4.node || (_c$4.node = _$createElement("div", {
+    ref: _c$4.ref
+  }))];
 };
 const template = props => {
   let childRef;
   const {
     content
   } = props;
-  return (() => {
-    const _el$ = _tmpl$3();
-    const _el$1 = _el$.firstChild;
-    const _el$2 = _el$1.nextSibling;
-    const _el$3 = _el$2.nextSibling;
-    _$insert(_el$, React.createElement(Child, {
-      name: "John",
-      __spread: props,
-      ref: childRef,
-      children: React.createElement(div, {
-        children: "From Parent"
-      })
-    }), _el$1);
-    _$insert(_el$, React.createElement(Child, {
-      name: "Jason",
-      ref: props.ref,
-      children: React.createElement(div, {
-        children: content
-      })
-    }), _el$2);
-    _$insert(_el$, React.createElement(Context.Context.Consumer, {
-      ref: props.consumerRef(),
-      children: context => context
-    }), _el$3);
-    return _el$;
-  })();
+  return <div>
+      <Child name="John" {...props} ref={childRef}>
+        <div>From Parent</div>
+      </Child>
+      <Child name="Jason" ref={props.ref}>
+        <div>{content}</div>
+      </Child>
+      <Context.Consumer ref={props.consumerRef()}>{context => context}</Context.Consumer>
+    </div>;
 };
-const template2 = React.createElement(Child, {
+const template2 = _$createElement(Child, {
   name: "Jake",
   dynamic: state.data,
   handleClick: clickHandler,
   "hyphen-ated": state.data,
   ref: el => e = el
 });
-const template3 = React.createElement(Child, {
-  children: [React.createElement(div, null), React.createElement(div, null), React.createElement(div, null), "After"]
+const template3 = _$createElement(Child, {
+  children: [_$createElement("div", null), _$createElement("div", null), _$createElement("div", null), "After"]
 });
 const [s, set] = createSignal();
-const template4 = React.createElement(Child, {
+const template4 = _$createElement(Child, {
   ref: set,
-  children: (() => {
-    const _el$ = _tmpl$4();
-    return _el$;
-  })()
+  children: <div />
 });
-const template5 = React.createElement(Child, {
+const template5 = _$createElement(Child, {
   dynamic: state.dynamic,
   children: state.dynamic
 });
-const template6 = React.createElement(For, {
+const template6 = _$createElement(For, {
   each: state.list,
-  fallback: React.createElement(Loading, null),
-  children: item => React.createElement(Show, {
-    when: state.condition,
-    children: item
-  })
+  fallback: _$createElement(Loading, null),
+  children: item => {
+    return _$createElement(Show, {
+      when: state.condition,
+      children: item
+    });
+  }
 });
-const template7 = React.createElement(Child, {
-  children: [React.createElement(div, null), state.dynamic]
+const template7 = _$createElement(Child, {
+  children: [_$createElement("div", null), state.dynamic]
 });
-const template8 = React.createElement(Child, {
+const template8 = _$createElement(Child, {
   children: [item => item, item => item]
 });
-const template9 = (() => {
-  const _el$ = _tmpl$5();
-  const _el$1 = _el$.firstChild;
-  const _el$2 = _el$1.nextSibling;
-  const _el$3 = _el$2.nextSibling;
-  const _el$4 = _el$3.nextSibling;
-  const _el$5 = _el$4.nextSibling;
-  const _el$6 = _el$5.nextSibling;
-  const _el$7 = _el$6.nextSibling;
-  _$insert(_el$, React.createElement(Link, {
-    children: "new"
-  }), _el$1);
-  _$insert(_el$, React.createElement(Link, {
-    children: "comments"
-  }), _el$3);
-  _$insert(_el$, React.createElement(Link, {
-    children: "show"
-  }), _el$5);
-  _$insert(_el$, React.createElement(Link, {
-    children: "ask"
-  }), _el$7);
-  return _el$;
-})();
-const template10 = (() => {
-  const _el$ = _tmpl$6();
-  const _el$1 = _el$.firstChild;
-  const _el$2 = _el$1.nextSibling;
-  const _el$3 = _el$2.nextSibling;
-  const _el$4 = _el$3.nextSibling;
-  const _el$5 = _el$4.nextSibling;
-  const _el$6 = _el$5.nextSibling;
-  _$insert(_el$, React.createElement(Link, {
-    children: "new"
-  }), _el$1);
-  _$insert(_el$, React.createElement(Link, {
-    children: "comments"
-  }), _el$3);
-  _$insert(_el$, React.createElement(Link, {
-    children: "show"
-  }), _el$4);
-  _$insert(_el$, React.createElement(Link, {
-    children: "ask"
-  }), _el$6);
-  return _el$;
-})();
+const template9 = <div>
+    <Link>new</Link>
+    {" | "}
+    <Link>comments</Link>
+    {" | "}
+    <Link>show</Link>
+    {" | "}
+    <Link>ask</Link>
+  </div>;
+const template10 = <div>
+    <Link>new</Link>
+    {" | "}
+    <Link>comments</Link>
+    <Link>show</Link>
+    {" | "}
+    <Link>ask</Link>
+  </div>;
 class Template11 {
   render() {
-    React.createElement(Component, {
+    _$createElement(Component, {
       prop: this.something,
       onClick: () => this.shouldStay,
-      children: React.createElement(Nested, {
-        prop: this.data,
-        children: this.content
-      })
+      children: _$createElement(Nested, {
+        prop: this.data
+      }, this.content)
     });
   }
 }
-const Template12 = React.createElement(Component, {
+const Template12 = _$createElement(Component, {
   children: data()
 });
-const Template13 = React.createElement(Component, {
+const Template13 = _$createElement(Component, {
   ...props
 });
-const Template14 = React.createElement(Component, {
+const Template14 = _$createElement(Component, {
   something: something,
   ...props
 });
-const Template15 = React.createElement(Component, {
+const Template15 = _$createElement(Component, {
   class: prop.red ? "red" : "green"
 });
-const template16 = React.createElement(Component, {
+const template16 = _$createElement(Component, {
   passObject: {
     ...a
   }
 });
-const template17 = React.createElement(Component, {
+const template17 = _$createElement(Component, {
   disabled: "t" in test,
   children: "t" in test && "true"
 });
@@ -482,401 +236,90 @@ function RealWorldComponent({
   user,
   onLogout
 }) {
-  return (() => {
-    const _el$ = _tmpl$7();
-    const _el$1 = _el$.firstChild;
-    const _el$2 = _el$1.nextSibling;
-    const _el$3 = _el$2.nextSibling;
-    _$insert(_el$, React.createElement(Avatar, {
-      src: user.avatar,
-      size: "large"
-    }), _el$1);
-    _$insert(_el$, React.createElement(UserInfo, {
-      name: user.name,
-      email: user.email,
-      children: React.createElement(Badge, {
-        type: user.role
-      })
-    }), _el$2);
-    _$insert(_el$, React.createElement(Button, {
-      onClick: onLogout,
-      variant: "outline",
-      children: "Logout"
-    }), _el$3);
-    return _el$;
-  })();
+  return _$createElement("div", {
+    className: "header"
+  }, _$createElement(Avatar, {
+    src: user.avatar,
+    size: "large"
+  }), _$createElement(UserInfo, {
+    name: user.name,
+    email: user.email,
+    children: _$createElement(Badge, {
+      type: user.role
+    })
+  }), _$createElement(Button, {
+    onClick: onLogout,
+    variant: "outline",
+    children: "Logout"
+  }));
 }
 function CompositionPattern({
   render,
   fallback,
   children
 }) {
-  return React.createElement(ErrorBoundary, {
+  return _$createElement(ErrorBoundary, {
     fallback: fallback,
-    children: React.createElement(Suspense, {
-      fallback: React.createElement(Skeleton, null),
-      children: typeof render === "function" ? render() : children
-    })
+    children: _$createElement(Suspense, {
+      fallback: _$createElement(Skeleton, null)
+    }, typeof render === "function" ? render() : children)
   });
 }"
 `;
 
 exports[`babel-plugin-react-fast > conditionalExpressions 1`] = `
-"import { template as _$template, effect as _$effect2 } from "react-fast";
-const _tmpl$1 = _$template("<div> </div>");
-const _tmpl$2 = _$template("<span>Loading...</span>");
-const _tmpl$3 = _$template("<span> </span>");
-const _tmpl$4 = _$template("<li> </li>");
-const _tmpl$5 = _$template("<div class=\\"success\\"> </div>");
-const _tmpl$6 = _$template("<div class=\\"error\\"> </div>");
-const _tmpl$7 = _$template("<div class=\\"loading\\">Please wait...</div>");
-const _tmpl$8 = _$template("<div>   </div>");
-const _tmpl$9 = _$template("<button class=\\"primary\\">Primary</button>");
-const _tmpl$10 = _$template("<button class=\\"secondary\\">Secondary</button>");
-const _tmpl$11 = _$template("<span>No variant</span>");
-const template1 = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = simple;
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template2 = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = state.dynamic;
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template3 = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = simple ? good : bad;
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template4 = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = simple ? good() : bad;
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template5 = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = state.dynamic ? good() : bad;
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template6 = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = state.dynamic && good();
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template7 = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = state.count > 5 ? state.dynamic ? best : good() : bad;
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template8 = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = state.dynamic && state.something && good();
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template9 = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = state.dynamic && good() || bad;
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template10 = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = state.a ? "a" : state.b ? "b" : state.c ? "c" : "fallback";
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template11 = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = state.a ? a() : state.b ? b() : state.c ? "c" : "fallback";
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template12 = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = state.dynamic ?? fallback();
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template13 = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = (thing() && thing1()) ?? thing2() ?? thing3();
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template14 = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = thing() || thing1() || thing2();
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template15 = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = something?.();
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template16 = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = something?.something;
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template17 = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = state?.dynamic ? "a" : "b";
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template18 = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = isLoading ? (() => {
-      const _el$ = _tmpl$2();
-      return _el$;
-    })() : (() => {
-      const _el$ = _tmpl$3();
-      const _el$1 = _el$.firstChild;
-      _$effect(_prev => {
-        const _v$0 = data;
-        if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-        return _prev;
-      }, {
-        a: undefined
-      });
-      return _el$;
-    })();
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template19 = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = items.length > 0 && items.map(item => (() => {
-      const _el$ = _tmpl$4();
-      const _el$1 = _el$.firstChild;
-      _$effect(_prev => {
-        const _v$0 = item.name;
-        if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-        return _prev;
-      }, {
-        a: undefined
-      });
-      return _el$;
-    })());
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template20 = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = status === "success" ? (() => {
-      const _el$ = _tmpl$5();
-      const _el$1 = _el$.firstChild;
-      _$effect(_prev => {
-        const _v$0 = message;
-        if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-        return _prev;
-      }, {
-        a: undefined
-      });
-      return _el$;
-    })() : status === "error" ? (() => {
-      const _el$ = _tmpl$6();
-      const _el$1 = _el$.firstChild;
-      _$effect(_prev => {
-        const _v$0 = error;
-        if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-        return _prev;
-      }, {
-        a: undefined
-      });
-      return _el$;
-    })() : (() => {
-      const _el$ = _tmpl$7();
-      return _el$;
-    })();
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
+"const template1 = <div>{simple}</div>;
+const template2 = <div>{state.dynamic}</div>;
+const template3 = <div>{simple ? good : bad}</div>;
+const template4 = <div>{simple ? good() : bad}</div>;
+const template5 = <div>{state.dynamic ? good() : bad}</div>;
+const template6 = <div>{state.dynamic && good()}</div>;
+const template7 = <div>{state.count > 5 ? state.dynamic ? best : good() : bad}</div>;
+const template8 = <div>{state.dynamic && state.something && good()}</div>;
+const template9 = <div>{state.dynamic && good() || bad}</div>;
+const template10 = <div>{state.a ? "a" : state.b ? "b" : state.c ? "c" : "fallback"}</div>;
+const template11 = <div>{state.a ? a() : state.b ? b() : state.c ? "c" : "fallback"}</div>;
+const template12 = <div>{state.dynamic ?? fallback()}</div>;
+const template13 = <div>{(thing() && thing1()) ?? thing2() ?? thing3()}</div>;
+const template14 = <div>{thing() || thing1() || thing2()}</div>;
+const template15 = <div>{something?.()}</div>;
+const template16 = <div>{something?.something}</div>;
+const template17 = <div>{state?.dynamic ? "a" : "b"}</div>;
+const template18 = <div>{isLoading ? <span>Loading...</span> : <span>{data}</span>}</div>;
+const template19 = <div>{items.length > 0 && items.map(item => <li key={item.id}>{item.name}</li>)}</div>;
+const template20 = <div>
+    {status === "success" ? <div className="success">{message}</div> : status === "error" ? <div className="error">{error}</div> : <div className="loading">Please wait...</div>}
+  </div>;
 function ConditionalComponent({
   variant
 }) {
-  return (() => {
-    const _el$ = _tmpl$8();
-    const _el$1 = _el$.firstChild;
-    const _el$2 = _el$1.nextSibling;
-    const _el$3 = _el$2.nextSibling;
-    _$effect(_prev => {
-      const _v$0 = variant === "primary" && (() => {
-          const _el$ = _tmpl$9();
-          return _el$;
-        })(),
-        _v$1 = variant === "secondary" && (() => {
-          const _el$ = _tmpl$10();
-          return _el$;
-        })(),
-        _v$2 = !variant && (() => {
-          const _el$ = _tmpl$11();
-          return _el$;
-        })();
-      if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-      if (_v$1 !== _prev.b) _el$2.firstChild.data = _prev.b = _v$1;
-      if (_v$2 !== _prev.c) _el$3.firstChild.data = _prev.c = _v$2;
-      return _prev;
-    }, {
-      a: undefined,
-      b: undefined,
-      c: undefined
-    });
-    return _el$;
-  })();
+  return <div>
+      {variant === "primary" && <button className="primary">Primary</button>}
+      {variant === "secondary" && <button className="secondary">Secondary</button>}
+      {!variant && <span>No variant</span>}
+    </div>;
 }"
 `;
 
 exports[`babel-plugin-react-fast > customElements 1`] = `
-"import { template as _$template } from "react-fast";
-const _tmpl$1 = _$template("<slot name=\\"head\\"></slot>");
-const template = <my-element some-attr={name} notProp={data} />;
+"const template = <my-element some-attr={name} notProp={data} />;
 const template2 = <my-element some-attr={state.name} notProp={state.data} />;
 const template3 = <my-element>
     <header slot="head">Title</header>
   </my-element>;
-const template4 = (() => {
-  const _el$ = _tmpl$1();
-  return _el$;
-})();
+const template4 = <>
+    <slot name="head"></slot>
+  </>;
 const template5 = <x-dialog open={isOpen} onClose={handleClose}>
     <h2 slot="title">{title}</h2>
     <div slot="content">
       <p>{description}</p>
-      <x-button variant="primary" onClick={handleConfirm}>Confirm</x-button>
-      <x-button variant="secondary" onClick={handleClose}>Cancel</x-button>
+      <x-button variant="primary" onClick={handleConfirm}>
+        Confirm
+      </x-button>
+      <x-button variant="secondary" onClick={handleClose}>
+        Cancel
+      </x-button>
     </div>
   </x-dialog>;
 const template6 = <custom-tabs selected-index={activeTab} onTabChange={setActiveTab}>
@@ -887,587 +330,349 @@ const template6 = <custom-tabs selected-index={activeTab} onTabChange={setActive
 `;
 
 exports[`babel-plugin-react-fast > eventExpressions 1`] = `
-"import { template as _$template, delegateEvents as _$delegateEvents } from "react-fast";
-const _tmpl$1 = _$template("<div id=\\"main\\"><button>Click Delegated</button><button>Click Delegated</button><button>Click Delegated</button><button>Mouse Down</button><button>Key Down</button><button>Focus</button><button>Blur</button><button>Double Click</button></div>");
-const _tmpl$2 = _$template("<div><input><textarea></textarea><select><option value=\\"a\\">A</option><option value=\\"b\\">B</option></select></div>");
-const _tmpl$3 = _$template("<div><button>Capture</button></div>");
-const _tmpl$4 = _$template("<div><button> Complex </button></div>");
-const _tmpl$5 = _$template("<form><input type=\\"text\\"><button type=\\"submit\\">Submit</button></form>");
-function hoisted1() {
+"function hoisted1() {
   console.log("hoisted");
 }
 const hoisted2 = () => console.log("hoisted delegated");
-const template = (() => {
-  const _el$ = _tmpl$1();
-  const _el$1 = _el$.firstChild;
-  const _el$2 = _el$1.nextSibling;
-  const _el$3 = _el$2.nextSibling;
-  const _el$4 = _el$3.nextSibling;
-  const _el$5 = _el$4.nextSibling;
-  const _el$6 = _el$5.nextSibling;
-  const _el$7 = _el$6.nextSibling;
-  const _el$8 = _el$7.nextSibling;
-  _el$1.$$click = () => console.log("delegated");
-  _el$2.$$click = handler;
-  _el$3.$$click = hoisted2;
-  _el$4.$$mousedown = () => console.log("mousedown");
-  _el$5.$$keydown = e => handleKey(e);
-  _el$6.$$focusin = () => console.log("focus");
-  _el$7.$$focusout = () => console.log("blur");
-  _el$8.$$dblclick = () => console.log("dblclick");
-  return _el$;
-})();
-const template2 = (() => {
-  const _el$ = _tmpl$2();
-  const _el$1 = _el$.firstChild;
-  const _el$2 = _el$1.nextSibling;
-  const _el$3 = _el$2.nextSibling;
-  _el$1.$$input = e => setValue(e.target.value);
-  _el$2.$$input = e => setText(e.target.value);
-  _el$3.addEventListener("change", e => setOption(e.target.value));
-  return _el$;
-})();
-const template3 = (() => {
-  const _el$ = _tmpl$3();
-  const _el$1 = _el$.firstChild;
-  _el$1.addEventListener("clickcapture", () => console.log("capture"));
-  return _el$;
-})();
-const template4 = (() => {
-  const _el$ = _tmpl$4();
-  const _el$1 = _el$.firstChild;
-  _el$1.$$click = () => setCount(c => c + 1);
-  _el$1.addEventListener("mouseenter", handleHover);
-  _el$1.addEventListener("mouseleave", handleLeave);
-  return _el$;
-})();
-const template5 = (() => {
-  const _el$ = _tmpl$5();
-  const _el$1 = _el$.firstChild;
-  _el$.addEventListener("submit", e => {
-    e.preventDefault();
-    handleSubmit();
-  });
-  _el$1.$$input = e => setName(e.target.value);
-  return _el$;
-})();
-_$delegateEvents(["click", "mousedown", "keydown", "focusin", "focusout", "dblclick", "input"]);"
+const template = <div id="main">
+    <button onClick={() => console.log("delegated")}>Click Delegated</button>
+    <button onClick={handler}>Click Delegated</button>
+    <button onClick={hoisted2}>Click Delegated</button>
+    <button onMouseDown={() => console.log("mousedown")}>Mouse Down</button>
+    <button onKeyDown={e => handleKey(e)}>Key Down</button>
+    <button onFocus={() => console.log("focus")}>Focus</button>
+    <button onBlur={() => console.log("blur")}>Blur</button>
+    <button onDblClick={() => console.log("dblclick")}>Double Click</button>
+  </div>;
+const template2 = <div>
+    <input onChange={e => setValue(e.target.value)} />
+    <textarea onChange={e => setText(e.target.value)} />
+    <select onChange={e => setOption(e.target.value)}>
+      <option value="a">A</option>
+      <option value="b">B</option>
+    </select>
+  </div>;
+const template3 = <div>
+    <button onClickCapture={() => console.log("capture")}>Capture</button>
+  </div>;
+const template4 = <div>
+    <button onClick={() => setCount(c => c + 1)} onMouseEnter={handleHover} onMouseLeave={handleLeave}>
+      Complex
+    </button>
+  </div>;
+const template5 = <form onSubmit={e => {
+  e.preventDefault();
+  handleSubmit();
+}}>
+    <input type="text" onInput={e => setName(e.target.value)} />
+    <button type="submit">Submit</button>
+  </form>;"
 `;
 
 exports[`babel-plugin-react-fast > fragments 1`] = `
-"import { template as _$template, effect as _$effect2 } from "react-fast";
-const _tmpl$1 = _$template("<div>First</div>");
-const _tmpl$2 = _$template("<div>Last</div>");
-const _tmpl$3 = _$template("<div></div>");
-const _tmpl$4 = _$template("<span>1</span>");
-const _tmpl$5 = _$template("<span>2</span>");
-const _tmpl$6 = _$template("<span>3</span>");
-const _tmpl$7 = _$template("<div>Outer</div>");
-const _tmpl$8 = _$template("<span>Always</span>");
-const _tmpl$9 = _$template("<div>Shown</div>");
-const _tmpl$10 = _$template("<h1>Title</h1>");
-const _tmpl$11 = _$template("<dt> </dt>");
-const _tmpl$12 = _$template("<dd> </dd>");
-const multiStatic = [(() => {
-  const _el$ = _tmpl$1();
-  return _el$;
-})(), (() => {
-  const _el$ = _tmpl$2();
-  return _el$;
-})()];
-const multiExpression = [(() => {
-  const _el$ = _tmpl$1();
-  return _el$;
-})(), inserted, (() => {
-  const _el$ = _tmpl$2();
-  return _el$;
-})(), "After"];
-const multiDynamic = [(() => {
-  const _el$ = _tmpl$1();
-  _$effect(_prev => {
-    const _v$0 = state.first;
-    if (_v$0 !== _prev.a) _el$.id = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})(), state.inserted, (() => {
-  const _el$ = _tmpl$2();
-  _$effect(_prev => {
-    const _v$0 = state.last;
-    if (_v$0 !== _prev.a) _el$.id = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})(), "After"];
-const singleExpression = inserted;
-const singleDynamic = inserted();
-const firstStatic = [inserted, (() => {
-  const _el$ = _tmpl$3();
-  return _el$;
-})()];
-const firstDynamic = [inserted(), (() => {
-  const _el$ = _tmpl$3();
-  return _el$;
-})()];
-const firstComponent = [React.createElement(Component, null), (() => {
-  const _el$ = _tmpl$3();
-  return _el$;
-})()];
-const lastStatic = [(() => {
-  const _el$ = _tmpl$3();
-  return _el$;
-})(), inserted];
-const lastDynamic = [(() => {
-  const _el$ = _tmpl$3();
-  return _el$;
-})(), inserted()];
-const lastComponent = [(() => {
-  const _el$ = _tmpl$3();
-  return _el$;
-})(), React.createElement(Component, null)];
-const spaces = [(() => {
-  const _el$ = _tmpl$4();
-  return _el$;
-})(), (() => {
-  const _el$ = _tmpl$5();
-  return _el$;
-})(), (() => {
-  const _el$ = _tmpl$6();
-  return _el$;
-})()];
-const multiLineTrailing = [(() => {
-  const _el$ = _tmpl$4();
-  return _el$;
-})(), (() => {
-  const _el$ = _tmpl$5();
-  return _el$;
-})(), (() => {
-  const _el$ = _tmpl$6();
-  return _el$;
-})()];
-const nestedFragments = [(() => {
-  const _el$ = _tmpl$7();
-  return _el$;
-})()];
-const fragmentWithConditional = [show && (() => {
-  const _el$ = _tmpl$9();
-  return _el$;
-})(), (() => {
-  const _el$ = _tmpl$8();
-  return _el$;
-})()];
+"import { template as _$template } from "react-fast";
+import { useRef as _$useRef, createElement as _$createElement } from "react";
+const _SSR$ = typeof window === "undefined";
+const _tmpl$1 = /*#__PURE__*/_$template("Title", true);
+const multiStatic = <>
+    <div>First</div>
+    <div>Last</div>
+  </>;
+const multiExpression = <>
+    <div>First</div>
+    {inserted}
+    <div>Last</div>
+    After
+  </>;
+const multiDynamic = <>
+    <div id={state.first}>First</div>
+    {state.inserted}
+    <div id={state.last}>Last</div>
+    After
+  </>;
+const singleExpression = <>{inserted}</>;
+const singleDynamic = <>{inserted()}</>;
+const firstStatic = <>
+    {inserted}
+    <div />
+  </>;
+const firstDynamic = <>
+    {inserted()}
+    <div />
+  </>;
+const firstComponent = <>
+    <Component />
+    <div />
+  </>;
+const lastStatic = <>
+    <div />
+    {inserted}
+  </>;
+const lastDynamic = <>
+    <div />
+    {inserted()}
+  </>;
+const lastComponent = <>
+    <div />
+    <Component />
+  </>;
+const spaces = <>
+    <span>1</span> <span>2</span> <span>3</span>
+  </>;
+const multiLineTrailing = <>
+    <span>1</span>
+    <span>2</span>
+    <span>3</span>
+  </>;
+const nestedFragments = <>
+    <>
+      <div>Inner 1</div>
+      <div>Inner 2</div>
+    </>
+    <div>Outer</div>
+  </>;
+const fragmentWithConditional = <>
+    {show && <div>Shown</div>}
+    <span>Always</span>
+  </>;
 function FragmentComponent({
   items
 }) {
-  return [(() => {
-    const _el$ = _tmpl$10();
-    return _el$;
-  })(), items.map(item => [(() => {
-    const _el$ = _tmpl$11();
-    const _el$1 = _el$.firstChild;
-    _$effect(_prev => {
-      const _v$0 = item.term;
-      if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-      return _prev;
-    }, {
-      a: undefined
-    });
-    return _el$;
-  })(), (() => {
-    const _el$ = _tmpl$12();
-    const _el$1 = _el$.firstChild;
-    _$effect(_prev => {
-      const _v$0 = item.definition;
-      if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-      return _prev;
-    }, {
-      a: undefined
-    });
-    return _el$;
-  })()])];
+  const _r$2 = _$useRef();
+  const _c$2 = _r$2.current || (_r$2.current = []);
+  if (!_c$2.ref) _c$2.ref = _el => {
+    if (!_el) return;
+    if (!_el.firstChild) _el.appendChild(_tmpl$1());
+    _c$2[0] = _el;
+  };
+  return [_SSR$ ? _$createElement("h1", {
+    dangerouslySetInnerHTML: {
+      __html: \`<h1>Title</h1>\`
+    }
+  }) : _c$2.node || (_c$2.node = _$createElement("h1", {
+    ref: _c$2.ref
+  })), items.map(item => {
+    return <>
+          <dt>{item.term}</dt>
+          <dd>{item.definition}</dd>
+        </>;
+  })];
 }"
 `;
 
 exports[`babel-plugin-react-fast > insertChildren 1`] = `
-"import { template as _$template, insert as _$insert2, spread as _$spread2, effect as _$effect2, delegateEvents as _$delegateEvents } from "react-fast";
-const _tmpl$1 = _$template("<div></div>");
-const _tmpl$2 = _$template("<module></module>");
-const _tmpl$3 = _$template("<module>Hello</module>");
-const _tmpl$4 = _$template("<module><!></module>");
-const _tmpl$5 = _$template("<module> </module>");
-const _tmpl$6 = _$template("<div>Test 1</div>");
-const _tmpl$7 = _$template("<div> </div>");
-const _tmpl$8 = _$template("<ul> </ul>");
-const _tmpl$9 = _$template("<li><span> </span><button>X</button></li>");
-const _tmpl$10 = _$template("<div><header> </header><main> </main><footer> </footer></div>");
-const _tmpl$11 = _$template("<section><h2> </h2> </section>");
-const _tmpl$12 = _$template("<p> </p>");
-const children = (() => {
-  const _el$ = _tmpl$1();
-  return _el$;
-})();
+"import { escape as _$escape, template as _$template } from "react-fast";
+import { createElement as _$createElement, useRef as _$useRef } from "react";
+const _SSR$ = typeof window === "undefined";
+const _tmpl$1 = /*#__PURE__*/_$template("\\u200B", true);
+const children = <div />;
 const dynamic = {
   children
 };
-const template = React.createElement(Module, {
+const template = _$createElement(Module, {
   children: children
 });
-const template2 = (() => {
-  const _el$ = _tmpl$2();
-  return _el$;
-})();
-const template3 = (() => {
-  const _el$ = _tmpl$3();
-  return _el$;
-})();
-const template4 = (() => {
-  const _el$ = _tmpl$4();
-  const _el$1 = _el$.firstChild;
-  _$insert(_el$, React.createElement(Hello, null), _el$1);
-  return _el$;
-})();
-const template5 = (() => {
-  const _el$ = _tmpl$2();
-  return _el$;
-})();
-const template6 = React.createElement(Module, {
+const template2 = <module children={children} />;
+const template3 = <module children={children}>Hello</module>;
+const template4 = <module children={children}>
+    <Hello />
+  </module>;
+const template5 = <module children={dynamic.children} />;
+const template6 = _$createElement(Module, {
   children: dynamic.children
 });
-const template7 = (() => {
-  const _el$ = _tmpl$2();
-  _$spread(_el$, dynamic);
-  return _el$;
-})();
-const template8 = (() => {
-  const _el$ = _tmpl$3();
-  _$spread(_el$, dynamic);
-  return _el$;
-})();
-const template9 = (() => {
-  const _el$ = _tmpl$5();
-  const _el$1 = _el$.firstChild;
-  _$spread(_el$, dynamic);
-  _$effect(_prev => {
-    const _v$0 = dynamic.children;
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template10 = React.createElement(Module, {
+const template7 = <module {...dynamic} />;
+const template8 = <module {...dynamic}>Hello</module>;
+const template9 = <module {...dynamic}>{dynamic.children}</module>;
+const template10 = _$createElement(Module, {
   ...dynamic,
   children: "Hello"
 });
-const template11 = (() => {
-  const _el$ = _tmpl$5();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = children();
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template12 = React.createElement(Module, {
+const template11 = <module>{children()}</module>;
+const template12 = _$createElement(Module, {
   children: children()
 });
-const template13 = (() => {
-  const _el$ = _tmpl$5();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = state.children();
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template14 = React.createElement(Module, {
+const template13 = <module>{state.children()}</module>;
+const template14 = _$createElement(Module, {
   children: state.children()
 });
 const tiles = [];
-tiles.push((() => {
-  const _el$ = _tmpl$6();
-  return _el$;
-})());
-const template15 = (() => {
-  const _el$ = _tmpl$7();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = tiles;
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template16 = (() => {
-  const _el$ = _tmpl$7();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = (expression(), "static");
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template17 = (() => {
-  const _el$ = _tmpl$7();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = children()();
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
+tiles.push(<div>Test 1</div>);
+const template15 = <div>{tiles}</div>;
+const template16 = <div>{(expression(), "static")}</div>;
+const template17 = <div>{children()()}</div>;
 function ListComponent({
   items
 }) {
-  return (() => {
-    const _el$ = _tmpl$8();
-    const _el$1 = _el$.firstChild;
-    _$effect(_prev => {
-      const _v$0 = items.map((item, index) => (() => {
-        const _el$ = _tmpl$9();
-        const _el$1 = _el$.firstChild;
-        const _el$2 = _el$1.firstChild;
-        const _el$3 = _el$1.nextSibling;
-        _el$3.$$click = () => remove(item.id);
-        _$effect(_prev => {
-          const _v$0 = index % 2 === 0 ? "even" : "odd",
-            _v$1 = item.name;
-          if (_v$0 !== _prev.a) _el$.className = _prev.a = _v$0;
-          if (_v$1 !== _prev.b) _el$2.firstChild.data = _prev.b = _v$1;
-          return _prev;
-        }, {
-          a: undefined,
-          b: undefined
-        });
-        return _el$;
-      })());
-      if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-      return _prev;
-    }, {
-      a: undefined
-    });
-    return _el$;
-  })();
+  return _$createElement("ul", null, items.map((item, index) => {
+    return <li key={item.id} className={index % 2 === 0 ? "even" : "odd"}>
+          <span>{item.name}</span>
+          <button onClick={() => remove(item.id)}>X</button>
+        </li>;
+  }));
 }
 function NestedInserts({
   data
 }) {
-  return (() => {
-    const _el$ = _tmpl$10();
-    const _el$1 = _el$.firstChild;
-    const _el$2 = _el$1.firstChild;
-    const _el$3 = _el$1.nextSibling;
-    const _el$4 = _el$3.firstChild;
-    const _el$5 = _el$3.nextSibling;
-    const _el$6 = _el$5.firstChild;
-    _$effect(_prev => {
-      const _v$0 = data.title,
-        _v$1 = data.sections.map(section => (() => {
-          const _el$ = _tmpl$11();
-          const _el$1 = _el$.firstChild;
-          const _el$2 = _el$1.firstChild;
-          const _el$3 = _el$1.nextSibling;
-          _$effect(_prev => {
-            const _v$0 = section.heading,
-              _v$1 = section.items.map(item => (() => {
-                const _el$ = _tmpl$12();
-                const _el$1 = _el$.firstChild;
-                _$effect(_prev => {
-                  const _v$0 = item;
-                  if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-                  return _prev;
-                }, {
-                  a: undefined
-                });
-                return _el$;
-              })());
-            if (_v$0 !== _prev.a) _el$2.firstChild.data = _prev.a = _v$0;
-            if (_v$1 !== _prev.b) _el$3.firstChild.data = _prev.b = _v$1;
-            return _prev;
-          }, {
-            a: undefined,
-            b: undefined
-          });
-          return _el$;
-        })()),
-        _v$2 = data.footer;
-      if (_v$0 !== _prev.a) _el$2.firstChild.data = _prev.a = _v$0;
-      if (_v$1 !== _prev.b) _el$4.firstChild.data = _prev.b = _v$1;
-      if (_v$2 !== _prev.c) _el$6.firstChild.data = _prev.c = _v$2;
-      return _prev;
-    }, {
-      a: undefined,
-      b: undefined,
-      c: undefined
-    });
-    return _el$;
-  })();
-}
-_$delegateEvents(["click"]);"
+  const _r$3 = _$useRef();
+  const _c$3 = _r$3.current || (_r$3.current = []);
+  if (!_c$3.ref) _c$3.ref = _el => {
+    if (!_el) return;
+    if (!_el.firstChild) _el.appendChild(_tmpl$1());
+    _c$3[0] = _el.firstChild;
+    _c$3[1] = _el;
+    _c$3[2] = data.footer;
+    _c$3[0].data = "" + data.footer;
+  };
+  if (_c$3[1]) {
+    const _v$0 = data.footer;
+    if (_c$3[2] !== _v$0) {
+      _c$3[2] = _v$0;
+      _c$3[0].data = "" + _v$0;
+    }
+  }
+  const _r$2 = _$useRef();
+  const _c$2 = _r$2.current || (_r$2.current = []);
+  if (!_c$2.ref) _c$2.ref = _el => {
+    if (!_el) return;
+    if (!_el.firstChild) _el.appendChild(_tmpl$1());
+    _c$2[0] = _el.firstChild;
+    _c$2[1] = _el;
+    _c$2[2] = data.title;
+    _c$2[0].data = "" + data.title;
+  };
+  if (_c$2[1]) {
+    const _v$0 = data.title;
+    if (_c$2[2] !== _v$0) {
+      _c$2[2] = _v$0;
+      _c$2[0].data = "" + _v$0;
+    }
+  }
+  return _$createElement("div", null, _SSR$ ? _$createElement("header", {
+    dangerouslySetInnerHTML: {
+      __html: \`<header>\${_$escape(data.title)}</header>\`
+    }
+  }) : _c$2.node || (_c$2.node = _$createElement("header", {
+    ref: _c$2.ref
+  })), _$createElement("main", null, data.sections.map(section => {
+    return <section>
+            <h2>{section.heading}</h2>
+            {section.items.map(item => <p>{item}</p>)}
+          </section>;
+  })), _SSR$ ? _$createElement("footer", {
+    dangerouslySetInnerHTML: {
+      __html: \`<footer>\${_$escape(data.footer)}</footer>\`
+    }
+  }) : _c$3.node || (_c$3.node = _$createElement("footer", {
+    ref: _c$3.ref
+  })));
+}"
 `;
 
 exports[`babel-plugin-react-fast > simpleElements 1`] = `
-"import { template as _$template } from "react-fast";
-const _tmpl$1 = _$template("<div id=\\"main\\"><style>div { color: red; }</style><h1>Welcome</h1><label for=\\"entry\\">Edit:</label><input id=\\"entry\\" type=\\"text\\"></div>");
-const _tmpl$2 = _$template("<div><span><a></a></span><span></span></div>");
-const _tmpl$3 = _$template("<div><div><table><tbody></tbody></table></div><div></div></div>");
-const _tmpl$4 = _$template("<div><div><footer><div></div></footer></div><div><button><span>0</span></button></div></div>");
-const _tmpl$5 = _$template("<div><noscript> No JS!! <style>div { color: red; }</style></noscript></div>");
-const template = (() => {
-  const _el$ = _tmpl$1();
-  return _el$;
-})();
-const template2 = (() => {
-  const _el$ = _tmpl$2();
-  return _el$;
-})();
-const template3 = (() => {
-  const _el$ = _tmpl$3();
-  return _el$;
-})();
-const template4 = (() => {
-  const _el$ = _tmpl$4();
-  return _el$;
-})();
-const template5 = (() => {
-  const _el$ = _tmpl$5();
-  return _el$;
-})();"
+"const template = <div id="main">
+    <style>{"div { color: red; }"}</style>
+    <h1>Welcome</h1>
+    <label htmlFor={"entry"}>Edit:</label>
+    <input id="entry" type="text" />
+  </div>;
+const template2 = <div>
+    <span>
+      <a></a>
+    </span>
+    <span />
+  </div>;
+const template3 = <div>
+    <div>
+      <table>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div></div>
+  </div>;
+const template4 = <div>
+    <div>
+      <footer>
+        <div />
+      </footer>
+    </div>
+    <div>
+      <button>
+        <span>{0}</span>
+      </button>
+    </div>
+  </div>;
+const template5 = <div>
+    <noscript>
+      No JS!!
+      <style>{"div { color: red; }"}</style>
+    </noscript>
+  </div>;"
 `;
 
 exports[`babel-plugin-react-fast > spreadProps 1`] = `
-"import { template as _$template, spread as _$spread2, effect as _$effect2, style as _$style2, delegateEvents as _$delegateEvents } from "react-fast";
-const _tmpl$1 = _$template("<div></div>");
-const _tmpl$2 = _$template("<div class=\\"extra\\"></div>");
-const _tmpl$3 = _$template("<div class=\\"base\\"></div>");
-const _tmpl$4 = _$template("<div class=\\"base\\" id=\\"main\\"></div>");
-const _tmpl$5 = _$template("<div><span>text</span></div>");
-const _tmpl$6 = _$template("<input type=\\"text\\">");
-const _tmpl$7 = _$template("<button> </button>");
-const _tmpl$8 = _$template("<div><div class=\\"card-body\\"> </div></div>");
-const _tmpl$9 = _$template("<div> </div>");
-const template = (() => {
-  const _el$ = _tmpl$1();
-  _$spread(_el$, props);
-  return _el$;
-})();
-const template2 = (() => {
-  const _el$ = _tmpl$2();
-  _$spread(_el$, props);
-  return _el$;
-})();
-const template3 = (() => {
-  const _el$ = _tmpl$3();
-  _$spread(_el$, props);
-  return _el$;
-})();
-const template4 = (() => {
-  const _el$ = _tmpl$1();
-  _$spread(_el$, first);
-  _$spread(_el$, second);
-  return _el$;
-})();
-const template5 = (() => {
-  const _el$ = _tmpl$4();
-  _$spread(_el$, first);
-  _$spread(_el$, second);
-  _$effect(_prev => {
-    const _v$0 = dynamic;
-    if (_v$0 !== _prev.a) _el$.title = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template6 = (() => {
-  const _el$ = _tmpl$5();
-  const _el$1 = _el$.firstChild;
-  _$spread(_el$, getProps("test"));
-  _$spread(_el$1, innerProps);
-  return _el$;
-})();
-const template7 = (() => {
-  const _el$ = _tmpl$6();
-  _$spread(_el$, inputProps);
-  _el$.$$input = handleChange;
-  _$effect(_prev => {
-    const _v$0 = value,
-      _v$1 = \`input \${error ? "error" : ""}\`;
-    if (_v$0 !== _prev.a) _el$.value = _prev.a = _v$0;
-    if (_v$1 !== _prev.b) _el$.className = _prev.b = _v$1;
-    return _prev;
-  }, {
-    a: undefined,
-    b: undefined
-  });
-  return _el$;
-})();
-const template8 = (() => {
-  const _el$ = _tmpl$7();
-  const _el$1 = _el$.firstChild;
-  _$spread(_el$, buttonProps);
-  _el$.$$click = handleClick;
-  _$effect(_prev => {
-    const _v$0 = isLoading,
-      _v$1 = {
-        ...baseStyle,
-        ...overrideStyle
-      },
-      _v$2 = isLoading ? "Loading..." : label;
-    if (_v$0 !== _prev.a) _el$.disabled = _prev.a = _v$0;
-    if (_v$1 !== _prev.b) _prev.b = _$style(_el$, _v$1, _prev.b);
-    if (_v$2 !== _prev.c) _el$1.firstChild.data = _prev.c = _v$2;
-    return _prev;
-  }, {
-    a: undefined,
-    b: undefined,
-    c: undefined
-  });
-  return _el$;
-})();
+"import { escape as _$escape, template as _$template } from "react-fast";
+import { createElement as _$createElement } from "react";
+import { spread as _$spread } from "react-fast";
+import { useRef as _$useRef } from "react";
+const _SSR$ = typeof window === "undefined";
+const _tmpl$1 = /*#__PURE__*/_$template("<div class=\\"card-body\\">\\u200B</div>", true);
+const template = <div {...props} />;
+const template2 = <div {...props} className="extra" />;
+const template3 = <div className="base" {...props} />;
+const template4 = <div {...first} {...second} />;
+const template5 = <div className="base" {...first} id="main" {...second} title={dynamic} />;
+const template6 = <div {...getProps("test")}>
+    <span {...innerProps}>text</span>
+  </div>;
+const template7 = <input type="text" {...inputProps} value={value} onChange={handleChange} className={\`input \${error ? "error" : ""}\`} />;
+const template8 = <button {...buttonProps} disabled={isLoading} onClick={handleClick} style={{
+  ...baseStyle,
+  ...overrideStyle
+}}>
+    {isLoading ? "Loading..." : label}
+  </button>;
 function SpreadComponent({
   variant,
   size,
   ...rest
 }) {
-  return (() => {
-    const _el$ = _tmpl$8();
-    const _el$1 = _el$.firstChild;
-    const _el$2 = _el$1.firstChild;
-    _$spread(_el$, rest);
-    _$spread(_el$1, rest.bodyProps);
-    _$effect(_prev => {
-      const _v$0 = \`card card-\${variant} card-\${size}\`,
-        _v$1 = rest.children;
-      if (_v$0 !== _prev.a) _el$.className = _prev.a = _v$0;
-      if (_v$1 !== _prev.b) _el$2.firstChild.data = _prev.b = _v$1;
-      return _prev;
-    }, {
-      a: undefined,
-      b: undefined
-    });
-    return _el$;
-  })();
+  const _r$2 = _$useRef();
+  const _c$2 = _r$2.current || (_r$2.current = []);
+  if (!_c$2.ref) _c$2.ref = _el => {
+    if (!_el) return;
+    if (!_el.firstChild) _el.appendChild(_tmpl$1());
+    _c$2[0] = _el.firstChild;
+    _c$2[1] = _c$2[0].firstChild;
+    _c$2[2] = _el;
+    _$spread(_c$2[2], rest);
+    _$spread(_c$2[0], rest.bodyProps);
+    _c$2[3] = _c$2[2].className = \`card card-\${variant} card-\${size}\`;
+    _c$2[4] = rest.children;
+    _c$2[1].data = "" + rest.children;
+  };
+  if (_c$2[2]) {
+    const _a$3 = \`card card-\${variant} card-\${size}\`;
+    if (_c$2[3] !== _a$3) {
+      _c$2[3] = _a$3;
+      _c$2[2].className = _a$3;
+    }
+    _$spread(_c$2[2], rest);
+    _$spread(_c$2[0], rest.bodyProps);
+    const _v$0 = rest.children;
+    if (_c$2[4] !== _v$0) {
+      _c$2[4] = _v$0;
+      _c$2[1].data = "" + _v$0;
+    }
+  }
+  return _SSR$ ? _$createElement("div", {
+    className: \`card card-\${variant} card-\${size}\`,
+    dangerouslySetInnerHTML: {
+      __html: \`<div class="\${_$escape(\`card card-\${variant} card-\${size}\`, true)}"><div class="card-body">\${_$escape(rest.children)}</div></div>\`
+    }
+  }) : _c$2.node || (_c$2.node = _$createElement("div", {
+    ref: _c$2.ref
+  }));
 }
 function ForwardedComponent(props) {
   const {
@@ -1476,430 +681,137 @@ function ForwardedComponent(props) {
     children,
     ...domProps
   } = props;
-  return (() => {
-    const _el$ = _tmpl$9();
-    const _el$1 = _el$.firstChild;
-    _$spread(_el$, domProps);
-    _$effect(_prev => {
-      const _v$0 = className,
-        _v$1 = style,
-        _v$2 = children;
-      if (_v$0 !== _prev.a) _el$.className = _prev.a = _v$0;
-      if (_v$1 !== _prev.b) _prev.b = _$style(_el$, _v$1, _prev.b);
-      if (_v$2 !== _prev.c) _el$1.firstChild.data = _prev.c = _v$2;
-      return _prev;
-    }, {
-      a: undefined,
-      b: undefined,
-      c: undefined
-    });
-    return _el$;
-  })();
-}
-_$delegateEvents(["input", "click"]);"
+  return <div className={className} style={style} {...domProps}>
+      {children}
+    </div>;
+}"
 `;
 
 exports[`babel-plugin-react-fast > svg 1`] = `
-"import { template as _$template, effect as _$effect2, setAttribute as _$setAttribute2, style as _$style2, spread as _$spread2 } from "react-fast";
-const _tmpl$1 = _$template("<svg width=\\"400\\" height=\\"180\\"><rect strokeWidth=\\"2\\" x=\\"50\\" y=\\"20\\" rx=\\"20\\" ry=\\"20\\" width=\\"150\\" height=\\"150\\" style=\\"fill:red;stroke:black;stroke-width:5;opacity:0.5\\"></rect><linearGradient gradientTransform=\\"rotate(25)\\"><stop offset=\\"0%\\"></stop></linearGradient></svg>", false, true);
-const _tmpl$2 = _$template("<svg width=\\"400\\" height=\\"180\\"><rect rx=\\"20\\" ry=\\"20\\" width=\\"150\\" height=\\"150\\"></rect></svg>", false, true);
-const _tmpl$3 = _$template("<svg width=\\"400\\" height=\\"180\\"><rect></rect></svg>", false, true);
-const _tmpl$4 = _$template("<rect x=\\"50\\" y=\\"20\\" width=\\"150\\" height=\\"150\\"></rect>", false, true);
-const _tmpl$5 = _$template("<svg viewBox=\\"0 0 160 40\\" xmlns=\\"http://www.w3.org/2000/svg\\"><a><text x=\\"10\\" y=\\"25\\"> MDN Web Docs </text></a></svg>", false, true);
-const _tmpl$6 = _$template("<svg viewBox=\\"0 0 100 100\\" xmlns=\\"http://www.w3.org/2000/svg\\"><circle></circle></svg>", false, true);
-const _tmpl$7 = _$template("<svg><path fill=\\"none\\" stroke=\\"currentColor\\" strokeLinecap=\\"round\\" strokeLinejoin=\\"round\\"></path></svg>", false, true);
-const _tmpl$8 = _$template("<svg width=\\"200\\" height=\\"200\\" viewBox=\\"0 0 200 200\\"><circle cx=\\"100\\" cy=\\"100\\" r=\\"90\\" fill=\\"none\\" stroke=\\"#e0e0e0\\" strokeWidth=\\"10\\"></circle><circle cx=\\"100\\" cy=\\"100\\" r=\\"90\\" fill=\\"none\\" stroke=\\"#4caf50\\" strokeWidth=\\"10\\" strokeLinecap=\\"round\\" transform=\\"rotate(-90 100 100)\\"></circle><text x=\\"100\\" y=\\"100\\" textAnchor=\\"middle\\" dominantBaseline=\\"central\\" fontSize=\\"24\\"> % </text></svg>", false, true);
-const template = (() => {
-  const _el$ = _tmpl$1();
-  return _el$;
-})();
-const template2 = (() => {
-  const _el$ = _tmpl$2();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = state.name,
-      _v$1 = state.width,
-      _v$2 = state.x,
-      _v$3 = state.y,
-      _v$4 = {
-        fill: "red",
-        stroke: "black",
-        "stroke-width": props.stroke,
-        opacity: 0.5
-      };
-    if (_v$0 !== _prev.a) _$setAttribute(_el$1, "class", _v$0), _prev.a = _v$0;
-    if (_v$1 !== _prev.b) _$setAttribute(_el$1, "strokeWidth", _v$1), _prev.b = _v$1;
-    if (_v$2 !== _prev.c) _$setAttribute(_el$1, "x", _v$2), _prev.c = _v$2;
-    if (_v$3 !== _prev.d) _$setAttribute(_el$1, "y", _v$3), _prev.d = _v$3;
-    if (_v$4 !== _prev.e) _prev.e = _$style(_el$1, _v$4, _prev.e);
-    return _prev;
-  }, {
-    a: undefined,
-    b: undefined,
-    c: undefined,
-    d: undefined,
-    e: undefined
-  });
-  return _el$;
-})();
-const template3 = (() => {
-  const _el$ = _tmpl$3();
-  const _el$1 = _el$.firstChild;
-  _$spread(_el$1, props);
-  return _el$;
-})();
-const template4 = (() => {
-  const _el$ = _tmpl$4();
-  return _el$;
-})();
-const template5 = (() => {
-  const _el$ = _tmpl$4();
-  return _el$;
-})();
-const template6 = (() => {
-  const _el$ = _tmpl$5();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = url;
-    if (_v$0 !== _prev.a) _$setAttribute(_el$1, "xlinkHref", _v$0), _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const template7 = (() => {
-  const _el$ = _tmpl$6();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = cx,
-      _v$1 = cy,
-      _v$2 = radius,
-      _v$3 = color,
-      _v$4 = stroke,
-      _v$5 = strokeWidth;
-    if (_v$0 !== _prev.a) _$setAttribute(_el$1, "cx", _v$0), _prev.a = _v$0;
-    if (_v$1 !== _prev.b) _$setAttribute(_el$1, "cy", _v$1), _prev.b = _v$1;
-    if (_v$2 !== _prev.c) _$setAttribute(_el$1, "r", _v$2), _prev.c = _v$2;
-    if (_v$3 !== _prev.d) _$setAttribute(_el$1, "fill", _v$3), _prev.d = _v$3;
-    if (_v$4 !== _prev.e) _$setAttribute(_el$1, "stroke", _v$4), _prev.e = _v$4;
-    if (_v$5 !== _prev.f) _$setAttribute(_el$1, "strokeWidth", _v$5), _prev.f = _v$5;
-    return _prev;
-  }, {
-    a: undefined,
-    b: undefined,
-    c: undefined,
-    d: undefined,
-    e: undefined,
-    f: undefined
-  });
-  return _el$;
-})();
-const template8 = (() => {
-  const _el$ = _tmpl$7();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = pathData;
-    if (_v$0 !== _prev.a) _$setAttribute(_el$1, "d", _v$0), _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
+"import { escape as _$escape, template as _$template } from "react-fast";
+import { createElement as _$createElement } from "react";
+import { setAttribute as _$setAttribute } from "react-fast";
+import { useRef as _$useRef } from "react";
+const _SSR$ = typeof window === "undefined";
+const _tmpl$1 = /*#__PURE__*/_$template("<circle cx=\\"100\\" cy=\\"100\\" r=\\"90\\" fill=\\"none\\" stroke=\\"#e0e0e0\\" strokeWidth=\\"10\\"></circle><circle cx=\\"100\\" cy=\\"100\\" r=\\"90\\" fill=\\"none\\" stroke=\\"#4caf50\\" strokeWidth=\\"10\\" strokeLinecap=\\"round\\" transform=\\"rotate(-90 100 100)\\"></circle><text x=\\"100\\" y=\\"100\\" textAnchor=\\"middle\\" dominantBaseline=\\"central\\" fontSize=\\"24\\">\\u200B%</text>", true, true);
+const template = <svg width="400" height="180">
+    <rect strokeWidth="2" x="50" y="20" rx="20" ry="20" width="150" height="150" style="fill:red;stroke:black;stroke-width:5;opacity:0.5" />
+    <linearGradient gradientTransform="rotate(25)">
+      <stop offset="0%"></stop>
+    </linearGradient>
+  </svg>;
+const template2 = <svg width="400" height="180">
+    <rect className={state.name} strokeWidth={state.width} x={state.x} y={state.y} rx="20" ry="20" width="150" height="150" style={{
+    fill: "red",
+    stroke: "black",
+    "stroke-width": props.stroke,
+    opacity: 0.5
+  }} />
+  </svg>;
+const template3 = <svg width="400" height="180">
+    <rect {...props} />
+  </svg>;
+const template4 = <rect x="50" y="20" width="150" height="150" />;
+const template5 = <>
+    <rect x="50" y="20" width="150" height="150" />
+  </>;
+const template6 = <svg viewBox={"0 0 160 40"} xmlns="http://www.w3.org/2000/svg">
+    <a xlinkHref={url}>
+      <text x="10" y="25">
+        MDN Web Docs
+      </text>
+    </a>
+  </svg>;
+const template7 = <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <circle cx={cx} cy={cy} r={radius} fill={color} stroke={stroke} strokeWidth={strokeWidth} />
+  </svg>;
+const template8 = <svg>
+    <path d={pathData} fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>;
 function AnimatedSVG({
   progress
 }) {
-  return (() => {
-    const _el$ = _tmpl$8();
-    const _el$1 = _el$.firstChild;
-    const _el$2 = _el$1.nextSibling;
-    const _el$3 = _el$2.nextSibling;
-    const _el$4 = _el$3.firstChild;
-    _$effect(_prev => {
-      const _v$0 = \`\${progress * 565.48} 565.48\`,
-        _v$1 = Math.round(progress * 100);
-      if (_v$0 !== _prev.a) _$setAttribute(_el$2, "strokeDasharray", _v$0), _prev.a = _v$0;
-      if (_v$1 !== _prev.b) _el$4.firstChild.data = _prev.b = _v$1;
-      return _prev;
-    }, {
-      a: undefined,
-      b: undefined
-    });
-    return _el$;
-  })();
+  const _r$2 = _$useRef();
+  const _c$2 = _r$2.current || (_r$2.current = []);
+  if (!_c$2.ref) _c$2.ref = _el => {
+    if (!_el) return;
+    if (!_el.firstChild) _el.appendChild(_tmpl$1());
+    const _n$0 = _el.firstChild;
+    _c$2[0] = _n$0.nextSibling;
+    _c$2[1] = _c$2[0].nextSibling;
+    _c$2[2] = _c$2[1].firstChild;
+    _c$2[3] = _el;
+    _$setAttribute(_c$2[0], "strokeDasharray", \`\${progress * 565.48} 565.48\`);
+    _c$2[4] = Math.round(progress * 100);
+    _c$2[2].data = "" + Math.round(progress * 100);
+  };
+  if (_c$2[3]) {
+    _$setAttribute(_c$2[0], "strokeDasharray", \`\${progress * 565.48} 565.48\`);
+    const _v$0 = Math.round(progress * 100);
+    if (_c$2[4] !== _v$0) {
+      _c$2[4] = _v$0;
+      _c$2[2].data = "" + _v$0;
+    }
+  }
+  return _SSR$ ? _$createElement("svg", {
+    width: "200",
+    height: "200",
+    viewBox: "0 0 200 200",
+    dangerouslySetInnerHTML: {
+      __html: \`<svg width="200" height="200" viewBox="0 0 200 200"><circle cx="100" cy="100" r="90" fill="none" stroke="#e0e0e0" strokeWidth="10"></circle><circle cx="100" cy="100" r="90" fill="none" stroke="#4caf50" strokeWidth="10" strokeDasharray="\${_$escape(\`\${progress * 565.48} 565.48\`, true)}" strokeLinecap="round" transform="rotate(-90 100 100)"></circle><text x="100" y="100" textAnchor="middle" dominantBaseline="central" fontSize="24">\${_$escape(Math.round(progress * 100))}%</text></svg>\`
+    }
+  }) : _c$2.node || (_c$2.node = _$createElement("svg", {
+    ref: _c$2.ref
+  }));
 }"
 `;
 
 exports[`babel-plugin-react-fast > textInterpolation 1`] = `
-"import { template as _$template, effect as _$effect2 } from "react-fast";
-const _tmpl$1 = _$template("<span>Hello </span>");
-const _tmpl$2 = _$template("<span> John</span>");
-const _tmpl$3 = _$template("<span>Hello John</span>");
-const _tmpl$4 = _$template("<span>Hello  </span>");
-const _tmpl$5 = _$template("<span>  John</span>");
-const _tmpl$6 = _$template("<span>  </span>");
-const _tmpl$7 = _$template("<span> Hello </span>");
-const _tmpl$8 = _$template("<span> Hello John </span>");
-const _tmpl$9 = _$template("<span>Hi&lt;script&gt;alert();&lt;/script&gt;</span>");
-const _tmpl$10 = _$template("<span>4 + 5 =  </span>");
-const _tmpl$11 = _$template("<div> \\nd</div>");
-const _tmpl$12 = _$template("<div> </div>");
-const _tmpl$13 = _$template("<span> </span>");
-const _tmpl$14 = _$template("<div><div></div> </div>");
-const _tmpl$15 = _$template("<p>Start   end   final</p>");
-const _tmpl$16 = _$template("<div><span> </span><span> </span><span> </span></div>");
-const _tmpl$17 = _$template("<div></div>");
-const _tmpl$18 = _$template("<span>42</span>");
-const trailing = (() => {
-  const _el$ = _tmpl$1();
-  return _el$;
-})();
-const leading = (() => {
-  const _el$ = _tmpl$2();
-  return _el$;
-})();
-const extraSpaces = (() => {
-  const _el$ = _tmpl$3();
-  return _el$;
-})();
-const trailingExpr = (() => {
-  const _el$ = _tmpl$4();
-  const _el$1 = _el$.firstChild;
-  const _el$2 = _el$1.nextSibling;
-  _$effect(_prev => {
-    const _v$0 = name;
-    if (_v$0 !== _prev.a) _el$2.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const leadingExpr = (() => {
-  const _el$ = _tmpl$5();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = greeting;
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const multiExpr = (() => {
-  const _el$ = _tmpl$6();
-  const _el$1 = _el$.firstChild;
-  const _el$2 = _el$1.nextSibling;
-  _$effect(_prev => {
-    const _v$0 = greeting,
-      _v$1 = name;
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    if (_v$1 !== _prev.b) _el$2.firstChild.data = _prev.b = _v$1;
-    return _prev;
-  }, {
-    a: undefined,
-    b: undefined
-  });
-  return _el$;
-})();
-const multiExprSpaced = (() => {
-  const _el$ = _tmpl$6();
-  const _el$1 = _el$.firstChild;
-  const _el$2 = _el$1.nextSibling;
-  _$effect(_prev => {
-    const _v$0 = greeting,
-      _v$1 = name;
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    if (_v$1 !== _prev.b) _el$2.firstChild.data = _prev.b = _v$1;
-    return _prev;
-  }, {
-    a: undefined,
-    b: undefined
-  });
-  return _el$;
-})();
-const multiExprTogether = (() => {
-  const _el$ = _tmpl$6();
-  const _el$1 = _el$.firstChild;
-  const _el$2 = _el$1.nextSibling;
-  _$effect(_prev => {
-    const _v$0 = greeting,
-      _v$1 = name;
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    if (_v$1 !== _prev.b) _el$2.firstChild.data = _prev.b = _v$1;
-    return _prev;
-  }, {
-    a: undefined,
-    b: undefined
-  });
-  return _el$;
-})();
-const multiLine = (() => {
-  const _el$ = _tmpl$7();
-  return _el$;
-})();
-const multiLineTrailingSpace = (() => {
-  const _el$ = _tmpl$8();
-  return _el$;
-})();
-const multiLineNoTrailingSpace = (() => {
-  const _el$ = _tmpl$8();
-  return _el$;
-})();
-const injection = (() => {
-  const _el$ = _tmpl$9();
-  return _el$;
-})();
+"const trailing = <span>Hello </span>;
+const leading = <span> John</span>;
+const extraSpaces = <span>Hello John</span>;
+const trailingExpr = <span>Hello {name}</span>;
+const leadingExpr = <span>{greeting} John</span>;
+const multiExpr = <span>
+    {greeting} {name}
+  </span>;
+const multiExprSpaced = <span>
+    {" "}
+    {greeting} {name}{" "}
+  </span>;
+const multiExprTogether = <span>
+    {" "}
+    {greeting}
+    {name}{" "}
+  </span>;
+const multiLine = <span>Hello</span>;
+const multiLineTrailingSpace = <span>Hello John</span>;
+const multiLineNoTrailingSpace = <span>Hello John</span>;
+const injection = <span>Hi{"<script>alert();</script>"}</span>;
 let value = "World";
-const evaluated = (() => {
-  const _el$ = _tmpl$4();
-  const _el$1 = _el$.firstChild;
-  const _el$2 = _el$1.nextSibling;
-  _$effect(_prev => {
-    const _v$0 = value + "!";
-    if (_v$0 !== _prev.a) _el$2.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
+const evaluated = <span>Hello {value + "!"}</span>;
 let number = 4 + 5;
-const evaluatedNonString = (() => {
-  const _el$ = _tmpl$10();
-  const _el$1 = _el$.firstChild;
-  const _el$2 = _el$1.nextSibling;
-  _$effect(_prev => {
-    const _v$0 = number;
-    if (_v$0 !== _prev.a) _el$2.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const newLineLiteral = (() => {
-  const _el$ = _tmpl$11();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = s;
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const trailingSpace = (() => {
-  const _el$ = _tmpl$12();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = expr;
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const leadingSpaceElement = (() => {
-  const _el$ = _tmpl$13();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = expr;
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const trailingSpaceElement = (() => {
-  const _el$ = _tmpl$13();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = expr;
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const lastElementExpression = (() => {
-  const _el$ = _tmpl$14();
-  const _el$1 = _el$.firstChild;
-  const _el$2 = _el$1.nextSibling;
-  _$effect(_prev => {
-    const _v$0 = expr();
-    if (_v$0 !== _prev.a) _el$2.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();
-const multipleTextNodes = (() => {
-  const _el$ = _tmpl$15();
-  const _el$1 = _el$.firstChild;
-  const _el$2 = _el$1.nextSibling;
-  const _el$3 = _el$2.nextSibling;
-  const _el$4 = _el$3.nextSibling;
-  _$effect(_prev => {
-    const _v$0 = middle,
-      _v$1 = last;
-    if (_v$0 !== _prev.a) _el$2.firstChild.data = _prev.a = _v$0;
-    if (_v$1 !== _prev.b) _el$4.firstChild.data = _prev.b = _v$1;
-    return _prev;
-  }, {
-    a: undefined,
-    b: undefined
-  });
-  return _el$;
-})();
-const nestedDynamic = (() => {
-  const _el$ = _tmpl$16();
-  const _el$1 = _el$.firstChild;
-  const _el$2 = _el$1.firstChild;
-  const _el$3 = _el$1.nextSibling;
-  const _el$4 = _el$3.firstChild;
-  const _el$5 = _el$3.nextSibling;
-  const _el$6 = _el$5.firstChild;
-  _$effect(_prev => {
-    const _v$0 = a,
-      _v$1 = b,
-      _v$2 = c;
-    if (_v$0 !== _prev.a) _el$2.firstChild.data = _prev.a = _v$0;
-    if (_v$1 !== _prev.b) _el$4.firstChild.data = _prev.b = _v$1;
-    if (_v$2 !== _prev.c) _el$6.firstChild.data = _prev.c = _v$2;
-    return _prev;
-  }, {
-    a: undefined,
-    b: undefined,
-    c: undefined
-  });
-  return _el$;
-})();
-const emptyExpression = (() => {
-  const _el$ = _tmpl$17();
-  return _el$;
-})();
-const numericChild = (() => {
-  const _el$ = _tmpl$18();
-  return _el$;
-})();
-const templateLiteralChild = (() => {
-  const _el$ = _tmpl$13();
-  const _el$1 = _el$.firstChild;
-  _$effect(_prev => {
-    const _v$0 = \`Hello \${name}\`;
-    if (_v$0 !== _prev.a) _el$1.firstChild.data = _prev.a = _v$0;
-    return _prev;
-  }, {
-    a: undefined
-  });
-  return _el$;
-})();"
+const evaluatedNonString = <span>4 + 5 = {number}</span>;
+const newLineLiteral = <div>
+    {s}
+    {"\\n"}d
+  </div>;
+const trailingSpace = <div>{expr}</div>;
+const leadingSpaceElement = <span> {expr}</span>;
+const trailingSpaceElement = <span>{expr} </span>;
+const lastElementExpression = <div>
+    <div></div>
+    {expr()}
+  </div>;
+const multipleTextNodes = <p>
+    Start {middle} end {last} final
+  </p>;
+const nestedDynamic = <div>
+    <span>{a}</span>
+    <span>{b}</span>
+    <span>{c}</span>
+  </div>;
+const emptyExpression = <div>{/* comment */}</div>;
+const numericChild = <span>{42}</span>;
+const templateLiteralChild = <span>{\`Hello \${name}\`}</span>;"
 `;

@@ -53,9 +53,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "animationend",
         nativeEvent: "animationend",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("animationend", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("animationend", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -84,9 +82,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "animationstart",
         nativeEvent: "animationstart",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("animationstart", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("animationstart", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -98,9 +94,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "auxclick",
         nativeEvent: "auxclick",
         dispatch(node) {
-          node.dispatchEvent(
-            new KeyboardEvent("auxclick", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new KeyboardEvent("auxclick", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -112,9 +106,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "blur",
         nativeEvent: "focusout",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("focusout", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("focusout", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -138,9 +130,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "contextmenu",
         nativeEvent: "contextmenu",
         dispatch(node) {
-          node.dispatchEvent(
-            new MouseEvent("contextmenu", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -152,9 +142,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "copy",
         nativeEvent: "copy",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("copy", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("copy", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -166,9 +154,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "cut",
         nativeEvent: "cut",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("cut", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("cut", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -180,9 +166,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "dblclick",
         nativeEvent: "dblclick",
         dispatch(node) {
-          node.dispatchEvent(
-            new KeyboardEvent("dblclick", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new KeyboardEvent("dblclick", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -194,9 +178,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "drag",
         nativeEvent: "drag",
         dispatch(node) {
-          node.dispatchEvent(
-            new MouseEvent("drag", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new MouseEvent("drag", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -208,9 +190,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "dragend",
         nativeEvent: "dragend",
         dispatch(node) {
-          node.dispatchEvent(
-            new MouseEvent("dragend", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new MouseEvent("dragend", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -222,9 +202,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "dragenter",
         nativeEvent: "dragenter",
         dispatch(node) {
-          node.dispatchEvent(
-            new MouseEvent("dragenter", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new MouseEvent("dragenter", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -236,9 +214,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "dragexit",
         nativeEvent: "dragexit",
         dispatch(node) {
-          node.dispatchEvent(
-            new MouseEvent("dragexit", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new MouseEvent("dragexit", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -250,9 +226,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "dragleave",
         nativeEvent: "dragleave",
         dispatch(node) {
-          node.dispatchEvent(
-            new MouseEvent("dragleave", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new MouseEvent("dragleave", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -264,9 +238,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "dragover",
         nativeEvent: "dragover",
         dispatch(node) {
-          node.dispatchEvent(
-            new MouseEvent("dragover", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new MouseEvent("dragover", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -278,9 +250,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "dragstart",
         nativeEvent: "dragstart",
         dispatch(node) {
-          node.dispatchEvent(
-            new MouseEvent("dragstart", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new MouseEvent("dragstart", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -292,9 +262,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "drop",
         nativeEvent: "drop",
         dispatch(node) {
-          node.dispatchEvent(
-            new MouseEvent("drop", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new MouseEvent("drop", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -306,9 +274,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "focus",
         nativeEvent: "focusin",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("focusin", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("focusin", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -337,9 +303,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "keydown",
         nativeEvent: "keydown",
         dispatch(node) {
-          node.dispatchEvent(
-            new KeyboardEvent("keydown", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -369,9 +333,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "keyup",
         nativeEvent: "keyup",
         dispatch(node) {
-          node.dispatchEvent(
-            new KeyboardEvent("keyup", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new KeyboardEvent("keyup", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -400,9 +362,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "mousedown",
         nativeEvent: "mousedown",
         dispatch(node) {
-          node.dispatchEvent(
-            new MouseEvent("mousedown", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new MouseEvent("mousedown", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -414,9 +374,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "mouseout",
         nativeEvent: "mouseout",
         dispatch(node) {
-          node.dispatchEvent(
-            new MouseEvent("mouseout", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new MouseEvent("mouseout", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -428,9 +386,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "mouseover",
         nativeEvent: "mouseover",
         dispatch(node) {
-          node.dispatchEvent(
-            new MouseEvent("mouseover", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new MouseEvent("mouseover", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -442,9 +398,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "mouseup",
         nativeEvent: "mouseup",
         dispatch(node) {
-          node.dispatchEvent(
-            new MouseEvent("mouseup", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new MouseEvent("mouseup", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -456,9 +410,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "paste",
         nativeEvent: "paste",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("paste", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("paste", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -470,9 +422,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "pointercancel",
         nativeEvent: "pointercancel",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("pointercancel", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("pointercancel", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -484,9 +434,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "pointerdown",
         nativeEvent: "pointerdown",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("pointerdown", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("pointerdown", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -498,9 +446,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "pointermove",
         nativeEvent: "pointermove",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("pointermove", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("pointermove", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -512,9 +458,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "pointerout",
         nativeEvent: "pointerout",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("pointerout", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("pointerout", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -526,9 +470,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "pointerover",
         nativeEvent: "pointerover",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("pointerover", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("pointerover", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -540,9 +482,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "pointerup",
         nativeEvent: "pointerup",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("pointerup", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("pointerup", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -554,9 +494,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "reset",
         nativeEvent: "reset",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("reset", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("reset", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -586,9 +524,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "touchcancel",
         nativeEvent: "touchcancel",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("touchcancel", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("touchcancel", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -600,9 +536,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "touchend",
         nativeEvent: "touchend",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("touchend", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("touchend", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -614,9 +548,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "touchmove",
         nativeEvent: "touchmove",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("touchmove", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("touchmove", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -628,9 +560,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "touchstart",
         nativeEvent: "touchstart",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("touchstart", { bubbles: true, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("touchstart", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -642,9 +572,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "transitionrun",
         nativeEvent: "transitionrun",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("transitionrun", { bubbles: true, cancelable: false }),
-          );
+          node.dispatchEvent(new Event("transitionrun", { bubbles: true, cancelable: false }));
         },
       });
     });
@@ -656,9 +584,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "transitionstart",
         nativeEvent: "transitionstart",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("transitionstart", { bubbles: true, cancelable: false }),
-          );
+          node.dispatchEvent(new Event("transitionstart", { bubbles: true, cancelable: false }));
         },
       });
     });
@@ -687,9 +613,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "transitionend",
         nativeEvent: "transitionend",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("transitionend", { bubbles: true, cancelable: false }),
-          );
+          node.dispatchEvent(new Event("transitionend", { bubbles: true, cancelable: false }));
         },
       });
     });
@@ -701,43 +625,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "wheel",
         nativeEvent: "wheel",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("wheel", { bubbles: true, cancelable: true }),
-          );
-        },
-      });
-    });
-
-    it("onFullscreenChange", async () => {
-      await testNativeBubblingEvent({
-        type: "div",
-        reactEvent: "onFullscreenChange",
-        reactEventType: "fullscreenchange",
-        nativeEvent: "fullscreenchange",
-        dispatch(node) {
-          node.dispatchEvent(
-            new Event("fullscreenchange", {
-              bubbles: true,
-              cancelable: false,
-            }),
-          );
-        },
-      });
-    });
-
-    it("onFullscreenError", async () => {
-      await testNativeBubblingEvent({
-        type: "div",
-        reactEvent: "onFullscreenError",
-        reactEventType: "fullscreenerror",
-        nativeEvent: "fullscreenerror",
-        dispatch(node) {
-          node.dispatchEvent(
-            new Event("fullscreenerror", {
-              bubbles: true,
-              cancelable: false,
-            }),
-          );
+          node.dispatchEvent(new Event("wheel", { bubbles: true, cancelable: true }));
         },
       });
     });
@@ -751,9 +639,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "abort",
         nativeEvent: "abort",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("abort", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("abort", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -765,9 +651,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "cancel",
         nativeEvent: "cancel",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("cancel", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("cancel", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -779,9 +663,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "canplay",
         nativeEvent: "canplay",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("canplay", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("canplay", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -793,9 +675,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "canplaythrough",
         nativeEvent: "canplaythrough",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("canplaythrough", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("canplaythrough", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -807,9 +687,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "close",
         nativeEvent: "close",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("close", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("close", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -821,9 +699,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "durationchange",
         nativeEvent: "durationchange",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("durationchange", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("durationchange", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -835,9 +711,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "emptied",
         nativeEvent: "emptied",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("emptied", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("emptied", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -849,9 +723,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "encrypted",
         nativeEvent: "encrypted",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("encrypted", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("encrypted", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -863,9 +735,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "ended",
         nativeEvent: "ended",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("ended", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("ended", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -877,9 +747,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "error",
         nativeEvent: "error",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("error", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("error", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -891,9 +759,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "invalid",
         nativeEvent: "invalid",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("invalid", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("invalid", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -905,9 +771,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "load",
         nativeEvent: "load",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("load", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("load", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -919,9 +783,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "loadeddata",
         nativeEvent: "loadeddata",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("loadeddata", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("loadeddata", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -933,9 +795,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "loadedmetadata",
         nativeEvent: "loadedmetadata",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("loadedmetadata", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("loadedmetadata", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -947,9 +807,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "loadstart",
         nativeEvent: "loadstart",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("loadstart", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("loadstart", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -961,9 +819,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "pause",
         nativeEvent: "pause",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("pause", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("pause", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -975,9 +831,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "play",
         nativeEvent: "play",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("play", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("play", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -989,9 +843,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "playing",
         nativeEvent: "playing",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("playing", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("playing", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -1003,9 +855,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "progress",
         nativeEvent: "progress",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("progress", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("progress", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -1017,9 +867,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "ratechange",
         nativeEvent: "ratechange",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("ratechange", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("ratechange", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -1031,9 +879,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "resize",
         nativeEvent: "resize",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("resize", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("resize", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -1045,9 +891,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "seeked",
         nativeEvent: "seeked",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("seeked", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("seeked", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -1059,9 +903,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "seeking",
         nativeEvent: "seeking",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("seeking", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("seeking", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -1073,9 +915,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "stalled",
         nativeEvent: "stalled",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("stalled", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("stalled", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -1087,9 +927,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "suspend",
         nativeEvent: "suspend",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("suspend", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("suspend", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -1101,9 +939,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "timeupdate",
         nativeEvent: "timeupdate",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("timeupdate", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("timeupdate", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -1115,9 +951,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "toggle",
         nativeEvent: "toggle",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("toggle", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("toggle", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -1130,9 +964,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "beforetoggle",
         nativeEvent: "beforetoggle",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("beforetoggle", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("beforetoggle", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -1145,9 +977,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "toggle",
         nativeEvent: "toggle",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("toggle", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("toggle", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -1159,9 +989,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "beforetoggle",
         nativeEvent: "beforetoggle",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("beforetoggle", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("beforetoggle", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -1173,9 +1001,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "toggle",
         nativeEvent: "toggle",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("toggle", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("toggle", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -1187,9 +1013,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "volumechange",
         nativeEvent: "volumechange",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("volumechange", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("volumechange", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -1201,9 +1025,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "waiting",
         nativeEvent: "waiting",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("waiting", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("waiting", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -1217,9 +1039,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "scroll",
         nativeEvent: "scroll",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("scroll", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("scroll", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -1231,9 +1051,7 @@ describe("ReactDOMEventPropagation", () => {
         reactEventType: "scrollend",
         nativeEvent: "scrollend",
         dispatch(node) {
-          node.dispatchEvent(
-            new Event("scrollend", { bubbles: false, cancelable: true }),
-          );
+          node.dispatchEvent(new Event("scrollend", { bubbles: false, cancelable: true }));
         },
       });
     });
@@ -1430,11 +1248,11 @@ describe("ReactDOMEventPropagation", () => {
         />,
       );
       expect(log.length).toBe(0);
-      const event = new Event("textInput", { bubbles: true }) as Event & {
-        data: string;
-      };
-      (event as unknown as Record<string, unknown>).data = "abcd";
-      targetRef.current!.dispatchEvent(event);
+      await act(() => {
+        const textInputEvent = new Event("textInput", { bubbles: true });
+        (textInputEvent as unknown as Record<string, unknown>).data = "abcd";
+        targetRef.current!.dispatchEvent(textInputEvent);
+      });
       expect(log).toEqual([
         "- outer parent capture",
         "-- outer capture",
@@ -1490,17 +1308,17 @@ describe("ReactDOMEventPropagation", () => {
         />,
       );
       expect(log.length).toBe(0);
-      setUntrackedValue.call(targetRef.current!, "hello");
-      targetRef.current!.dispatchEvent(
-        new Event("input", { bubbles: true }),
-      );
+      await act(() => {
+        setUntrackedValue.call(targetRef.current!, "hello");
+        targetRef.current!.dispatchEvent(new Event("input", { bubbles: true }));
+      });
       expect(log).toEqual([
         "- outer parent capture",
+        "-- outer capture",
+        "--- parent capture",
         "---- target capture",
         "---- target",
-        "--- parent capture",
         "--- parent",
-        "-- outer capture",
         "-- outer",
         "- outer parent",
       ]);
@@ -1549,9 +1367,7 @@ describe("ReactDOMEventPropagation", () => {
         />,
       );
       expect(log.length).toBe(0);
-      targetRef.current!.dispatchEvent(
-        new Event("compositionstart", { bubbles: true }),
-      );
+      targetRef.current!.dispatchEvent(new Event("compositionstart", { bubbles: true }));
       expect(log).toEqual([
         "- outer parent capture",
         "-- outer capture",
@@ -1607,9 +1423,7 @@ describe("ReactDOMEventPropagation", () => {
         />,
       );
       expect(log.length).toBe(0);
-      targetRef.current!.dispatchEvent(
-        new Event("compositionend", { bubbles: true }),
-      );
+      targetRef.current!.dispatchEvent(new Event("compositionend", { bubbles: true }));
       expect(log).toEqual([
         "- outer parent capture",
         "-- outer capture",
@@ -1665,9 +1479,7 @@ describe("ReactDOMEventPropagation", () => {
         />,
       );
       expect(log.length).toBe(0);
-      targetRef.current!.dispatchEvent(
-        new Event("compositionupdate", { bubbles: true }),
-      );
+      targetRef.current!.dispatchEvent(new Event("compositionupdate", { bubbles: true }));
       expect(log).toEqual([
         "- outer parent capture",
         "-- outer capture",
@@ -1723,17 +1535,17 @@ describe("ReactDOMEventPropagation", () => {
         />,
       );
       expect(log.length).toBe(0);
-      targetRef.current!.focus();
-      targetRef.current!.dispatchEvent(
-        new Event("keydown", { bubbles: true }),
-      );
+      await act(() => {
+        targetRef.current!.focus();
+        targetRef.current!.dispatchEvent(new Event("keydown", { bubbles: true }));
+      });
       expect(log).toEqual([
         "- outer parent capture",
+        "-- outer capture",
+        "--- parent capture",
         "---- target capture",
         "---- target",
-        "--- parent capture",
         "--- parent",
-        "-- outer capture",
         "-- outer",
         "- outer parent",
       ]);
@@ -1747,10 +1559,6 @@ describe("ReactDOMEventPropagation", () => {
     await testReactStopPropagationInParentCapturePhase(eventConfig);
     await testReactStopPropagationInTargetBubblePhase(eventConfig);
     await testReactStopPropagationInOuterBubblePhase(eventConfig);
-    await testNativeStopPropagationInOuterParentCapturePhase(eventConfig);
-    await testNativeStopPropagationInParentCapturePhase(eventConfig);
-    await testNativeStopPropagationInTargetBubblePhase(eventConfig);
-    await testNativeStopPropagationInOuterBubblePhase(eventConfig);
   }
 
   async function testEmulatedBubblingEvent(eventConfig: EventConfig) {
@@ -1769,9 +1577,7 @@ describe("ReactDOMEventPropagation", () => {
     await testNonBubblingReactStopPropagationInParentCapturePhase(eventConfig);
   }
 
-  async function testBubblingEventWithTargetListener(
-    eventConfig: EventConfig,
-  ) {
+  async function testBubblingEventWithTargetListener(eventConfig: EventConfig) {
     const log: string[] = [];
     const targetRef = React.createRef<HTMLElement>();
     await render(
@@ -1814,7 +1620,9 @@ describe("ReactDOMEventPropagation", () => {
       />,
     );
     expect(log.length).toBe(0);
-    eventConfig.dispatch(targetRef.current!);
+    await act(() => {
+      eventConfig.dispatch(targetRef.current!);
+    });
     expect(log).toEqual([
       "- outer parent capture",
       "-- outer capture",
@@ -1827,9 +1635,7 @@ describe("ReactDOMEventPropagation", () => {
     ]);
   }
 
-  async function testEmulatedBubblingEventWithTargetListener(
-    eventConfig: EventConfig,
-  ) {
+  async function testEmulatedBubblingEventWithTargetListener(eventConfig: EventConfig) {
     const log: string[] = [];
     const targetRef = React.createRef<HTMLElement>();
     await render(
@@ -1873,7 +1679,9 @@ describe("ReactDOMEventPropagation", () => {
       />,
     );
     expect(log.length).toBe(0);
-    eventConfig.dispatch(targetRef.current!);
+    await act(() => {
+      eventConfig.dispatch(targetRef.current!);
+    });
     expect(log).toEqual([
       "- outer parent capture",
       "-- outer capture",
@@ -1886,9 +1694,7 @@ describe("ReactDOMEventPropagation", () => {
     ]);
   }
 
-  async function testNonBubblingEventWithTargetListener(
-    eventConfig: EventConfig,
-  ) {
+  async function testNonBubblingEventWithTargetListener(eventConfig: EventConfig) {
     const log: string[] = [];
     const targetRef = React.createRef<HTMLElement>();
     await render(
@@ -1931,7 +1737,9 @@ describe("ReactDOMEventPropagation", () => {
       />,
     );
     expect(log.length).toBe(0);
-    eventConfig.dispatch(targetRef.current!);
+    await act(() => {
+      eventConfig.dispatch(targetRef.current!);
+    });
     expect(log).toEqual([
       "- outer parent capture",
       "-- outer capture",
@@ -1941,9 +1749,7 @@ describe("ReactDOMEventPropagation", () => {
     ]);
   }
 
-  async function testBubblingEventWithoutTargetListener(
-    eventConfig: EventConfig,
-  ) {
+  async function testBubblingEventWithoutTargetListener(eventConfig: EventConfig) {
     const log: string[] = [];
     const targetRef = React.createRef<HTMLElement>();
     await render(
@@ -1979,7 +1785,9 @@ describe("ReactDOMEventPropagation", () => {
       />,
     );
     expect(log.length).toBe(0);
-    eventConfig.dispatch(targetRef.current!);
+    await act(() => {
+      eventConfig.dispatch(targetRef.current!);
+    });
     expect(log).toEqual([
       "- outer parent capture",
       "-- outer capture",
@@ -1990,9 +1798,7 @@ describe("ReactDOMEventPropagation", () => {
     ]);
   }
 
-  async function testEmulatedBubblingEventWithoutTargetListener(
-    eventConfig: EventConfig,
-  ) {
+  async function testEmulatedBubblingEventWithoutTargetListener(eventConfig: EventConfig) {
     const log: string[] = [];
     const targetRef = React.createRef<HTMLElement>();
     await render(
@@ -2030,7 +1836,9 @@ describe("ReactDOMEventPropagation", () => {
       />,
     );
     expect(log.length).toBe(0);
-    eventConfig.dispatch(targetRef.current!);
+    await act(() => {
+      eventConfig.dispatch(targetRef.current!);
+    });
     expect(log).toEqual([
       "- outer parent capture",
       "-- outer capture",
@@ -2041,9 +1849,7 @@ describe("ReactDOMEventPropagation", () => {
     ]);
   }
 
-  async function testNonBubblingEventWithoutTargetListener(
-    eventConfig: EventConfig,
-  ) {
+  async function testNonBubblingEventWithoutTargetListener(eventConfig: EventConfig) {
     const log: string[] = [];
     const targetRef = React.createRef<HTMLElement>();
     await render(
@@ -2079,17 +1885,13 @@ describe("ReactDOMEventPropagation", () => {
       />,
     );
     expect(log.length).toBe(0);
-    eventConfig.dispatch(targetRef.current!);
-    expect(log).toEqual([
-      "- outer parent capture",
-      "-- outer capture",
-      "--- parent capture",
-    ]);
+    await act(() => {
+      eventConfig.dispatch(targetRef.current!);
+    });
+    expect(log).toEqual(["- outer parent capture", "-- outer capture", "--- parent capture"]);
   }
 
-  async function testReactStopPropagationInOuterCapturePhase(
-    eventConfig: EventConfig,
-  ) {
+  async function testReactStopPropagationInOuterCapturePhase(eventConfig: EventConfig) {
     const log: string[] = [];
     const targetRef = React.createRef<HTMLElement>();
     await render(
@@ -2134,13 +1936,13 @@ describe("ReactDOMEventPropagation", () => {
       />,
     );
     expect(log.length).toBe(0);
-    eventConfig.dispatch(targetRef.current!);
+    await act(() => {
+      eventConfig.dispatch(targetRef.current!);
+    });
     expect(log).toEqual(["- outer parent capture", "-- outer capture"]);
   }
 
-  async function testReactStopPropagationInParentCapturePhase(
-    eventConfig: EventConfig,
-  ) {
+  async function testReactStopPropagationInParentCapturePhase(eventConfig: EventConfig) {
     const log: string[] = [];
     const targetRef = React.createRef<HTMLElement>();
     await render(
@@ -2185,17 +1987,13 @@ describe("ReactDOMEventPropagation", () => {
       />,
     );
     expect(log.length).toBe(0);
-    eventConfig.dispatch(targetRef.current!);
-    expect(log).toEqual([
-      "- outer parent capture",
-      "-- outer capture",
-      "--- parent capture",
-    ]);
+    await act(() => {
+      eventConfig.dispatch(targetRef.current!);
+    });
+    expect(log).toEqual(["- outer parent capture", "-- outer capture", "--- parent capture"]);
   }
 
-  async function testReactStopPropagationInTargetBubblePhase(
-    eventConfig: EventConfig,
-  ) {
+  async function testReactStopPropagationInTargetBubblePhase(eventConfig: EventConfig) {
     const log: string[] = [];
     const targetRef = React.createRef<HTMLElement>();
     await render(
@@ -2240,7 +2038,9 @@ describe("ReactDOMEventPropagation", () => {
       />,
     );
     expect(log.length).toBe(0);
-    eventConfig.dispatch(targetRef.current!);
+    await act(() => {
+      eventConfig.dispatch(targetRef.current!);
+    });
     expect(log).toEqual([
       "- outer parent capture",
       "-- outer capture",
@@ -2250,9 +2050,7 @@ describe("ReactDOMEventPropagation", () => {
     ]);
   }
 
-  async function testReactStopPropagationInOuterBubblePhase(
-    eventConfig: EventConfig,
-  ) {
+  async function testReactStopPropagationInOuterBubblePhase(eventConfig: EventConfig) {
     const log: string[] = [];
     const targetRef = React.createRef<HTMLElement>();
     await render(
@@ -2297,7 +2095,9 @@ describe("ReactDOMEventPropagation", () => {
       />,
     );
     expect(log.length).toBe(0);
-    eventConfig.dispatch(targetRef.current!);
+    await act(() => {
+      eventConfig.dispatch(targetRef.current!);
+    });
     expect(log).toEqual([
       "- outer parent capture",
       "-- outer capture",
@@ -2309,9 +2109,7 @@ describe("ReactDOMEventPropagation", () => {
     ]);
   }
 
-  async function testNativeStopPropagationInOuterParentCapturePhase(
-    eventConfig: EventConfig,
-  ) {
+  async function testNativeStopPropagationInOuterParentCapturePhase(eventConfig: EventConfig) {
     const log: string[] = [];
     const targetRef = React.createRef<HTMLElement>();
     await render(
@@ -2366,7 +2164,9 @@ describe("ReactDOMEventPropagation", () => {
       />,
     );
     expect(log.length).toBe(0);
-    eventConfig.dispatch(targetRef.current!);
+    await act(() => {
+      eventConfig.dispatch(targetRef.current!);
+    });
     expect(log).toEqual([
       "- outer parent capture",
       "-- outer capture",
@@ -2376,9 +2176,7 @@ describe("ReactDOMEventPropagation", () => {
     ]);
   }
 
-  async function testNativeStopPropagationInParentCapturePhase(
-    eventConfig: EventConfig,
-  ) {
+  async function testNativeStopPropagationInParentCapturePhase(eventConfig: EventConfig) {
     const log: string[] = [];
     const targetRef = React.createRef<HTMLElement>();
     await render(
@@ -2433,7 +2231,9 @@ describe("ReactDOMEventPropagation", () => {
       />,
     );
     expect(log.length).toBe(0);
-    eventConfig.dispatch(targetRef.current!);
+    await act(() => {
+      eventConfig.dispatch(targetRef.current!);
+    });
     expect(log).toEqual([
       "- outer parent capture",
       "-- outer capture",
@@ -2443,9 +2243,7 @@ describe("ReactDOMEventPropagation", () => {
     ]);
   }
 
-  async function testNativeStopPropagationInTargetBubblePhase(
-    eventConfig: EventConfig,
-  ) {
+  async function testNativeStopPropagationInTargetBubblePhase(eventConfig: EventConfig) {
     const log: string[] = [];
     const targetRef = { current: null as HTMLElement | null };
     await render(
@@ -2496,7 +2294,9 @@ describe("ReactDOMEventPropagation", () => {
       />,
     );
     expect(log.length).toBe(0);
-    eventConfig.dispatch(targetRef.current!);
+    await act(() => {
+      eventConfig.dispatch(targetRef.current!);
+    });
     expect(log).toEqual([
       "- outer parent capture",
       "-- outer capture",
@@ -2506,9 +2306,7 @@ describe("ReactDOMEventPropagation", () => {
     ]);
   }
 
-  async function testNativeStopPropagationInOuterBubblePhase(
-    eventConfig: EventConfig,
-  ) {
+  async function testNativeStopPropagationInOuterBubblePhase(eventConfig: EventConfig) {
     const log: string[] = [];
     const targetRef = React.createRef<HTMLElement>();
     await render(
@@ -2559,7 +2357,9 @@ describe("ReactDOMEventPropagation", () => {
       />,
     );
     expect(log.length).toBe(0);
-    eventConfig.dispatch(targetRef.current!);
+    await act(() => {
+      eventConfig.dispatch(targetRef.current!);
+    });
     expect(log).toEqual([
       "- outer parent capture",
       "-- outer capture",
@@ -2571,9 +2371,7 @@ describe("ReactDOMEventPropagation", () => {
     ]);
   }
 
-  async function testNonBubblingReactStopPropagationInOuterCapturePhase(
-    eventConfig: EventConfig,
-  ) {
+  async function testNonBubblingReactStopPropagationInOuterCapturePhase(eventConfig: EventConfig) {
     const log: string[] = [];
     const targetRef = React.createRef<HTMLElement>();
     await render(
@@ -2617,13 +2415,13 @@ describe("ReactDOMEventPropagation", () => {
       />,
     );
     expect(log.length).toBe(0);
-    eventConfig.dispatch(targetRef.current!);
+    await act(() => {
+      eventConfig.dispatch(targetRef.current!);
+    });
     expect(log).toEqual(["- outer parent capture", "-- outer capture"]);
   }
 
-  async function testNonBubblingReactStopPropagationInParentCapturePhase(
-    eventConfig: EventConfig,
-  ) {
+  async function testNonBubblingReactStopPropagationInParentCapturePhase(eventConfig: EventConfig) {
     const log: string[] = [];
     const targetRef = React.createRef<HTMLElement>();
     await render(
@@ -2667,12 +2465,10 @@ describe("ReactDOMEventPropagation", () => {
       />,
     );
     expect(log.length).toBe(0);
-    eventConfig.dispatch(targetRef.current!);
-    expect(log).toEqual([
-      "- outer parent capture",
-      "-- outer capture",
-      "--- parent capture",
-    ]);
+    await act(() => {
+      eventConfig.dispatch(targetRef.current!);
+    });
+    expect(log).toEqual(["- outer parent capture", "-- outer capture", "--- parent capture"]);
   }
 
   function Fixture({

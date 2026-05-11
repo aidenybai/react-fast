@@ -143,11 +143,7 @@ describe("ReactDOMFiber", () => {
   });
 
   it("should render a component returning strings directly from render", async () => {
-    const Text = ({
-      value,
-    }: {
-      value: React.ReactNode;
-    }): React.ReactNode => value;
+    const Text = ({ value }: { value: React.ReactNode }): React.ReactNode => value;
 
     await act(async () => {
       root.render(<Text value="foo" />);
@@ -156,11 +152,7 @@ describe("ReactDOMFiber", () => {
   });
 
   it("should render a component returning numbers directly from render", async () => {
-    const Text = ({
-      value,
-    }: {
-      value: React.ReactNode;
-    }): React.ReactNode => value;
+    const Text = ({ value }: { value: React.ReactNode }): React.ReactNode => value;
 
     await act(async () => {
       root.render(<Text value={10} />);
@@ -207,9 +199,7 @@ describe("ReactDOMFiber", () => {
     const portalContainer = document.createElement("div");
 
     await act(() => {
-      root.render(
-        <div>{createPortal(<div>portal</div>, portalContainer)}</div>,
-      );
+      root.render(<div>{createPortal(<div>portal</div>, portalContainer)}</div>);
     });
     expect(portalContainer.innerHTML).toBe("<div>portal</div>");
     expect(container.innerHTML).toBe("<div></div>");
@@ -252,10 +242,7 @@ describe("ReactDOMFiber", () => {
         const { step } = this.props;
         return [
           <Child key="a" name={`normal[0]:${step}`} />,
-          createPortal(
-            <Child key="b" name={`portal1[0]:${step}`} />,
-            portalContainer1,
-          ),
+          createPortal(<Child key="b" name={`portal1[0]:${step}`} />, portalContainer1),
           <Child key="c" name={`normal[1]:${step}`} />,
           createPortal(
             [
@@ -272,12 +259,8 @@ describe("ReactDOMFiber", () => {
       root.render(<Parent step="a" />);
     });
     expect(portalContainer1.innerHTML).toBe("<div>portal1[0]:a</div>");
-    expect(portalContainer2.innerHTML).toBe(
-      "<div>portal2[0]:a</div><div>portal2[1]:a</div>",
-    );
-    expect(container.innerHTML).toBe(
-      "<div>normal[0]:a</div><div>normal[1]:a</div>",
-    );
+    expect(portalContainer2.innerHTML).toBe("<div>portal2[0]:a</div><div>portal2[1]:a</div>");
+    expect(container.innerHTML).toBe("<div>normal[0]:a</div><div>normal[1]:a</div>");
     assertLog([
       "normal[0]:a componentDidMount",
       "portal1[0]:a componentDidMount",
@@ -291,12 +274,8 @@ describe("ReactDOMFiber", () => {
       root.render(<Parent step="b" />);
     });
     expect(portalContainer1.innerHTML).toBe("<div>portal1[0]:b</div>");
-    expect(portalContainer2.innerHTML).toBe(
-      "<div>portal2[0]:b</div><div>portal2[1]:b</div>",
-    );
-    expect(container.innerHTML).toBe(
-      "<div>normal[0]:b</div><div>normal[1]:b</div>",
-    );
+    expect(portalContainer2.innerHTML).toBe("<div>portal2[0]:b</div><div>portal2[1]:b</div>");
+    expect(container.innerHTML).toBe("<div>normal[0]:b</div><div>normal[1]:b</div>");
     assertLog([
       "normal[0]:b componentDidUpdate",
       "portal1[0]:b componentDidUpdate",
@@ -340,14 +319,10 @@ describe("ReactDOMFiber", () => {
         <div key="f">normal[1]</div>,
       ]);
     });
-    expect(portalContainer1.innerHTML).toBe(
-      "<div>portal1[0]</div><div>portal1[1]</div>",
-    );
+    expect(portalContainer1.innerHTML).toBe("<div>portal1[0]</div><div>portal1[1]</div>");
     expect(portalContainer2.innerHTML).toBe("<div>portal2[0]</div>");
     expect(portalContainer3.innerHTML).toBe("<div>portal3[0]</div>");
-    expect(container.innerHTML).toBe(
-      "<div>normal[0]</div><div>normal[1]</div>",
-    );
+    expect(container.innerHTML).toBe("<div>normal[0]</div><div>normal[1]</div>");
 
     root.unmount();
     expect(portalContainer1.innerHTML).toBe("");
@@ -360,45 +335,31 @@ describe("ReactDOMFiber", () => {
     const portalContainer = document.createElement("div");
 
     await act(() => {
-      root.render(
-        <div>
-          {createPortal(<div>portal:1</div>, portalContainer)}
-        </div>,
-      );
+      root.render(<div>{createPortal(<div>portal:1</div>, portalContainer)}</div>);
     });
     expect(portalContainer.innerHTML).toBe("<div>portal:1</div>");
     expect(container.innerHTML).toBe("<div></div>");
 
     await act(() => {
-      root.render(
-        <div>
-          {createPortal(<div>portal:2</div>, portalContainer)}
-        </div>,
-      );
+      root.render(<div>{createPortal(<div>portal:2</div>, portalContainer)}</div>);
     });
     expect(portalContainer.innerHTML).toBe("<div>portal:2</div>");
     expect(container.innerHTML).toBe("<div></div>");
 
     await act(() => {
-      root.render(
-        <div>{createPortal(<p>portal:3</p>, portalContainer)}</div>,
-      );
+      root.render(<div>{createPortal(<p>portal:3</p>, portalContainer)}</div>);
     });
     expect(portalContainer.innerHTML).toBe("<p>portal:3</p>");
     expect(container.innerHTML).toBe("<div></div>");
 
     await act(() => {
-      root.render(
-        <div>{createPortal(["Hi", "Bye"], portalContainer)}</div>,
-      );
+      root.render(<div>{createPortal(["Hi", "Bye"], portalContainer)}</div>);
     });
     expect(portalContainer.innerHTML).toBe("HiBye");
     expect(container.innerHTML).toBe("<div></div>");
 
     await act(() => {
-      root.render(
-        <div>{createPortal(["Bye", "Hi"], portalContainer)}</div>,
-      );
+      root.render(<div>{createPortal(["Bye", "Hi"], portalContainer)}</div>);
     });
     expect(portalContainer.innerHTML).toBe("ByeHi");
     expect(container.innerHTML).toBe("<div></div>");
@@ -441,9 +402,7 @@ describe("ReactDOMFiber", () => {
     await act(() => {
       root.render(<Wrapper />);
     });
-    expect(container.innerHTML).toBe(
-      "<div><div>child</div><div>parent</div></div>",
-    );
+    expect(container.innerHTML).toBe("<div><div>child</div><div>parent</div></div>");
     await act(() => {
       wrapperInstance.setState({ show: false });
     });
@@ -718,7 +677,8 @@ describe("ReactDOMFiber", () => {
                 onClick={() => log("portal clicked")}
                 ref={(node) => {
                   portal = node;
-                }}>
+                }}
+              >
                 portal
               </div>,
               portalContainer,
@@ -747,10 +707,7 @@ describe("ReactDOMFiber", () => {
     let secondTarget: HTMLDivElement | null = null;
     let thirdTarget: HTMLDivElement | null = null;
 
-    const simulateMouseMove = (
-      from: Element | null,
-      to: Element | null,
-    ) => {
+    const simulateMouseMove = (from: Element | null, to: Element | null) => {
       if (from) {
         from.dispatchEvent(
           new MouseEvent("mouseout", {
@@ -775,21 +732,30 @@ describe("ReactDOMFiber", () => {
       await act(() => {
         root.render(
           <div>
-            <div
-              onMouseEnter={() => log("enter parent")}
-              onMouseLeave={() => log("leave parent")}>
-              <div ref={(node) => { firstTarget = node; }} />
+            <div onMouseEnter={() => log("enter parent")} onMouseLeave={() => log("leave parent")}>
+              <div
+                ref={(node) => {
+                  firstTarget = node;
+                }}
+              />
               {createPortal(
                 <div
                   onMouseEnter={() => log("enter portal")}
                   onMouseLeave={() => log("leave portal")}
-                  ref={(node) => { secondTarget = node; }}>
+                  ref={(node) => {
+                    secondTarget = node;
+                  }}
+                >
                   portal
                 </div>,
                 portalContainer,
               )}
             </div>
-            <div ref={(node) => { thirdTarget = node; }} />
+            <div
+              ref={(node) => {
+                thirdTarget = node;
+              }}
+            />
           </div>,
         );
       });
@@ -815,10 +781,7 @@ describe("ReactDOMFiber", () => {
   it("does not fire mouseEnter twice when relatedTarget is the root node", async () => {
     let target: HTMLDivElement | null = null;
 
-    const simulateMouseMove = (
-      from: Element | null,
-      to: Element | null,
-    ) => {
+    const simulateMouseMove = (from: Element | null, to: Element | null) => {
       if (from) {
         from.dispatchEvent(
           new MouseEvent("mouseout", {
@@ -842,7 +805,9 @@ describe("ReactDOMFiber", () => {
     await act(() => {
       root.render(
         <div
-          ref={(node) => { target = node; }}
+          ref={(node) => {
+            target = node;
+          }}
           onMouseEnter={() => log("enter")}
           onMouseLeave={() => log("leave")}
         />,
@@ -877,10 +842,7 @@ describe("ReactDOMFiber", () => {
     await act(() => {
       root.render(
         <div onClick={onClick}>
-          {createPortal(
-            <button ref={buttonRef}>click</button>,
-            document.body,
-          )}
+          {createPortal(<button ref={buttonRef}>click</button>, document.body)}
         </div>,
       );
     });
@@ -944,10 +906,7 @@ describe("ReactDOMFiber", () => {
       node.dispatchEvent(event);
     };
 
-    class Example extends React.Component<
-      { forceA?: boolean },
-      { flip: boolean; count: number }
-    > {
+    class Example extends React.Component<{ forceA?: boolean }, { flip: boolean; count: number }> {
       state: { flip: boolean; count: number } = { flip: false, count: 0 };
       flip() {
         this.setState({ flip: true, count: this.state.count + 1 });
@@ -1113,20 +1072,15 @@ describe("ReactDOMFiber", () => {
 
     try {
       const iframeDocument = iframe.contentDocument!;
-      iframeDocument.write(
-        "<!DOCTYPE html><html><head></head><body><div></div></body></html>",
-      );
+      iframeDocument.write("<!DOCTYPE html><html><head></head><body><div></div></body></html>");
       iframeDocument.close();
-      const iframeContainer = iframeDocument.body
-        .firstChild as HTMLDivElement;
+      const iframeContainer = iframeDocument.body.firstChild as HTMLDivElement;
 
       let actualDocument: Document | null = null;
       let textNode: Node | null = null;
 
       const appendChildSpy = vi.spyOn(iframeContainer, "appendChild");
-      appendChildSpy.mockImplementation((<T extends Node>(
-        appendedNode: T,
-      ): T => {
+      appendChildSpy.mockImplementation((<T extends Node>(appendedNode: T): T => {
         actualDocument = appendedNode.ownerDocument;
         textNode = appendedNode;
         return appendedNode;
@@ -1185,12 +1139,7 @@ describe("ReactDOMFiber", () => {
         return (
           <div>
             <Child />
-            <input
-              ref={inputRef}
-              type="checkbox"
-              checked={true}
-              onChange={this.handleChange}
-            />
+            <input ref={inputRef} type="checkbox" checked={true} onChange={this.handleChange} />
           </div>
         );
       }

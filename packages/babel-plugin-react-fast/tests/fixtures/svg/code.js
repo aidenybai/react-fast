@@ -31,7 +31,7 @@ const template2 = (
         fill: "red",
         stroke: "black",
         "stroke-width": props.stroke,
-        opacity: 0.5
+        opacity: 0.5,
       }}
     />
   </svg>
@@ -69,21 +69,20 @@ const template7 = (
 
 const template8 = (
   <svg>
-    <path d={pathData} fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+    <path
+      d={pathData}
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 
 function AnimatedSVG({ progress }) {
   return (
     <svg width="200" height="200" viewBox="0 0 200 200">
-      <circle
-        cx="100"
-        cy="100"
-        r="90"
-        fill="none"
-        stroke="#e0e0e0"
-        strokeWidth="10"
-      />
+      <circle cx="100" cy="100" r="90" fill="none" stroke="#e0e0e0" strokeWidth="10" />
       <circle
         cx="100"
         cy="100"

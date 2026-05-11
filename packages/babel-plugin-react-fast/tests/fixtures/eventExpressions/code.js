@@ -1,5 +1,7 @@
-function hoisted1() { console.log("hoisted"); }
-const hoisted2 = () => console.log("hoisted delegated")
+function hoisted1() {
+  console.log("hoisted");
+}
+const hoisted2 = () => console.log("hoisted delegated");
 
 const template = (
   <div id="main">
@@ -33,14 +35,23 @@ const template3 = (
 
 const template4 = (
   <div>
-    <button onClick={() => setCount(c => c + 1)} onMouseEnter={handleHover} onMouseLeave={handleLeave}>
+    <button
+      onClick={() => setCount((c) => c + 1)}
+      onMouseEnter={handleHover}
+      onMouseLeave={handleLeave}
+    >
       Complex
     </button>
   </div>
 );
 
 const template5 = (
-  <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+  <form
+    onSubmit={(e) => {
+      e.preventDefault();
+      handleSubmit();
+    }}
+  >
     <input type="text" onInput={(e) => setName(e.target.value)} />
     <button type="submit">Submit</button>
   </form>

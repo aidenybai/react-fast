@@ -37,7 +37,7 @@ const tiles = [];
 tiles.push(<div>Test 1</div>);
 const template15 = <div>{tiles}</div>;
 
-const template16 = <div>{expression(), "static"}</div>;
+const template16 = <div>{(expression(), "static")}</div>;
 
 const template17 = <div>{children()()}</div>;
 
@@ -59,10 +59,12 @@ function NestedInserts({ data }) {
     <div>
       <header>{data.title}</header>
       <main>
-        {data.sections.map(section => (
+        {data.sections.map((section) => (
           <section>
             <h2>{section.heading}</h2>
-            {section.items.map(item => <p>{item}</p>)}
+            {section.items.map((item) => (
+              <p>{item}</p>
+            ))}
           </section>
         ))}
       </main>

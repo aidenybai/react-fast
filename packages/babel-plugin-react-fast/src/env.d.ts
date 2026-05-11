@@ -15,17 +15,9 @@ declare module "@babel/helper-module-imports" {
     opts?: ImportOptions,
   ): t.Identifier;
 
-  export function addDefault(
-    path: NodePath,
-    source: string,
-    opts?: ImportOptions,
-  ): t.Identifier;
+  export function addDefault(path: NodePath, source: string, opts?: ImportOptions): t.Identifier;
 
-  export function addNamespace(
-    path: NodePath,
-    source: string,
-    opts?: ImportOptions,
-  ): t.Identifier;
+  export function addNamespace(path: NodePath, source: string, opts?: ImportOptions): t.Identifier;
 }
 
 declare module "@babel/plugin-syntax-jsx" {

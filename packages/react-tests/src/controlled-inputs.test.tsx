@@ -1,8 +1,57 @@
+// @vitest-environment jsdom
 import React from "react";
 import * as ReactDOMClient from "react-dom/client";
 import { renderToString } from "react-dom/server";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { act } from "./utils";
+
+const CHECKED_DIRTY_SYMBOL = Symbol("checkedDirty");
+const originalCheckedDescriptor = Object.getOwnPropertyDescriptor(
+  HTMLInputElement.prototype,
+  "checked",
+)!;
+const originalCheckedSetter = originalCheckedDescriptor.set!;
+const originalCheckedGetter = originalCheckedDescriptor.get!;
+
+const originalDefaultCheckedDescriptor = Object.getOwnPropertyDescriptor(
+  HTMLInputElement.prototype,
+  "defaultChecked",
+)!;
+const originalDefaultCheckedSetter = originalDefaultCheckedDescriptor.set!;
+const originalDefaultCheckedGetter = originalDefaultCheckedDescriptor.get!;
+
+Object.defineProperty(HTMLInputElement.prototype, "checked", {
+  ...originalCheckedDescriptor,
+  get() {
+    return originalCheckedGetter.call(this);
+  },
+  set(value: boolean) {
+    (this as any)[CHECKED_DIRTY_SYMBOL] = true;
+    originalCheckedSetter.call(this, value);
+  },
+});
+
+Object.defineProperty(HTMLInputElement.prototype, "defaultChecked", {
+  ...originalDefaultCheckedDescriptor,
+  get() {
+    return originalDefaultCheckedGetter.call(this);
+  },
+  set(value: boolean) {
+    originalDefaultCheckedSetter.call(this, value);
+    if (!(this as any)[CHECKED_DIRTY_SYMBOL]) {
+      originalCheckedSetter.call(this, value);
+    }
+  },
+});
+
+const originalCloneNode = HTMLInputElement.prototype.cloneNode;
+HTMLInputElement.prototype.cloneNode = function (deep?: boolean) {
+  const clone = originalCloneNode.call(this, deep) as HTMLInputElement;
+  if ((this as any)[CHECKED_DIRTY_SYMBOL]) {
+    (clone as any)[CHECKED_DIRTY_SYMBOL] = true;
+  }
+  return clone;
+};
 
 const emptyFunction = () => {};
 

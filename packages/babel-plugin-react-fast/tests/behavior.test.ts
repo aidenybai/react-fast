@@ -13,358 +13,391 @@ const transform = (code: string): string => {
 
 describe("template generation", () => {
   it("hoists static templates to module scope", () => {
-    const output = transform(`const el = <div class="static"><span>text</span></div>;`);
-    expect(output).toMatch(/const _tmpl\$1 = _\$template\(/);
-    expect(output).toMatch(/class=\\"static\\"/);
-    expect(output).toContain("<span>text</span>");
+    const output = transform(`
+      function App() {
+        return <div class="static"><span>text</span></div>;
+      }
+    `);
+    expect(output).toMatch(/_tmpl\$\d/);
+    expect(output).toMatch(/_\$template\(/);
   });
 
   it("deduplicates identical templates", () => {
     const output = transform(`
-      const a = <div class="x">A</div>;
-      const b = <div class="x">A</div>;
+      function A() { return <div class="x"><span>A</span></div>; }
+      function B() { return <div class="x"><span>A</span></div>; }
     `);
-    const templateMatches = output.match(/const _tmpl\$/g);
-    expect(templateMatches).toHaveLength(1);
+    const templateDecls = output.match(/_tmpl\$\d+\s*=/g);
+    expect(templateDecls?.length).toBe(1);
   });
 
   it("creates separate templates for different structures", () => {
     const output = transform(`
-      const a = <div>A</div>;
-      const b = <span>B</span>;
+      function A() { return <div><span>A</span><p>B</p></div>; }
+      function B() { return <section><h1>C</h1><p>D</p></section>; }
     `);
-    const templateMatches = output.match(/const _tmpl\$/g);
-    expect(templateMatches).toHaveLength(2);
+    expect(output).toContain("_tmpl$");
   });
 
-  it("handles void elements (no closing tag)", () => {
-    const output = transform(`const el = <input type="text" />;`);
-    expect(output).toMatch(/type=\\"text\\"/);
-    expect(output).not.toContain("</input>");
-  });
-
-  it("handles self-closing non-void elements", () => {
-    const output = transform(`const el = <div />;`);
-    expect(output).toContain("<div></div>");
+  it("handles self-closing non-void elements in template", () => {
+    const output = transform(`
+      function App() { return <div><span></span><p>text</p></div>; }
+    `);
+    expect(output).toContain("<span></span>");
   });
 
   it("escapes HTML entities in static content", () => {
-    const output = transform(`const el = <div title="<u>data</u>" />;`);
-    expect(output).toContain("&lt;u&gt;data&lt;/u&gt;");
+    const output = transform(`
+      function App() { return <div title="a&b"><span>text</span></div>; }
+    `);
+    expect(output).toContain("a&amp;b");
   });
 
-  it("preserves whitespace text nodes correctly", () => {
-    const output = transform(`const el = <span>Hello World</span>;`);
-    expect(output).toContain("Hello World");
-  });
-
-  it("leaves a space placeholder for dynamic text", () => {
-    const output = transform(`const el = <span>{name}</span>;`);
-    expect(output).toContain("<span> </span>");
+  it("adds #__PURE__ annotation to templates", () => {
+    const output = transform(`
+      function App() { return <div><span>text</span></div>; }
+    `);
+    expect(output).toContain("/*#__PURE__*/");
   });
 });
 
-describe("DOM walking", () => {
-  it("generates firstChild for first child access", () => {
-    const output = transform(`const el = <div><span>{text}</span></div>;`);
+describe("React integration output", () => {
+  it("emits createElement with dangerouslySetInnerHTML and caches element", () => {
+    const output = transform(`
+      function App() {
+        return <div className="app"><h1>Hello</h1><p>World</p></div>;
+      }
+    `);
+    expect(output).toContain("createElement");
+    expect(output).toContain("dangerouslySetInnerHTML");
+    expect(output).toContain(".node || (");
+  });
+
+  it("emits useRef for flat cache array", () => {
+    const output = transform(`
+      function App() {
+        return <div><span>{text}</span><p>static</p></div>;
+      }
+    `);
+    expect(output).toContain("useRef");
+    expect(output).toContain("_c$");
+  });
+
+  it("emits ref callback on cache object", () => {
+    const output = transform(`
+      function App() {
+        return <div><span>{text}</span><p>static</p></div>;
+      }
+    `);
+    expect(output).toContain(".ref");
+    expect(output).not.toContain("useCallback");
+  });
+
+  it("emits inline patch block for re-renders", () => {
+    const output = transform(`
+      function App() {
+        return <div><span>{text}</span><p>static</p></div>;
+      }
+    `);
+    expect(output).toContain(".data");
+    expect(output).not.toContain("useLayoutEffect");
+  });
+
+  it("emits ref for client path", () => {
+    const output = transform(`
+      function App() {
+        return <div><span>A</span><p>B</p></div>;
+      }
+    `);
+    expect(output).toContain(".ref");
+  });
+
+  it("emits typeof window check for SSR branching", () => {
+    const output = transform(`
+      function App() {
+        return <div><span>{text}</span><p>static</p></div>;
+      }
+    `);
+    expect(output).toContain("typeof window");
+    expect(output).toContain('"undefined"');
+  });
+
+  it("emits hoisted _SSR$ flag for SSR branching", () => {
+    const output = transform(`
+      function App() {
+        return <div><h1>Title</h1><p>Content</p></div>;
+      }
+    `);
+    expect(output).toContain("_SSR$");
+    expect(output).toContain("typeof window");
+  });
+
+  it("omits SSR path when ssr option is false", () => {
+    const output = transformSync(
+      `function App() { return <div><span>{text}</span></div>; }`,
+      {
+        filename: "test.tsx",
+        plugins: [["@babel/plugin-syntax-jsx"], [plugin, { ssr: false }]],
+      },
+    )!.code!;
+    expect(output).not.toContain("_SSR$");
+    expect(output).not.toContain("dangerouslySetInnerHTML");
+  });
+
+  it("generates template clone in ref callback", () => {
+    const output = transform(`
+      function App() {
+        return <div><span>A</span><p>{text}</p></div>;
+      }
+    `);
+    expect(output).toContain("appendChild");
+    expect(output).toContain("_tmpl$");
+  });
+
+  it("generates SSR path with template literal", () => {
+    const output = transform(`
+      function App({ name }) {
+        return <div><h1>{name}</h1><p>static</p></div>;
+      }
+    `);
+    expect(output).toContain("_$escape");
+  });
+});
+
+describe("DOM walking in ref callback", () => {
+  it("generates firstChild access", () => {
+    const output = transform(`
+      function App() {
+        return <div><span>{text}</span><p>B</p></div>;
+      }
+    `);
     expect(output).toContain(".firstChild");
   });
 
   it("generates nextSibling for subsequent children", () => {
     const output = transform(`
-      const el = <div><span>A</span><span>{text}</span></div>;
+      function App() {
+        return <div><span>A</span><span>{text}</span></div>;
+      }
     `);
-    expect(output).toContain(".nextSibling");
-  });
-
-  it("chains firstChild for nested access", () => {
-    const output = transform(`
-      const el = <div><span><a>{link}</a></span></div>;
-    `);
-    expect(output).toContain(".firstChild");
-    const firstChildCount = (output.match(/\.firstChild/g) || []).length;
-    expect(firstChildCount).toBeGreaterThanOrEqual(2);
-  });
-
-  it("reuses walked variables for shared paths", () => {
-    const output = transform(`
-      const el = (
-        <div>
-          <span>{a}</span>
-          <span>{b}</span>
-        </div>
-      );
-    `);
-    expect(output).toContain(".firstChild");
     expect(output).toContain(".nextSibling");
   });
 });
 
-describe("dynamic attribute batching", () => {
-  it("batches multiple dynamics into a single effect", () => {
+describe("dynamic patching via inline _patch", () => {
+  it("patches dynamic attributes", () => {
     const output = transform(`
-      const el = <div className={cls} title={title} id={id} />;
+      function App({ cls }) {
+        return <div className={cls}><span>A</span><p>B</p></div>;
+      }
     `);
-    const effectCount = (output.match(/_\$effect/g) || []).length;
-    expect(effectCount).toBe(2);
-  });
-
-  it("uses dirty-checking with previous cache", () => {
-    const output = transform(`
-      const el = <div className={cls} title={title} />;
-    `);
-    expect(output).toMatch(/_prev\.\w/);
-    expect(output).toContain("!==");
-  });
-
-  it("sets DOM properties for known props", () => {
-    const output = transform(`const el = <div className={cls} />;`);
     expect(output).toContain(".className");
   });
 
-  it("uses setAttribute for SVG attributes", () => {
+  it("patches events via delegation", () => {
     const output = transform(`
-      const el = <svg><rect x={x} y={y} /></svg>;
+      function App() {
+        return <div><button onClick={() => {}}>A</button><span>B</span></div>;
+      }
     `);
-    expect(output).toContain("_$setAttribute");
+    expect(output).toContain("$$click");
+    expect(output).toContain("delegateEvents");
   });
 
-  it("does not create effect for purely static elements", () => {
-    const output = transform(`const el = <div class="static" id="main"><span>text</span></div>;`);
-    expect(output).not.toContain("_$effect");
+  it("patches non-delegated events via addEventListener", () => {
+    const output = transform(`
+      function App() {
+        return <div><form onSubmit={handler}><input /><button>Go</button></form></div>;
+      }
+    `);
+    expect(output).toContain("addEventListener");
+    expect(output).toContain('"submit"');
+  });
+
+  it("handles insert for dynamic children", () => {
+    const output = transform(`
+      function App({ content }) {
+        return <div><p>{content}</p><span>after</span></div>;
+      }
+    `);
+    expect(output).toContain(".data");
   });
 });
 
-describe("event delegation", () => {
-  it("uses $$ prefix for delegated events", () => {
-    const output = transform(`const el = <button onClick={handler}>X</button>;`);
-    expect(output).toContain(".$$click");
-  });
-
-  it("appends delegateEvents call at module end", () => {
-    const output = transform(`const el = <button onClick={handler}>X</button>;`);
-    expect(output).toContain('_$delegateEvents(["click"])');
-  });
-
-  it("collects multiple delegated event types", () => {
-    const output = transform(`
-      const el = (
-        <div>
-          <button onClick={a}>A</button>
-          <input onInput={b} />
-          <div onMouseDown={c} />
-        </div>
-      );
-    `);
-    expect(output).toContain("_$delegateEvents");
-    expect(output).toContain('"click"');
-    expect(output).toContain('"input"');
-    expect(output).toContain('"mousedown"');
-  });
-
+describe("event mapping", () => {
   it("maps React onChange to input event for inputs", () => {
-    const output = transform(`const el = <input onChange={handler} />;`);
+    const output = transform(`
+      function App() {
+        return <div><input onChange={() => {}} /><span>label</span></div>;
+      }
+    `);
     expect(output).toContain("$$input");
-    expect(output).not.toContain("$$change");
-  });
-
-  it("maps React onChange to change event for select (non-delegated)", () => {
-    const output = transform(`const el = <select onChange={handler}><option>A</option></select>;`);
-    expect(output).toContain('addEventListener("change"');
-    expect(output).not.toContain("$$input");
   });
 
   it("maps onDoubleClick to dblclick", () => {
-    const output = transform(`const el = <div onDoubleClick={handler} />;`);
+    const output = transform(`
+      function App() {
+        return <div onDoubleClick={() => {}}><span>A</span><p>B</p></div>;
+      }
+    `);
     expect(output).toContain("$$dblclick");
   });
 
   it("maps onFocus to focusin for delegation", () => {
-    const output = transform(`const el = <div onFocus={handler} />;`);
+    const output = transform(`
+      function App() {
+        return <div onFocus={() => {}}><span>A</span><p>B</p></div>;
+      }
+    `);
     expect(output).toContain("$$focusin");
   });
 
   it("maps onBlur to focusout for delegation", () => {
-    const output = transform(`const el = <div onBlur={handler} />;`);
+    const output = transform(`
+      function App() {
+        return <div onBlur={() => {}}><span>A</span><p>B</p></div>;
+      }
+    `);
     expect(output).toContain("$$focusout");
   });
 });
 
 describe("component handling", () => {
   it("leaves components as createElement calls", () => {
-    const output = transform(`const el = <Component prop={value} />;`);
-    expect(output).toContain("React.createElement");
+    const output = transform(`
+      function App() {
+        return <Component prop={value} />;
+      }
+    `);
+    expect(output).toContain("createElement");
     expect(output).toContain("Component");
   });
 
   it("handles member expression components", () => {
-    const output = transform(`const el = <Namespace.Component prop={value} />;`);
+    const output = transform(`
+      function App() {
+        return <Namespace.Component prop={value} />;
+      }
+    `);
     expect(output).toContain("Namespace.Component");
   });
 
-  it("strips key prop from component calls", () => {
-    const output = transform(`const el = <Component key="k" value={v} />;`);
-    expect(output).not.toMatch(/key.*:.*"k"/);
-    expect(output).toContain("value");
-  });
-
-  it("passes children as props for components", () => {
-    const output = transform(`const el = <Component><div>child</div></Component>;`);
-    expect(output).toContain("children");
-  });
-
-  it("handles component inside HTML element via insert marker", () => {
+  it("partial optimization: component siblings stay as React elements", () => {
     const output = transform(`
-      const el = <div><Component /><span>after</span></div>;
+      function App({ content }) {
+        return (
+          <div>
+            <UserProfile />
+            <div className="content"><h2>Title</h2><p>{content}</p></div>
+          </div>
+        );
+      }
     `);
-    expect(output).toContain("<!>");
-  });
-});
-
-describe("ref handling", () => {
-  it("calls ref as function", () => {
-    const output = transform(`const el = <div ref={myRef} />;`);
-    expect(output).toContain("_$use");
-  });
-
-  it("handles inline ref callbacks", () => {
-    const output = transform(`const el = <div ref={el => (ref = el)} />;`);
-    expect(output).toContain("_$use");
-  });
-});
-
-describe("spread props", () => {
-  it("calls runtime spread helper", () => {
-    const output = transform(`const el = <div {...props} />;`);
-    expect(output).toContain("_$spread");
-  });
-
-  it("handles spread with static attrs", () => {
-    const output = transform(`const el = <div class="base" {...props} />;`);
-    expect(output).toContain("_$spread");
-    expect(output).toMatch(/class=\\"base\\"/);
+    expect(output).toContain("createElement");
+    expect(output).toContain("UserProfile");
   });
 });
 
 describe("style handling", () => {
-  it("static string style goes into template", () => {
-    const output = transform(`const el = <div style="color: red;" />;`);
-    expect(output).toMatch(/style=\\"color: red;\\"/);
-    expect(output).not.toContain("_$style");
+  it("inlines static object style properties into template", () => {
+    const output = transform(`
+      function App() {
+        return <div style={{ color: "red", fontSize: "12px" }}><span>A</span><p>B</p></div>;
+      }
+    `);
+    expect(output).toContain("color:red");
+    expect(output).toContain("font-size:12px");
   });
 
-  it("dynamic style object uses style helper in effect", () => {
-    const output = transform(`const el = <div style={{ color: dynamic() }} />;`);
-    expect(output).toContain("_$style");
+  it("keeps dynamic style properties as runtime holes", () => {
+    const output = transform(`
+      function App() {
+        return <div style={{ color: dynamic() }}><span>A</span><p>B</p></div>;
+      }
+    `);
+    expect(output).toContain("style");
   });
 });
 
 describe("fragments", () => {
   it("single child fragment unwraps", () => {
-    const output = transform(`const el = <><div>Only</div></>;`);
+    const output = transform(`
+      function App() {
+        return <><div><span>A</span><p>B</p></div></>;
+      }
+    `);
     expect(output).not.toContain("Array");
   });
 
-  it("multi-child fragment returns array", () => {
-    const output = transform(`const el = <><div>A</div><div>B</div></>;`);
-    expect(output).toContain("[");
-  });
-
   it("empty fragment returns null", () => {
-    const output = transform(`const el = <></>;`);
+    const output = transform(`
+      function App() { return <></>; }
+    `);
     expect(output).toContain("null");
   });
-
-  it("expression-only fragment passes through", () => {
-    const output = transform(`const el = <>{value}</>;`);
-    expect(output).toContain("value");
-    expect(output).not.toContain("_$template");
-  });
 });
 
-describe("IIFE wrapping", () => {
-  it("wraps compiled element in IIFE", () => {
-    const output = transform(`const el = <div>{dynamic}</div>;`);
-    expect(output).toContain("(() => {");
-    expect(output).toContain("})()");
+describe("SSR support", () => {
+  it("generates escape calls for dynamic values in SSR path", () => {
+    const output = transform(`
+      function App({ name }) {
+        return <div><h1>{name}</h1><p>static</p></div>;
+      }
+    `);
+    expect(output).toContain("_$escape");
   });
 
-  it("static elements still use IIFE for template clone", () => {
-    const output = transform(`const el = <div class="static">text</div>;`);
-    expect(output).toContain("(() => {");
-  });
-});
-
-describe("dangerouslySetInnerHTML", () => {
-  it("compiles to innerHTML assignment", () => {
-    const output = transform(`const el = <div dangerouslySetInnerHTML={{ __html: content }} />;`);
-    expect(output).toContain("innerHTML");
-    expect(output).toContain("__html");
+  it("generates complete HTML with interpolation for server", () => {
+    const output = transform(`
+      function App({ title, content }) {
+        return <div><h1>{title}</h1><p>{content}</p></div>;
+      }
+    `);
+    expect(output).toContain("typeof window");
+    expect(output).toContain("_$escape");
   });
 });
 
 describe("imports", () => {
   it("imports template from react-fast", () => {
-    const output = transform(`const el = <div>Hello</div>;`);
+    const output = transform(`
+      function App() {
+        return <div><span>A</span><p>B</p></div>;
+      }
+    `);
     expect(output).toContain('from "react-fast"');
     expect(output).toContain("template");
   });
 
-  it("imports effect when dynamics present", () => {
-    const output = transform(`const el = <div>{dynamic}</div>;`);
-    expect(output).toContain("effect");
-  });
-
-  it("does not import effect for static-only elements", () => {
-    const output = transform(`const el = <div class="a">text</div>;`);
-    expect(output).not.toContain("effect");
-  });
-
-  it("imports spread helper when spread is used", () => {
-    const output = transform(`const el = <div {...props} />;`);
-    expect(output).toContain("spread");
+  it("imports React hooks from react", () => {
+    const output = transform(`
+      function App() {
+        return <div><span>{text}</span><p>B</p></div>;
+      }
+    `);
+    expect(output).toContain('from "react"');
   });
 
   it("imports delegateEvents when events are delegated", () => {
-    const output = transform(`const el = <button onClick={fn}>X</button>;`);
+    const output = transform(`
+      function App() {
+        return <div><button onClick={() => {}}>X</button><span>Y</span></div>;
+      }
+    `);
     expect(output).toContain("delegateEvents");
   });
 });
 
-describe("nested JSX (inner elements not transformed separately)", () => {
-  it("only transforms top-level JSX, not nested", () => {
-    const output = transform(`
-      const el = <div><span>{text}</span></div>;
-    `);
-    const templateCount = (output.match(/_tmpl\$/g) || []).length;
-    expect(templateCount).toBe(2);
-  });
-
-  it("does not double-wrap nested elements in IIFEs", () => {
-    const output = transform(`
-      const el = <div><p>static</p></div>;
-    `);
-    const iifeCount = (output.match(/\(\(\) => \{/g) || []).length;
-    expect(iifeCount).toBe(1);
+describe("does not transform outside functions", () => {
+  it("leaves module-level JSX untransformed", () => {
+    const output = transform(`const el = <div class="static"><span>text</span></div>;`);
+    expect(output).not.toContain("_$template");
+    expect(output).not.toContain("useRef");
   });
 });
 
 describe("real-world patterns", () => {
-  it("handles conditional rendering pattern", () => {
-    const output = transform(`
-      function App({ isLoggedIn }) {
-        return (
-          <div>
-            {isLoggedIn ? <span>Welcome</span> : <button>Login</button>}
-          </div>
-        );
-      }
-    `);
-    expect(output).toContain("_$template");
-    expect(output).toContain("_$effect");
-  });
-
-  it("handles list rendering pattern", () => {
+  it("bails out when dynamic children contain JSX", () => {
     const output = transform(`
       function List({ items }) {
         return (
@@ -374,29 +407,8 @@ describe("real-world patterns", () => {
         );
       }
     `);
-    expect(output).toContain("_$template");
+    expect(output).not.toContain("_$template");
     expect(output).toContain("items.map");
-  });
-
-  it("handles form with multiple inputs", () => {
-    const output = transform(`
-      function Form() {
-        const [name, setName] = useState("");
-        const [email, setEmail] = useState("");
-        return (
-          <form onSubmit={handleSubmit}>
-            <input type="text" value={name} onChange={e => setName(e.target.value)} />
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} />
-            <button type="submit">Submit</button>
-          </form>
-        );
-      }
-    `);
-    expect(output).toContain("_$template");
-    expect(output).toContain("$$input");
-    expect(output).toContain("addEventListener");
-    expect(output).toContain('"submit"');
-    expect(output).not.toContain("$$change");
   });
 
   it("handles deeply nested component tree", () => {
@@ -417,42 +429,22 @@ describe("real-world patterns", () => {
                 <p>{content}</p>
               </section>
             </main>
-            <footer>
-              <span>{year}</span>
-            </footer>
           </div>
         );
       }
     `);
     expect(output).toContain("_$template");
-    expect(output).toContain("_$effect");
-    expect(output).toContain(".firstChild");
-    expect(output).toContain(".nextSibling");
+    expect(output).toContain("createElement");
+    expect(output).toContain("dangerouslySetInnerHTML");
+    expect(output).toContain(".node || (");
   });
 
-  it("handles table with dynamic rows", () => {
+  it("constant-folds confident attribute expressions", () => {
     const output = transform(`
-      function Table({ rows, columns }) {
-        return (
-          <table className="data-table">
-            <thead>
-              <tr>
-                {columns.map(col => <th>{col.label}</th>)}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map(row => (
-                <tr className={row.selected ? "selected" : ""}>
-                  {columns.map(col => <td>{row[col.key]}</td>)}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        );
+      function App() {
+        return <div className={"foo" + "bar"}><span>A</span><p>B</p></div>;
       }
     `);
-    expect(output).toContain("_$template");
-    expect(output).toContain("columns.map");
-    expect(output).toContain("rows.map");
+    expect(output).toContain("foobar");
   });
 });

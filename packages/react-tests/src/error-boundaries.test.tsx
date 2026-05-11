@@ -141,9 +141,7 @@ describe("ReactErrorBoundaries", () => {
       log("BrokenComponentWillReceiveProps componentDidMount");
     }
     UNSAFE_componentWillReceiveProps() {
-      log(
-        "BrokenComponentWillReceiveProps componentWillReceiveProps [!]",
-      );
+      log("BrokenComponentWillReceiveProps componentWillReceiveProps [!]");
       throw new Error("Hello");
     }
     UNSAFE_componentWillUpdate() {
@@ -271,23 +269,17 @@ describe("ReactErrorBoundaries", () => {
       return <div>{this.props.children}</div>;
     }
     UNSAFE_componentWillMount() {
-      log(
-        "BrokenComponentWillMountErrorBoundary componentWillMount [!]",
-      );
+      log("BrokenComponentWillMountErrorBoundary componentWillMount [!]");
       throw new Error("Hello");
     }
     componentDidMount() {
       log("BrokenComponentWillMountErrorBoundary componentDidMount");
     }
     componentWillUnmount() {
-      log(
-        "BrokenComponentWillMountErrorBoundary componentWillUnmount",
-      );
+      log("BrokenComponentWillMountErrorBoundary componentWillUnmount");
     }
     static getDerivedStateFromError(error: Error) {
-      log(
-        "BrokenComponentWillMountErrorBoundary static getDerivedStateFromError",
-      );
+      log("BrokenComponentWillMountErrorBoundary static getDerivedStateFromError");
       return { error };
     }
   }
@@ -310,33 +302,22 @@ describe("ReactErrorBoundaries", () => {
       return <div>{this.props.children}</div>;
     }
     UNSAFE_componentWillMount() {
-      log(
-        "BrokenComponentDidMountErrorBoundary componentWillMount",
-      );
+      log("BrokenComponentDidMountErrorBoundary componentWillMount");
     }
     componentDidMount() {
-      log(
-        "BrokenComponentDidMountErrorBoundary componentDidMount [!]",
-      );
+      log("BrokenComponentDidMountErrorBoundary componentDidMount [!]");
       throw new Error("Hello");
     }
     componentWillUnmount() {
-      log(
-        "BrokenComponentDidMountErrorBoundary componentWillUnmount",
-      );
+      log("BrokenComponentDidMountErrorBoundary componentWillUnmount");
     }
     static getDerivedStateFromError(error: Error) {
-      log(
-        "BrokenComponentDidMountErrorBoundary static getDerivedStateFromError",
-      );
+      log("BrokenComponentDidMountErrorBoundary static getDerivedStateFromError");
       return { error };
     }
   }
 
-  class BrokenRenderErrorBoundary extends React.Component<
-    ChildrenProps,
-    ErrorBoundaryState
-  > {
+  class BrokenRenderErrorBoundary extends React.Component<ChildrenProps, ErrorBoundaryState> {
     constructor(props: ChildrenProps) {
       super(props);
       this.state = { error: null };
@@ -360,9 +341,7 @@ describe("ReactErrorBoundaries", () => {
       log("BrokenRenderErrorBoundary componentWillUnmount");
     }
     static getDerivedStateFromError(error: Error) {
-      log(
-        "BrokenRenderErrorBoundary static getDerivedStateFromError",
-      );
+      log("BrokenRenderErrorBoundary static getDerivedStateFromError");
       return { error };
     }
   }
@@ -474,16 +453,11 @@ describe("ReactErrorBoundaries", () => {
     }
   }
 
-  class ErrorBoundary extends React.Component<
-    ErrorBoundaryProps,
-    ErrorBoundaryState
-  > {
+  class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
     static defaultProps = {
       logName: "ErrorBoundary",
       renderError: (error: Error, props: ErrorBoundaryProps) => (
-        <div ref={props.errorMessageRef}>
-          Caught an error: {error.message}.
-        </div>
+        <div ref={props.errorMessageRef}>Caught an error: {error.message}.</div>
       ),
     };
     constructor(props: ErrorBoundaryProps) {
@@ -542,9 +516,7 @@ describe("ReactErrorBoundaries", () => {
       log("RetryErrorBoundary componentWillUnmount");
     }
     static getDerivedStateFromError() {
-      log(
-        "RetryErrorBoundary static getDerivedStateFromError [!]",
-      );
+      log("RetryErrorBoundary static getDerivedStateFromError [!]");
       return {};
     }
   }
@@ -692,9 +664,7 @@ describe("ReactErrorBoundaries", () => {
     });
     expect(container1.firstChild?.textContent).toBe("Before 1");
     expect(container2.firstChild).toBe(null);
-    expect(container3.firstChild?.textContent).toBe(
-      "Caught an error: Hello.",
-    );
+    expect(container3.firstChild?.textContent).toBe("Caught an error: Hello.");
 
     clearLog();
     await act(async () => {
@@ -706,9 +676,7 @@ describe("ReactErrorBoundaries", () => {
     });
     clearLog();
     await act(async () => {
-      root3.render(
-        <ErrorBoundary forceRetry={true}>After 3</ErrorBoundary>,
-      );
+      root3.render(<ErrorBoundary forceRetry={true}>After 3</ErrorBoundary>);
     });
     expect(container1.firstChild?.textContent).toBe("After 1");
     expect(container2.firstChild?.textContent).toBe("After 2");
@@ -732,9 +700,7 @@ describe("ReactErrorBoundaries", () => {
       );
     });
 
-    expect(container.firstChild?.textContent).toBe(
-      "Caught an error: Hello.",
-    );
+    expect(container.firstChild?.textContent).toBe("Caught an error: Hello.");
     assertLog([
       "ErrorBoundary constructor",
       "ErrorBoundary componentWillMount",
@@ -771,9 +737,7 @@ describe("ReactErrorBoundaries", () => {
         </ErrorBoundary>,
       );
     });
-    expect(container.firstChild?.textContent).toBe(
-      "Caught an error: Hello.",
-    );
+    expect(container.firstChild?.textContent).toBe("Caught an error: Hello.");
     assertLog([
       "ErrorBoundary constructor",
       "ErrorBoundary componentWillMount",
@@ -810,9 +774,7 @@ describe("ReactErrorBoundaries", () => {
         </ErrorBoundary>,
       );
     });
-    expect(container.firstChild?.textContent).toBe(
-      "Caught an error: Hello.",
-    );
+    expect(container.firstChild?.textContent).toBe("Caught an error: Hello.");
     assertLog([
       "ErrorBoundary constructor",
       "ErrorBoundary componentWillMount",
@@ -845,9 +807,7 @@ describe("ReactErrorBoundaries", () => {
         </ErrorBoundary>,
       );
     });
-    expect(container.firstChild?.textContent).toBe(
-      "Caught an error: Hello.",
-    );
+    expect(container.firstChild?.textContent).toBe("Caught an error: Hello.");
     assertLog([
       "ErrorBoundary constructor",
       "ErrorBoundary componentWillMount",
@@ -873,9 +833,7 @@ describe("ReactErrorBoundaries", () => {
   });
 
   it("mounts the error message if mounting fails", async () => {
-    const renderError = (error: Error) => (
-      <ErrorMessage message={error.message} />
-    );
+    const renderError = (error: Error) => <ErrorMessage message={error.message} />;
 
     const container = document.createElement("div");
     const root = ReactDOMClient.createRoot(container);
@@ -916,10 +874,7 @@ describe("ReactErrorBoundaries", () => {
     ]);
 
     root.unmount();
-    assertLog([
-      "ErrorBoundary componentWillUnmount",
-      "ErrorMessage componentWillUnmount",
-    ]);
+    assertLog(["ErrorBoundary componentWillUnmount", "ErrorMessage componentWillUnmount"]);
   });
 
   it("propagates errors on retry on mounting", async () => {
@@ -934,9 +889,7 @@ describe("ReactErrorBoundaries", () => {
         </ErrorBoundary>,
       );
     });
-    expect(container.firstChild?.textContent).toBe(
-      "Caught an error: Hello.",
-    );
+    expect(container.firstChild?.textContent).toBe("Caught an error: Hello.");
     assertLog([
       "ErrorBoundary constructor",
       "ErrorBoundary componentWillMount",
@@ -991,9 +944,7 @@ describe("ReactErrorBoundaries", () => {
         </ErrorBoundary>,
       );
     });
-    expect(container.firstChild?.textContent).toBe(
-      "Caught an error: Hello.",
-    );
+    expect(container.firstChild?.textContent).toBe("Caught an error: Hello.");
     assertLog([
       "ErrorBoundary constructor",
       "ErrorBoundary componentWillMount",
@@ -1030,9 +981,7 @@ describe("ReactErrorBoundaries", () => {
         </ErrorBoundary>,
       );
     });
-    expect(container.firstChild?.textContent).toBe(
-      "Caught an error: Hello.",
-    );
+    expect(container.firstChild?.textContent).toBe("Caught an error: Hello.");
     assertLog([
       "ErrorBoundary constructor",
       "ErrorBoundary componentWillMount",
@@ -1083,9 +1032,7 @@ describe("ReactErrorBoundaries", () => {
         </ErrorBoundary>,
       );
     });
-    expect(container.firstChild?.textContent).toBe(
-      "Caught an error: Hello.",
-    );
+    expect(container.firstChild?.textContent).toBe("Caught an error: Hello.");
     assertLog([
       "ErrorBoundary constructor",
       "ErrorBoundary componentWillMount",
@@ -1119,11 +1066,13 @@ describe("ReactErrorBoundaries", () => {
   });
 
   it("resets callback refs if mounting aborts", async () => {
+    const stringifyRef = (node: HTMLElement | null) =>
+      node === null ? "null" : `[object ${node.constructor.name}]`;
     const childRef = (element: HTMLDivElement | null) => {
-      log("Child ref is set to " + element);
+      log("Child ref is set to " + stringifyRef(element));
     };
     const errorMessageRef = (element: HTMLDivElement | null) => {
-      log("Error message ref is set to " + element);
+      log("Error message ref is set to " + stringifyRef(element));
     };
 
     const container = document.createElement("div");
@@ -1161,10 +1110,7 @@ describe("ReactErrorBoundaries", () => {
     ]);
 
     root.unmount();
-    assertLog([
-      "ErrorBoundary componentWillUnmount",
-      "Error message ref is set to null",
-    ]);
+    assertLog(["ErrorBoundary componentWillUnmount", "Error message ref is set to null"]);
   });
 
   it("resets object refs if mounting aborts", async () => {
@@ -1203,9 +1149,7 @@ describe("ReactErrorBoundaries", () => {
       "ErrorBoundary render error",
       "ErrorBoundary componentDidMount",
     ]);
-    expect(errorMessageRef.current?.toString()).toEqual(
-      "[object HTMLDivElement]",
-    );
+    expect(errorMessageRef.current).toBeInstanceOf(HTMLDivElement);
 
     root.unmount();
     assertLog(["ErrorBoundary componentWillUnmount"]);
@@ -1222,9 +1166,7 @@ describe("ReactErrorBoundaries", () => {
         </ErrorBoundary>,
       );
     });
-    expect(container.firstChild?.textContent).toBe(
-      "Mounted successfully.",
-    );
+    expect(container.firstChild?.textContent).toBe("Mounted successfully.");
     assertLog([
       "ErrorBoundary constructor",
       "ErrorBoundary componentWillMount",
@@ -1519,14 +1461,16 @@ describe("ReactErrorBoundaries", () => {
   });
 
   it("keeps refs up-to-date during updates", async () => {
+    const stringifyRef = (node: HTMLElement | null) =>
+      node === null ? "null" : `[object ${node.constructor.name}]`;
     const child1Ref = (element: HTMLDivElement | null) => {
-      log("Child1 ref is set to " + element);
+      log("Child1 ref is set to " + stringifyRef(element));
     };
     const child2Ref = (element: HTMLDivElement | null) => {
-      log("Child2 ref is set to " + element);
+      log("Child2 ref is set to " + stringifyRef(element));
     };
     const errorMessageRef = (element: HTMLDivElement | null) => {
-      log("Error message ref is set to " + element);
+      log("Error message ref is set to " + stringifyRef(element));
     };
 
     const container = document.createElement("div");
@@ -1581,10 +1525,7 @@ describe("ReactErrorBoundaries", () => {
     ]);
 
     root.unmount();
-    assertLog([
-      "ErrorBoundary componentWillUnmount",
-      "Error message ref is set to null",
-    ]);
+    assertLog(["ErrorBoundary componentWillUnmount", "Error message ref is set to null"]);
   });
 
   it("recovers from componentWillUnmount errors on update", async () => {
@@ -1691,23 +1632,15 @@ describe("ReactErrorBoundaries", () => {
   });
 
   it("picks the right boundary when handling unmounting errors", async () => {
-    const renderInnerError = (error: Error) => (
-      <div>Caught an inner error: {error.message}.</div>
-    );
-    const renderOuterError = (error: Error) => (
-      <div>Caught an outer error: {error.message}.</div>
-    );
+    const renderInnerError = (error: Error) => <div>Caught an inner error: {error.message}.</div>;
+    const renderOuterError = (error: Error) => <div>Caught an outer error: {error.message}.</div>;
 
     const container = document.createElement("div");
     const root = ReactDOMClient.createRoot(container);
     await act(async () => {
       root.render(
-        <ErrorBoundary
-          logName="OuterErrorBoundary"
-          renderError={renderOuterError}>
-          <ErrorBoundary
-            logName="InnerErrorBoundary"
-            renderError={renderInnerError}>
+        <ErrorBoundary logName="OuterErrorBoundary" renderError={renderOuterError}>
+          <ErrorBoundary logName="InnerErrorBoundary" renderError={renderInnerError}>
             <BrokenComponentWillUnmount />
           </ErrorBoundary>
         </ErrorBoundary>,
@@ -1717,19 +1650,12 @@ describe("ReactErrorBoundaries", () => {
     clearLog();
     await act(async () => {
       root.render(
-        <ErrorBoundary
-          logName="OuterErrorBoundary"
-          renderError={renderOuterError}>
-          <ErrorBoundary
-            logName="InnerErrorBoundary"
-            renderError={renderInnerError}
-          />
+        <ErrorBoundary logName="OuterErrorBoundary" renderError={renderOuterError}>
+          <ErrorBoundary logName="InnerErrorBoundary" renderError={renderInnerError} />
         </ErrorBoundary>,
       );
     });
-    expect(container.textContent).toBe(
-      "Caught an inner error: Hello.",
-    );
+    expect(container.textContent).toBe("Caught an inner error: Hello.");
     assertLog([
       "OuterErrorBoundary componentWillReceiveProps",
       "OuterErrorBoundary componentWillUpdate",
@@ -1795,10 +1721,7 @@ describe("ReactErrorBoundaries", () => {
     ]);
 
     root.unmount();
-    assertLog([
-      "ErrorBoundary componentWillUnmount",
-      "Normal componentWillUnmount",
-    ]);
+    assertLog(["ErrorBoundary componentWillUnmount", "Normal componentWillUnmount"]);
   });
 
   it("can update multiple times in error state", async () => {
@@ -1893,9 +1816,7 @@ describe("ReactErrorBoundaries", () => {
 
       let currentIndex = elements.length;
       while (0 !== currentIndex) {
-        const randomIndex = Math.floor(
-          Math.random() * currentIndex,
-        );
+        const randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
         const temporaryValue = elements[currentIndex];
         elements[currentIndex] = elements[randomIndex];
@@ -1917,22 +1838,14 @@ describe("ReactErrorBoundaries", () => {
     const container = document.createElement("div");
     const root = ReactDOMClient.createRoot(container);
     await act(async () => {
-      root.render(
-        <ErrorBoundary>
-          {getAMixOfNormalAndBrokenRenderElements()}
-        </ErrorBoundary>,
-      );
+      root.render(<ErrorBoundary>{getAMixOfNormalAndBrokenRenderElements()}</ErrorBoundary>);
     });
     expect(container.textContent).not.toContain("Caught an error");
 
     didFailRender = true;
     clearLog();
     await act(async () => {
-      root.render(
-        <ErrorBoundary>
-          {getAMixOfNormalAndBrokenRenderElements()}
-        </ErrorBoundary>,
-      );
+      root.render(<ErrorBoundary>{getAMixOfNormalAndBrokenRenderElements()}</ErrorBoundary>);
     });
     expect(container.textContent).toBe("Caught an error: Hello.");
 
@@ -2094,9 +2007,7 @@ describe("ReactErrorBoundaries", () => {
       "ErrorBoundary render error",
       "ErrorBoundary componentDidUpdate",
     ]);
-    expect(container.firstChild?.textContent).toBe(
-      "Caught an error: Hello.",
-    );
+    expect(container.firstChild?.textContent).toBe("Caught an error: Hello.");
   });
 
   it("catches errors in useLayoutEffect", async () => {
@@ -2122,9 +2033,7 @@ describe("ReactErrorBoundaries", () => {
       "ErrorBoundary componentDidUpdate",
     ]);
 
-    expect(container.firstChild?.textContent).toBe(
-      "Caught an error: Hello.",
-    );
+    expect(container.firstChild?.textContent).toBe("Caught an error: Hello.");
   });
 
   it("propagates errors inside boundary during componentDidMount", async () => {
@@ -2135,17 +2044,13 @@ describe("ReactErrorBoundaries", () => {
         <ErrorBoundary>
           <BrokenComponentDidMountErrorBoundary
             renderError={(error: Error) => (
-              <div>
-                We should never catch our own error: {error.message}.
-              </div>
+              <div>We should never catch our own error: {error.message}.</div>
             )}
           />
         </ErrorBoundary>,
       );
     });
-    expect(container.firstChild?.textContent).toBe(
-      "Caught an error: Hello.",
-    );
+    expect(container.firstChild?.textContent).toBe("Caught an error: Hello.");
     assertLog([
       "ErrorBoundary constructor",
       "ErrorBoundary componentWillMount",
@@ -2179,15 +2084,11 @@ describe("ReactErrorBoundaries", () => {
     await act(async () => {
       root.render(
         <ErrorBoundary logName="OuterErrorBoundary">
-          <ErrorBoundary
-            logName="InnerUnmountBoundary"
-            renderError={renderUnmountError}>
+          <ErrorBoundary logName="InnerUnmountBoundary" renderError={renderUnmountError}>
             <BrokenComponentWillUnmount errorText="E1" />
             <BrokenComponentWillUnmount errorText="E2" />
           </ErrorBoundary>
-          <ErrorBoundary
-            logName="InnerUpdateBoundary"
-            renderError={renderUpdateError}>
+          <ErrorBoundary logName="InnerUpdateBoundary" renderError={renderUpdateError}>
             <BrokenComponentDidUpdate errorText="E3" />
             <BrokenComponentDidUpdate errorText="E4" />
           </ErrorBoundary>
@@ -2199,13 +2100,8 @@ describe("ReactErrorBoundaries", () => {
     await act(async () => {
       root.render(
         <ErrorBoundary logName="OuterErrorBoundary">
-          <ErrorBoundary
-            logName="InnerUnmountBoundary"
-            renderError={renderUnmountError}
-          />
-          <ErrorBoundary
-            logName="InnerUpdateBoundary"
-            renderError={renderUpdateError}>
+          <ErrorBoundary logName="InnerUnmountBoundary" renderError={renderUnmountError} />
+          <ErrorBoundary logName="InnerUpdateBoundary" renderError={renderUpdateError}>
             <BrokenComponentDidUpdate errorText="E3" />
             <BrokenComponentDidUpdate errorText="E4" />
           </ErrorBoundary>
@@ -2214,8 +2110,7 @@ describe("ReactErrorBoundaries", () => {
     });
 
     expect(container.firstChild?.textContent).toBe(
-      "Caught an unmounting error: E2." +
-        "Caught an updating error: E4.",
+      "Caught an unmounting error: E2." + "Caught an updating error: E4.",
     );
     assertLog([
       "OuterErrorBoundary componentWillReceiveProps",
@@ -2473,9 +2368,7 @@ describe("ReactErrorBoundaries", () => {
         componentDidCatchError = error;
       }
       render() {
-        return this.state.error
-          ? "ErrorBoundary"
-          : this.props.children;
+        return this.state.error ? "ErrorBoundary" : this.props.children;
       }
     }
 
@@ -2510,9 +2403,7 @@ describe("ReactErrorBoundaries", () => {
         </ErrorBoundary>,
       );
     });
-    expect(container.textContent).toContain(
-      "Caught an error: input is a void element tag",
-    );
+    expect(container.textContent).toContain("Caught an error: input is a void element tag");
   });
 
   it("should catch errors from errors in the throw phase from boundaries", async () => {
@@ -2529,15 +2420,11 @@ describe("ReactErrorBoundaries", () => {
         return this.props.children;
       }
     }
-    Object.defineProperty(
-      EvilErrorBoundary.prototype,
-      "componentDidCatch",
-      {
-        get() {
-          throw new Error("gotta catch em all");
-        },
+    Object.defineProperty(EvilErrorBoundary.prototype, "componentDidCatch", {
+      get() {
+        throw new Error("gotta catch em all");
       },
-    );
+    });
 
     await act(async () => {
       root.render(
@@ -2549,9 +2436,7 @@ describe("ReactErrorBoundaries", () => {
       );
     });
 
-    expect(container.textContent).toContain(
-      "Caught an error: gotta catch em all",
-    );
+    expect(container.textContent).toContain("Caught an error: gotta catch em all");
   });
 
   it("should protect errors from errors in the stack generation", async () => {
@@ -2582,9 +2467,7 @@ describe("ReactErrorBoundaries", () => {
       );
     });
 
-    expect(container.textContent).toContain(
-      "Caught an error: gotta catch em all.",
-    );
+    expect(container.textContent).toContain("Caught an error: gotta catch em all.");
   });
 
   it("catches errors thrown in componentWillUnmount", async () => {
@@ -2634,13 +2517,9 @@ describe("ReactErrorBoundaries", () => {
 
     await act(async () => {
       root.render(
-        <LocalErrorBoundary
-          id="OuterBoundary"
-          fallbackID="OuterFallback">
+        <LocalErrorBoundary id="OuterBoundary" fallbackID="OuterFallback">
           <LocalComponent id="sibling" />
-          <LocalErrorBoundary
-            id="InnerBoundary"
-            fallbackID="InnerFallback">
+          <LocalErrorBoundary id="InnerBoundary" fallbackID="InnerFallback">
             <LocalBrokenComponentWillUnmount />
           </LocalErrorBoundary>
         </LocalErrorBoundary>,
@@ -2658,9 +2537,7 @@ describe("ReactErrorBoundaries", () => {
 
     await act(async () => {
       root.render(
-        <LocalErrorBoundary
-          id="OuterBoundary"
-          fallbackID="OuterFallback">
+        <LocalErrorBoundary id="OuterBoundary" fallbackID="OuterFallback">
           <LocalComponent id="sibling" />
         </LocalErrorBoundary>,
       );
@@ -2727,13 +2604,9 @@ describe("ReactErrorBoundaries", () => {
 
     await act(async () => {
       root.render(
-        <LocalErrorBoundary
-          id="OuterBoundary"
-          fallbackID="OuterFallback">
+        <LocalErrorBoundary id="OuterBoundary" fallbackID="OuterFallback">
           <LocalComponent id="sibling" />
-          <LocalErrorBoundary
-            id="InnerBoundary"
-            fallbackID="InnerFallback">
+          <LocalErrorBoundary id="InnerBoundary" fallbackID="InnerFallback">
             <LocalBrokenCallbackRef />
           </LocalErrorBoundary>
         </LocalErrorBoundary>,
@@ -2752,9 +2625,7 @@ describe("ReactErrorBoundaries", () => {
 
     await act(async () => {
       root.render(
-        <LocalErrorBoundary
-          id="OuterBoundary"
-          fallbackID="OuterFallback">
+        <LocalErrorBoundary id="OuterBoundary" fallbackID="OuterFallback">
           <LocalComponent id="sibling" />
         </LocalErrorBoundary>,
       );

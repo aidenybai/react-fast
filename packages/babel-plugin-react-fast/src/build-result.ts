@@ -1,29 +1,17 @@
 import * as t from "@babel/types";
-import type { DynamicHole, TemplateWalkStep, ComponentInsert } from "./generate-template.js";
-import { DELEGATED_EVENTS } from "./shared/constants.js";
+import type { DynamicHole, TemplateWalkStep, InsertHole } from "./generate-template.js";
 
-export interface BuildOutput {
+export interface WalkResult {
   statements: t.Statement[];
-  returnId: t.Identifier;
-  delegatedEvents: Set<string>;
+  walkedIds: Map<string, t.Identifier>;
 }
 
-export const buildResult = (
-  templateId: t.Identifier,
-  rootId: t.Identifier,
+export const buildDOMWalk = (
+  rootExpr: t.Expression,
   holes: DynamicHole[],
-  componentInserts: ComponentInsert[],
-  runtimeImports: Set<string>,
-): BuildOutput => {
+  inserts: InsertHole[],
+): WalkResult => {
   const statements: t.Statement[] = [];
-  const delegatedEvents = new Set<string>();
-
-  statements.push(
-    t.variableDeclaration("const", [
-      t.variableDeclarator(rootId, t.callExpression(templateId, [])),
-    ]),
-  );
-
   const walkedIds = new Map<string, t.Identifier>();
   let walkCounter = 0;
 
@@ -32,235 +20,79 @@ export const buildResult = (
     return t.identifier(`_el$${walkCounter}`);
   };
 
-  const getElementId = (walkPath: TemplateWalkStep[]): t.Identifier => {
-    if (walkPath.length === 0) return rootId;
+  const allPaths = collectAllWalkPaths(holes, inserts);
 
-    const pathKey = walkPath.map((s) => s.method).join(".");
-    const existing = walkedIds.get(pathKey);
-    if (existing) return existing;
+  for (const pathKey of allPaths) {
+    const steps = pathKey.split(".");
+    let accessExpr: t.Expression = rootExpr;
 
-    let currentExpr: t.Expression = rootId;
-    let accumulatedKey = "";
-
-    for (let i = 0; i < walkPath.length; i++) {
-      const step = walkPath[i]!;
-      accumulatedKey += (accumulatedKey ? "." : "") + step.method;
-
-      const existingIntermediate = walkedIds.get(accumulatedKey);
-      if (existingIntermediate) {
-        currentExpr = existingIntermediate;
+    for (let i = 0; i < steps.length; i++) {
+      const partialKey = steps.slice(0, i + 1).join(".");
+      if (walkedIds.has(partialKey)) {
+        accessExpr = walkedIds.get(partialKey)!;
         continue;
       }
 
+      const parentKey = steps.slice(0, i).join(".");
+      const parentId = parentKey ? walkedIds.get(parentKey) : null;
+      const base = parentId || (i === 0 ? rootExpr : accessExpr);
+
       const stepId = nextId();
-      const accessExpr = t.memberExpression(currentExpr, t.identifier(step.method));
-      statements.push(
-        t.variableDeclaration("const", [
-          t.variableDeclarator(stepId, accessExpr),
-        ]),
-      );
-      walkedIds.set(accumulatedKey, stepId);
-      currentExpr = stepId;
+      const memberExpr = t.memberExpression(base, t.identifier(steps[i]!));
+      statements.push(t.variableDeclaration("const", [t.variableDeclarator(stepId, memberExpr)]));
+      walkedIds.set(partialKey, stepId);
+      accessExpr = stepId;
     }
+  }
 
-    return walkedIds.get(pathKey)!;
-  };
+  return { statements, walkedIds };
+};
 
-  const expressionStatements: t.Statement[] = [];
-  const dynamics: Array<{ elementId: t.Identifier; hole: DynamicHole }> = [];
+export const getElementFromWalk = (
+  walkPath: TemplateWalkStep[],
+  walkedIds: Map<string, t.Identifier>,
+  rootExpr: t.Expression,
+): t.Expression => {
+  if (walkPath.length === 0) return rootExpr;
+  const pathKey = walkPath.map((s) => s.method).join(".");
+  return walkedIds.get(pathKey) || rootExpr;
+};
+
+const collectAllWalkPaths = (holes: DynamicHole[], inserts: InsertHole[]): string[] => {
+  const paths = new Set<string>();
 
   for (const hole of holes) {
-    const elementId = getElementId(hole.walkPath);
+    const pathKey = hole.walkPath.map((s) => s.method).join(".");
+    if (pathKey) paths.add(pathKey);
+  }
 
-    switch (hole.kind) {
-      case "ref": {
-        runtimeImports.add("use");
-        expressionStatements.push(
-          t.expressionStatement(
-            t.callExpression(t.identifier("_$use"), [hole.expression, elementId]),
-          ),
-        );
-        break;
-      }
-      case "event": {
-        const eventName = hole.name!;
-        if (hole.isDelegated) {
-          delegatedEvents.add(eventName);
-          expressionStatements.push(
-            t.expressionStatement(
-              t.assignmentExpression(
-                "=",
-                t.memberExpression(elementId, t.identifier(`$$${eventName}`)),
-                hole.expression,
-              ),
-            ),
-          );
-        } else {
-          expressionStatements.push(
-            t.expressionStatement(
-              t.callExpression(
-                t.memberExpression(elementId, t.identifier("addEventListener")),
-                [t.stringLiteral(eventName), hole.expression],
-              ),
-            ),
-          );
-        }
-        break;
-      }
-      case "spread": {
-        runtimeImports.add("spread");
-        expressionStatements.push(
-          t.expressionStatement(
-            t.callExpression(t.identifier("_$spread"), [elementId, hole.expression]),
-          ),
-        );
-        break;
-      }
-      case "style": {
-        dynamics.push({ elementId, hole });
-        break;
-      }
-      case "classList": {
-        dynamics.push({ elementId, hole });
-        break;
-      }
-      case "text": {
-        dynamics.push({ elementId, hole });
-        break;
-      }
-      case "attribute": {
-        dynamics.push({ elementId, hole });
-        break;
-      }
+  for (const insert of inserts) {
+    const pathKey = insert.walkPath.map((s) => s.method).join(".");
+    if (pathKey) paths.add(pathKey);
+    const parentKey = insert.walkPath
+      .slice(0, -1)
+      .map((s) => s.method)
+      .join(".");
+    if (parentKey) paths.add(parentKey);
+  }
+
+  const withIntermediates = new Set<string>();
+  for (const path of paths) {
+    withIntermediates.add(path);
+    const steps = path.split(".");
+    for (let i = 1; i < steps.length; i++) {
+      withIntermediates.add(steps.slice(0, i).join("."));
     }
   }
 
-  for (const insert of componentInserts) {
-    runtimeImports.add("insert");
-    const markerId = getElementId(insert.walkPath);
-    expressionStatements.push(
-      t.expressionStatement(
-        t.callExpression(t.identifier("_$insert"), [
-          rootId,
-          insert.expression,
-          markerId,
-        ]),
-      ),
-    );
-  }
+  return [...withIntermediates].sort((a, b) => {
+    const aDepth = a.split(".").length;
+    const bDepth = b.split(".").length;
+    if (aDepth !== bDepth) return aDepth - bDepth;
+    return a.localeCompare(b);
+  });
+};
 
-  statements.push(...expressionStatements);
-
-  if (dynamics.length > 0) {
-    runtimeImports.add("effect");
-    const cacheKeys = dynamics.map((_, i) => String.fromCharCode(97 + i));
-    const prevParam = t.identifier("_prev");
-
-    const effectBody: t.Statement[] = [];
-
-    const valueDeclarations: t.VariableDeclarator[] = [];
-    for (let i = 0; i < dynamics.length; i++) {
-      const { hole } = dynamics[i]!;
-      valueDeclarations.push(
-        t.variableDeclarator(t.identifier(`_v$${i}`), hole.expression),
-      );
-    }
-    effectBody.push(t.variableDeclaration("const", valueDeclarations));
-
-    for (let i = 0; i < dynamics.length; i++) {
-      const { elementId, hole } = dynamics[i]!;
-      const key = cacheKeys[i]!;
-      const valueId = t.identifier(`_v$${i}`);
-      const prevAccess = t.memberExpression(prevParam, t.identifier(key));
-
-      let assignment: t.Expression;
-
-      switch (hole.kind) {
-        case "text": {
-          const textNodeAccess = t.memberExpression(elementId, t.identifier("firstChild"));
-          assignment = t.assignmentExpression(
-            "=",
-            t.memberExpression(textNodeAccess, t.identifier("data")),
-            t.assignmentExpression("=", prevAccess, valueId),
-          );
-          break;
-        }
-        case "attribute": {
-          if (hole.name === "innerHTML") {
-            assignment = t.assignmentExpression(
-              "=",
-              t.memberExpression(elementId, t.identifier("innerHTML")),
-              t.assignmentExpression("=", prevAccess, valueId),
-            );
-          } else if (hole.isAttribute) {
-            runtimeImports.add("setAttribute");
-            assignment = t.sequenceExpression([
-              t.callExpression(t.identifier("_$setAttribute"), [
-                elementId,
-                t.stringLiteral(hole.name!),
-                valueId,
-              ]),
-              t.assignmentExpression("=", prevAccess, valueId),
-            ]);
-          } else {
-            assignment = t.assignmentExpression(
-              "=",
-              t.memberExpression(elementId, t.identifier(hole.name!)),
-              t.assignmentExpression("=", prevAccess, valueId),
-            );
-          }
-          break;
-        }
-        case "style": {
-          runtimeImports.add("style");
-          assignment = t.assignmentExpression(
-            "=",
-            prevAccess,
-            t.callExpression(t.identifier("_$style"), [elementId, valueId, prevAccess]),
-          );
-          break;
-        }
-        case "classList": {
-          runtimeImports.add("classList");
-          assignment = t.assignmentExpression(
-            "=",
-            prevAccess,
-            t.callExpression(t.identifier("_$classList"), [elementId, valueId, prevAccess]),
-          );
-          break;
-        }
-        default:
-          assignment = t.assignmentExpression("=", prevAccess, valueId);
-      }
-
-      effectBody.push(
-        t.ifStatement(
-          t.binaryExpression("!==", valueId, prevAccess),
-          t.expressionStatement(assignment),
-        ),
-      );
-    }
-
-    effectBody.push(t.returnStatement(prevParam));
-
-    const initialCacheProps = cacheKeys.map((key) =>
-      t.objectProperty(t.identifier(key), t.identifier("undefined")),
-    );
-
-    statements.push(
-      t.expressionStatement(
-        t.callExpression(t.identifier("_$effect"), [
-          t.arrowFunctionExpression(
-            [prevParam],
-            t.blockStatement(effectBody),
-          ),
-          t.objectExpression(initialCacheProps),
-        ]),
-      ),
-    );
-  }
-
-  statements.push(t.returnStatement(rootId));
-
-  return { statements, returnId: rootId, delegatedEvents };
+export const isProvablyFunction = (expr: t.Expression): boolean => {
+  return t.isArrowFunctionExpression(expr) || t.isFunctionExpression(expr);
 };

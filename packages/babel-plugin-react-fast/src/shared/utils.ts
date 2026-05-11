@@ -1,5 +1,26 @@
 import * as t from "@babel/types";
-import { SVG_ELEMENTS } from "./constants.js";
+import type { NodePath } from "@babel/core";
+import { addNamed } from "@babel/helper-module-imports";
+import { SVG_ELEMENTS, MODULE_NAME } from "./constants.js";
+
+export const registerImportMethod = (
+  path: NodePath,
+  name: string,
+  moduleName: string = MODULE_NAME,
+): t.Identifier => {
+  const programScope = path.scope.getProgramParent();
+  if (!programScope.data.imports) {
+    programScope.data.imports = new Map<string, t.Identifier>();
+  }
+  const imports = programScope.data.imports as Map<string, t.Identifier>;
+  const key = `${moduleName}:${name}`;
+  if (!imports.has(key)) {
+    const id = addNamed(path, name, moduleName, { nameHint: `_$${name}` });
+    imports.set(key, id);
+    return id;
+  }
+  return t.cloneNode(imports.get(key)!);
+};
 
 export const isComponent = (tagName: string): boolean => {
   return (
@@ -32,6 +53,8 @@ export const isStaticExpression = (node: t.Expression | t.JSXEmptyExpression): b
   if (t.isStringLiteral(node) || t.isNumericLiteral(node) || t.isBooleanLiteral(node)) {
     return true;
   }
+  if (t.isNullLiteral(node)) return true;
+  if (t.isIdentifier(node) && node.name === "undefined") return true;
   if (t.isTemplateLiteral(node) && node.expressions.length === 0) {
     return true;
   }
@@ -39,32 +62,185 @@ export const isStaticExpression = (node: t.Expression | t.JSXEmptyExpression): b
 };
 
 export const isDynamic = (
-  node: t.Expression | t.JSXEmptyExpression,
-  checkMember = true,
+  path: NodePath,
+  opts: { checkMember?: boolean; checkTags?: boolean; checkCallExpressions?: boolean } = {},
 ): boolean => {
-  if (t.isJSXEmptyExpression(node)) return false;
-  if (isStaticExpression(node)) return false;
-  if (t.isIdentifier(node)) return true;
-  if (t.isCallExpression(node)) return true;
-  if (t.isMemberExpression(node) && checkMember) return true;
-  if (t.isOptionalMemberExpression(node)) return true;
-  if (t.isConditionalExpression(node)) return true;
-  if (t.isLogicalExpression(node)) return true;
-  if (t.isBinaryExpression(node)) return true;
-  if (t.isUnaryExpression(node)) return true;
-  if (t.isTemplateLiteral(node) && node.expressions.length > 0) return true;
-  if (t.isTaggedTemplateExpression(node)) return true;
-  if (t.isObjectExpression(node)) return true;
-  if (t.isArrayExpression(node)) return true;
-  return false;
+  const { checkMember = true, checkTags = false, checkCallExpressions = true } = opts;
+  const expr = path.node;
+
+  if (t.isFunction(expr)) return false;
+
+  if (
+    checkCallExpressions &&
+    (t.isCallExpression(expr) ||
+      t.isOptionalCallExpression(expr) ||
+      t.isTaggedTemplateExpression(expr))
+  ) {
+    return true;
+  }
+
+  if (checkMember && t.isMemberExpression(expr)) {
+    const object = (path as NodePath<t.MemberExpression>).get("object");
+    if (t.isIdentifier(object.node)) {
+      const binding = path.scope.getBinding(object.node.name);
+      if (binding && binding.path.isImportNamespaceSpecifier()) return false;
+    }
+    return true;
+  }
+
+  if (
+    checkMember &&
+    (t.isOptionalMemberExpression(expr) ||
+      t.isSpreadElement(expr) ||
+      (t.isBinaryExpression(expr) && expr.operator === "in"))
+  ) {
+    return true;
+  }
+
+  if (
+    checkTags &&
+    (t.isJSXElement(expr) || (t.isJSXFragment(expr) && (expr as t.JSXFragment).children.length))
+  ) {
+    return true;
+  }
+
+  let dynamic = false;
+  path.traverse({
+    Function(p) {
+      p.skip();
+    },
+    CallExpression(p) {
+      if (checkCallExpressions) {
+        dynamic = true;
+        p.stop();
+      }
+    },
+    OptionalCallExpression(p) {
+      if (checkCallExpressions) {
+        dynamic = true;
+        p.stop();
+      }
+    },
+    MemberExpression(p) {
+      if (checkMember) {
+        dynamic = true;
+        p.stop();
+      }
+    },
+    OptionalMemberExpression(p) {
+      if (checkMember) {
+        dynamic = true;
+        p.stop();
+      }
+    },
+    SpreadElement(p) {
+      if (checkMember) {
+        dynamic = true;
+        p.stop();
+      }
+    },
+    BinaryExpression(p) {
+      if (checkMember && p.node.operator === "in") {
+        dynamic = true;
+        p.stop();
+      }
+    },
+    JSXElement(p) {
+      if (checkTags) {
+        dynamic = true;
+        p.stop();
+      } else p.skip();
+    },
+    JSXFragment(p) {
+      if (checkTags && p.node.children.length) {
+        dynamic = true;
+        p.stop();
+      } else p.skip();
+    },
+  });
+  return dynamic;
 };
 
-export const escapeHtml = (value: string): string => {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/"/g, "&quot;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+export const trimWhitespace = (text: string): string => {
+  text = text.replace(/\r/g, "");
+  if (/\n/g.test(text)) {
+    text = text
+      .split("\n")
+      .map((line, i) => (i ? line.replace(/^\s*/g, "") : line))
+      .filter((s) => !/^\s*$/.test(s))
+      .join(" ");
+  }
+  return text.replace(/\s+/g, " ");
+};
+
+export const escapeHtml = (s: string, attr = false): string => {
+  const delim = attr ? '"' : "<";
+  const escDelim = attr ? "&quot;" : "&lt;";
+  let iDelim = s.indexOf(delim);
+  let iAmp = s.indexOf("&");
+
+  if (iDelim < 0 && iAmp < 0) return s;
+
+  let left = 0;
+  let out = "";
+
+  while (iDelim >= 0 && iAmp >= 0) {
+    if (iDelim < iAmp) {
+      if (left < iDelim) out += s.substring(left, iDelim);
+      out += escDelim;
+      left = iDelim + 1;
+      iDelim = s.indexOf(delim, left);
+    } else {
+      if (left < iAmp) out += s.substring(left, iAmp);
+      out += "&amp;";
+      left = iAmp + 1;
+      iAmp = s.indexOf("&", left);
+    }
+  }
+
+  if (iDelim >= 0) {
+    do {
+      if (left < iDelim) out += s.substring(left, iDelim);
+      out += escDelim;
+      left = iDelim + 1;
+      iDelim = s.indexOf(delim, left);
+    } while (iDelim >= 0);
+  } else {
+    while (iAmp >= 0) {
+      if (left < iAmp) out += s.substring(left, iAmp);
+      out += "&amp;";
+      left = iAmp + 1;
+      iAmp = s.indexOf("&", left);
+    }
+  }
+
+  return left < s.length ? out + s.substring(left) : out;
+};
+
+const ID_CHARS = "etaoinshrdlucwmfygpbTAOISWCBvkxjqzPHFMDRELNGUKVYJQZX_$";
+const ID_BASE = ID_CHARS.length;
+
+export const getNumberedId = (num: number): string => {
+  let out = "";
+  do {
+    const digit = num % ID_BASE;
+    num = Math.floor(num / ID_BASE);
+    out = ID_CHARS[digit]! + out;
+  } while (num !== 0);
+  return out;
+};
+
+export const wrapThunk = (expr: t.Expression): t.Expression => {
+  if (t.isFunction(expr)) return expr;
+  if (
+    t.isCallExpression(expr) &&
+    expr.arguments.length === 0 &&
+    !t.isCallExpression(expr.callee) &&
+    !t.isMemberExpression(expr.callee)
+  ) {
+    return expr.callee as t.Expression;
+  }
+  return t.arrowFunctionExpression([], expr);
 };
 
 export const getAttributeName = (node: t.JSXAttribute): string => {
@@ -72,9 +248,7 @@ export const getAttributeName = (node: t.JSXAttribute): string => {
   return `${node.name.namespace.name}:${node.name.name.name}`;
 };
 
-export const getAttributeValue = (
-  node: t.JSXAttribute,
-): t.Expression | null => {
+export const getAttributeValue = (node: t.JSXAttribute): t.Expression | null => {
   if (node.value === null) return t.booleanLiteral(true);
   if (t.isStringLiteral(node.value)) return node.value;
   if (t.isJSXExpressionContainer(node.value)) {
@@ -82,4 +256,8 @@ export const getAttributeValue = (
     return node.value.expression;
   }
   return null;
+};
+
+export const camelToKebab = (s: string): string => {
+  return s.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
 };

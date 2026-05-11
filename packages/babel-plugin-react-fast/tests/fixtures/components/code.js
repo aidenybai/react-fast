@@ -1,12 +1,14 @@
-const Child = props => {
+const Child = (props) => {
   const [s, set] = createSignal();
-  return <>
-    <div ref={props.ref}>Hello {props.name}</div>
-    <div ref={set}>{props.children}</div>
-  </>
+  return (
+    <>
+      <div ref={props.ref}>Hello {props.name}</div>
+      <div ref={set}>{props.children}</div>
+    </>
+  );
 };
 
-const template = props => {
+const template = (props) => {
   let childRef;
   const { content } = props;
   return (
@@ -17,7 +19,7 @@ const template = props => {
       <Child name="Jason" ref={props.ref}>
         <div>{content}</div>
       </Child>
-      <Context.Consumer ref={props.consumerRef()}>{context => context}</Context.Consumer>
+      <Context.Consumer ref={props.consumerRef()}>{(context) => context}</Context.Consumer>
     </div>
   );
 };
@@ -28,7 +30,7 @@ const template2 = (
     dynamic={state.data}
     handleClick={clickHandler}
     hyphen-ated={state.data}
-    ref={el => (e = el)}
+    ref={(el) => (e = el)}
   />
 );
 
@@ -48,7 +50,7 @@ const template5 = <Child dynamic={state.dynamic}>{state.dynamic}</Child>;
 
 const template6 = (
   <For each={state.list} fallback={<Loading />}>
-    {item => <Show when={state.condition}>{item}</Show>}
+    {(item) => <Show when={state.condition}>{item}</Show>}
   </For>
 );
 
@@ -61,8 +63,8 @@ const template7 = (
 
 const template8 = (
   <Child>
-    {item => item}
-    {item => item}
+    {(item) => item}
+    {(item) => item}
   </Child>
 );
 
@@ -99,9 +101,9 @@ class Template11 {
 
 const Template12 = <Component>{data()}</Component>;
 
-const Template13 = <Component {...props}/>;
+const Template13 = <Component {...props} />;
 
-const Template14 = <Component something={something} {...props}/>;
+const Template14 = <Component something={something} {...props} />;
 
 const Template15 = <Component class={prop.red ? "red" : "green"} />;
 

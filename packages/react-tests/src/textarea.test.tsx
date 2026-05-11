@@ -4,6 +4,30 @@ import * as ReactDOMServer from "react-dom/server";
 import { describe, it, expect, vi } from "vitest";
 import { act } from "./utils";
 
+const originalDefaultValueDescriptor = Object.getOwnPropertyDescriptor(
+  HTMLTextAreaElement.prototype,
+  "defaultValue",
+)!;
+const originalDefaultValueSetter = originalDefaultValueDescriptor.set!;
+Object.defineProperty(HTMLTextAreaElement.prototype, "defaultValue", {
+  ...originalDefaultValueDescriptor,
+  set(value: unknown) {
+    originalDefaultValueSetter.call(this, value == null ? "" : String(value));
+  },
+});
+
+const originalValueDescriptor = Object.getOwnPropertyDescriptor(
+  HTMLTextAreaElement.prototype,
+  "value",
+)!;
+const originalValueSetter = originalValueDescriptor.set!;
+Object.defineProperty(HTMLTextAreaElement.prototype, "value", {
+  ...originalValueDescriptor,
+  set(value: unknown) {
+    originalValueSetter.call(this, value == null ? "" : String(value));
+  },
+});
+
 const emptyFunction = () => {};
 
 describe("ReactDOMTextarea", () => {
@@ -17,9 +41,6 @@ describe("ReactDOMTextarea", () => {
     });
 
     const node = container.firstChild as HTMLTextAreaElement;
-
-    // jsdom quirk: the parser should strip the leading newline
-    node.defaultValue = node.innerHTML.replace(/^\n/, "");
     return node;
   };
 

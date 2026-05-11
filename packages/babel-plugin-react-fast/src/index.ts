@@ -1,136 +1,178 @@
 import type { PluginObj, NodePath } from "@babel/core";
 import * as t from "@babel/types";
-import { addNamed } from "@babel/helper-module-imports";
 import { transformJSXElement, transformJSXFragment } from "./transform.js";
-import { MODULE_NAME } from "./shared/constants.js";
-import type { TemplateInfo } from "./generate-template.js";
+import { registerImportMethod } from "./shared/utils.js";
+import type { PluginState } from "./shared/types.js";
 
-interface PluginState {
-  templates: Map<string, TemplateInfo>;
-  templateCounter: number;
-  elementCounter: number;
-  delegatedEvents: Set<string>;
-  runtimeImports: Set<string>;
-  importIdentifiers: Map<string, t.Identifier>;
-  programPath: NodePath<t.Program> | null;
+interface PluginOptions {
+  ssr?: boolean;
 }
 
-const RUNTIME_IMPORT_ALIASES: Record<string, string> = {
-  template: "_$template",
-  effect: "_$effect",
-  insert: "_$insert",
-  spread: "_$spread",
-  use: "_$use",
-  style: "_$style",
-  classList: "_$classList",
-  setAttribute: "_$setAttribute",
-  delegateEvents: "_$delegateEvents",
-};
-
-const reactFastPlugin = (): PluginObj<PluginState> => {
+const reactFastPlugin = (_: unknown, options: PluginOptions = {}): PluginObj<PluginState> => {
+  const ssr = options.ssr !== false;
   return {
     name: "babel-plugin-react-fast",
     inherits: require("@babel/plugin-syntax-jsx").default,
 
     visitor: {
       Program: {
-        enter(path, state) {
+        enter(_path, state) {
           state.templates = new Map();
           state.templateCounter = 0;
-          state.elementCounter = 0;
           state.delegatedEvents = new Set();
-          state.runtimeImports = new Set();
-          state.importIdentifiers = new Map();
-          state.programPath = path;
+          state.programPath = null;
+          state.ssr = ssr;
         },
 
         exit(path, state) {
-          if (state.delegatedEvents.size > 0) {
-            state.runtimeImports.add("delegateEvents");
+          if (state.templates.size === 0 && state.delegatedEvents.size === 0) {
+            return;
           }
 
-          if (state.templates.size === 0 && state.runtimeImports.size === 0) return;
+          const hoistedDeclarators: t.VariableDeclarator[] = [];
 
-          const importStatements: t.Statement[] = [];
-
-          for (const importName of state.runtimeImports) {
-            const alias = RUNTIME_IMPORT_ALIASES[importName] || `_$${importName}`;
-            const id = addNamed(path, importName, MODULE_NAME, {
-              nameHint: alias,
-            });
-            state.importIdentifiers.set(importName, id);
-          }
-
-          const templateDeclarations: t.Statement[] = [];
           for (const [, info] of state.templates) {
-            const templateImportId = state.importIdentifiers.get("template");
-            if (!templateImportId) continue;
-
+            const templateImportId = registerImportMethod(path, "template");
             const args: t.Expression[] = [t.stringLiteral(info.html)];
-            if (info.isSVG) {
-              args.push(t.booleanLiteral(false));
-              args.push(t.booleanLiteral(true));
+            if (info.isFragment || info.isSVG) {
+              args.push(t.booleanLiteral(info.isFragment));
+              if (info.isSVG) {
+                args.push(t.booleanLiteral(true));
+              }
             }
 
-            templateDeclarations.push(
-              t.variableDeclaration("const", [
-                t.variableDeclarator(
-                  info.id,
-                  t.callExpression(templateImportId, args),
-                ),
-              ]),
+            hoistedDeclarators.push(
+              t.variableDeclarator(
+                info.id,
+                t.addComment(t.callExpression(templateImportId, args), "leading", "#__PURE__"),
+              ),
             );
           }
 
-          if (templateDeclarations.length > 0) {
-            const lastImport = path.get("body").filter(
-              (p) => p.isImportDeclaration(),
-            ).pop();
+          if (hoistedDeclarators.length > 0) {
+            const decl = t.variableDeclaration("const", hoistedDeclarators);
+            const lastImport = path
+              .get("body")
+              .filter((p) => p.isImportDeclaration())
+              .pop();
 
             if (lastImport) {
-              lastImport.insertAfter(templateDeclarations);
+              lastImport.insertAfter(decl);
             } else {
-              path.unshiftContainer("body", templateDeclarations);
+              path.unshiftContainer("body", decl);
             }
           }
 
           if (state.delegatedEvents.size > 0) {
-            const delegateImportId = state.importIdentifiers.get("delegateEvents");
-            if (delegateImportId) {
-              path.pushContainer(
-                "body",
-                t.expressionStatement(
-                  t.callExpression(delegateImportId, [
-                    t.arrayExpression(
-                      [...state.delegatedEvents].map((e) => t.stringLiteral(e)),
-                    ),
+            const delegateImportId = registerImportMethod(path, "delegateEvents");
+            path.pushContainer(
+              "body",
+              t.expressionStatement(
+                t.callExpression(delegateImportId, [
+                  t.arrayExpression([...state.delegatedEvents].map((e) => t.stringLiteral(e))),
+                ]),
+              ),
+            );
+          }
+
+          // Emit __dom protocol assignments — must come before any render() calls
+          if (state.pendingDomProtocols && state.pendingDomProtocols.length > 0) {
+            const body = path.get("body");
+            // Find insertion point: after the component declaration
+            for (const dp of state.pendingDomProtocols) {
+              const assignStmt = t.expressionStatement(
+                t.assignmentExpression(
+                  "=",
+                  t.memberExpression(t.identifier(dp.bindingName), t.identifier("__dom")),
+                  t.objectExpression([
+                    t.objectProperty(t.identifier("c"), dp.createFn),
+                    t.objectProperty(t.identifier("p"), dp.patchFn),
                   ]),
                 ),
               );
+              // Find the declaration of the component and insert after it
+              let inserted = false;
+              for (let i = 0; i < body.length; i++) {
+                const stmt = body[i];
+                if (stmt.isVariableDeclaration()) {
+                  for (const decl of stmt.node.declarations) {
+                    if (t.isIdentifier(decl.id) && decl.id.name === dp.bindingName) {
+                      stmt.insertAfter(assignStmt);
+                      inserted = true;
+                      break;
+                    }
+                  }
+                } else if (stmt.isFunctionDeclaration() && stmt.node.id?.name === dp.bindingName) {
+                  stmt.insertAfter(assignStmt);
+                  inserted = true;
+                }
+                if (inserted) break;
+              }
+              if (!inserted) {
+                path.pushContainer("body", assignStmt);
+              }
             }
           }
         },
       },
 
-      JSXElement(path, state) {
-        if (isInsideJSX(path)) return;
+      JSXElement: {
+        enter(path, state) {
+          if (isInsideJSX(path)) return;
+          if (hasOptOutDirective(path)) return;
 
-        const result = transformJSXElement(path, state);
-        if (result) {
-          path.replaceWith(result);
-        }
+          ensureBlockBody(path);
+
+          const prevListCacheId = state.lastListCacheId;
+          state.lastListCacheId = null;
+
+          const result = transformJSXElement(path, state);
+          const listCacheId = state.lastListCacheId;
+          state.lastListCacheId = prevListCacheId;
+
+          if (result) {
+            if (listCacheId && path.parentPath?.isReturnStatement()) {
+              // Cache entire return tree: DOM is updated by _lc$.u() before return,
+              // so React sees the same element and bails out of reconciliation entirely
+              const cached = t.logicalExpression(
+                "||",
+                t.memberExpression(listCacheId, t.identifier("ret")),
+                t.assignmentExpression("=", t.memberExpression(listCacheId, t.identifier("ret")), result),
+              );
+              path.replaceWith(cached);
+            } else {
+              path.replaceWith(result);
+            }
+          }
+        },
       },
 
-      JSXFragment(path, state) {
-        if (isInsideJSX(path)) return;
+      JSXFragment: {
+        enter(path, state) {
+          if (isInsideJSX(path)) return;
+          if (hasOptOutDirective(path)) return;
 
-        const result = transformJSXFragment(path, state);
-        if (result) {
-          path.replaceWith(result);
-        }
+          ensureBlockBody(path);
+
+          const result = transformJSXFragment(path, state);
+          if (result) {
+            path.replaceWith(result);
+          }
+        },
       },
     },
   };
+};
+
+const ensureBlockBody = (path: NodePath): void => {
+  const funcPath = path.getFunctionParent();
+  if (!funcPath) return;
+  if (
+    t.isArrowFunctionExpression(funcPath.node) &&
+    !t.isBlockStatement(funcPath.node.body)
+  ) {
+    (funcPath as NodePath<t.ArrowFunctionExpression>).ensureBlock();
+  }
 };
 
 const isInsideJSX = (path: NodePath): boolean => {
@@ -138,6 +180,28 @@ const isInsideJSX = (path: NodePath): boolean => {
   while (current) {
     if (current.isJSXElement() || current.isJSXFragment()) return true;
     current = current.parentPath;
+  }
+  return false;
+};
+
+const hasOptOutDirective = (path: NodePath): boolean => {
+  const funcParent = path.getFunctionParent();
+  if (!funcParent) return false;
+  const body = funcParent.get("body");
+  if (!body || !("node" in body) || !t.isBlockStatement(body.node)) return false;
+  const block = body.node as t.BlockStatement;
+  if (block.directives) {
+    for (const d of block.directives) {
+      if (d.value.value === "use no fast") return true;
+    }
+  }
+  const first = block.body[0];
+  if (
+    t.isExpressionStatement(first) &&
+    t.isStringLiteral(first.expression) &&
+    first.expression.value === "use no fast"
+  ) {
+    return true;
   }
   return false;
 };
