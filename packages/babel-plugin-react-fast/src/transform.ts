@@ -354,9 +354,6 @@ const tryTransformListOptimization = (
     : [listCode.patchBlock];
   injectHooksIntoFunction(path, [...listCode.cacheStatements, ...patchStatements]);
 
-  // Track that a list optimization was applied in this function scope
-  state.lastListCacheId = listCode.cacheId;
-
   const createElementId = getImportId("createElement");
 
   const staticProps: t.ObjectProperty[] = [
@@ -902,9 +899,6 @@ const tryBuildListElement = (
     ? listCode.patchBlock.body
     : [listCode.patchBlock];
   injectHooksIntoFunction(path, patchStatements);
-
-  // Track that a list optimization was applied in this function scope
-  state.lastListCacheId = listCode.cacheId;
 
   const createElementId = registerImportMethod(path, "createElement", "react");
 

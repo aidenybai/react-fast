@@ -22,7 +22,6 @@ export interface PluginState {
   ssrFlagId?: t.Identifier;
   ssr: boolean;
   pendingDomProtocols?: DomProtocolEntry[];
-  lastListCacheId?: t.Identifier | null;
 }
 
 export type ImportResolver = (name: string) => t.Identifier;

@@ -123,26 +123,9 @@ const reactFastPlugin = (_: unknown, options: PluginOptions = {}): PluginObj<Plu
 
           ensureBlockBody(path);
 
-          const prevListCacheId = state.lastListCacheId;
-          state.lastListCacheId = null;
-
           const result = transformJSXElement(path, state);
-          const listCacheId = state.lastListCacheId;
-          state.lastListCacheId = prevListCacheId;
-
           if (result) {
-            if (listCacheId && path.parentPath?.isReturnStatement()) {
-              // Cache entire return tree: DOM is updated by _lc$.u() before return,
-              // so React sees the same element and bails out of reconciliation entirely
-              const cached = t.logicalExpression(
-                "||",
-                t.memberExpression(listCacheId, t.identifier("ret")),
-                t.assignmentExpression("=", t.memberExpression(listCacheId, t.identifier("ret")), result),
-              );
-              path.replaceWith(cached);
-            } else {
-              path.replaceWith(result);
-            }
+            path.replaceWith(result);
           }
         },
       },
